@@ -1,0 +1,27 @@
+{
+  "name": "css-selector-parser",
+  "version": "1.0.0",
+  "description": "Just a CSS selector parser.",
+  "keywords": [
+    "css",
+    "css selector",
+    "css selector parser"
+  ],
+  "author": {
+    "name": "Marat Dulin",
+    "email": "mdevils@yandex.ru"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "colors": "*"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mdevils/node-css-selector-parser.git"
+  },
+  "main": "index",
+  "engines": [
+    "node >= 0.4.0"
+  ],
+  "license": "MIT"
+}

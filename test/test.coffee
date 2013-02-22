@@ -16,8 +16,6 @@ assertError = (str, cb) ->
   assertEquals str, errStr
 
 parser = new CssSelectorParser
-
-isAttrMatchOperator = (c) -> c == '=' || c == '^' || c == '$' || c == '*' || c == '~'
 parser.registerAttrEqualityMods '^', '$', '*', '~'
 parser.registerNestingOperators '>', '+', '~'
 

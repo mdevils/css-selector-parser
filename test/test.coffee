@@ -99,4 +99,25 @@ assertEquals 'tag\\a0 tag', parser.render(parser.parse('tag\\00a0 tag'))
 assertEquals '.class\\a0 class', parser.render(parser.parse('.class\\00a0 class'))
 assertEquals '[attr\\a0 attr]', parser.render(parser.parse('[attr\\a0 attr]'))
 
+assertEquals '[attr="$var"]', parser.render(parser.parse('[attr=$var]'))
+assertEquals ':has("$var")', parser.render(parser.parse(':has($var)'))
+parser.enableSubstitutes()
+assertEquals '[attr=$var]', parser.render(parser.parse('[attr=$var]'))
+assertEquals ':has($var)', parser.render(parser.parse(':has($var)'))
+parser.disableSubstitutes()
+assertEquals '[attr="$var"]', parser.render(parser.parse('[attr=$var]'))
+assertEquals ':has("$var")', parser.render(parser.parse(':has($var)'))
+
+parser.registerNestingOperators ';'
+assertEquals 'tag1 ; tag2', parser.render(parser.parse('tag1 ; tag2'))
+parser.unregisterNestingOperators ';'
+assertError 'Rule expected but ";" found.', ->
+  parser.parse('tag1 ; tag2')
+
+parser.registerAttrEqualityMods ';'
+assertEquals '[attr;="val"]', parser.render(parser.parse('[attr;=val]'))
+parser.unregisterAttrEqualityMods ';'
+assertError 'Expected "=" but ";" found.', ->
+  parser.parse('[attr;=val]')
+
 assertEquals '#y.cls1.cls2 .cls3 + abc#def[x="y"] > yy, ff', parser.render(parser.parse('.cls1.cls2#y .cls3+abc#def[x=y]>yy,ff'))

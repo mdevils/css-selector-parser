@@ -5,6 +5,7 @@ class exports.CssSelectorParser
     @pseudos = {}
     @attrEqualityMods = {}
     @ruleNestingOperators = {}
+    @substitutesEnabled = false
 
   registerSelectorPseudos: (name) ->
     for name in arguments
@@ -35,6 +36,9 @@ class exports.CssSelectorParser
     for mod in arguments
       delete @attrEqualityMods[mod]
     @
+
+  enableSubstitutes: -> @substitutesEnabled = true; @
+  disableSubstitutes: -> @substitutesEnabled = false; @
 
   isIdentStart = (c) -> (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z')
   isIdent = (c) -> (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || (c >= '0' && c <= '9') || c == '-' || c == '_'
@@ -106,7 +110,7 @@ class exports.CssSelectorParser
     '\\': '\\'
     '"': '"'
 
-  ParseContext = (str, p, pseudos, attrEqualityMods, ruleNestingOperators) ->
+  ParseContext = (str, p, pseudos, attrEqualityMods, ruleNestingOperators, substitutesEnabled) ->
     l = str.length
     c = null
 
@@ -213,7 +217,6 @@ class exports.CssSelectorParser
       return null unless rule
       currentRule = selector
       while rule
-        rule.isRule = true
         rule.type = 'rule'
         currentRule.rule = rule
         currentRule = rule
@@ -272,10 +275,15 @@ class exports.CssSelectorParser
             p++
             skipWhitespace()
             attrValue = ''
+            attr.valueType = 'string'
             if c == '"'
               attrValue = getStr '"', doubleQuotesEscapeChars
             else if c == '\''
               attrValue = getStr '\'', singleQuoteEscapeChars
+            else if substitutesEnabled && c == '$'
+              p++
+              attrValue = getIdent()
+              attr.valueType = 'substitute'
             else
               while p < l
                 break if c == ']'
@@ -307,6 +315,10 @@ class exports.CssSelectorParser
                 value = getStr '"', doubleQuotesEscapeChars
               else if c == '\''
                 value = getStr '\'', singleQuoteEscapeChars
+              else if substitutesEnabled && c == '$'
+                p++
+                value = getIdent()
+                pseudo.valueType = 'substitute'
               else
                 while p < l
                   break if c == ')'
@@ -326,7 +338,7 @@ class exports.CssSelectorParser
     @
 
   parse: (str) ->
-    context = new ParseContext(str, 0, @pseudos, @attrEqualityMods, @ruleNestingOperators)
+    context = new ParseContext(str, 0, @pseudos, @attrEqualityMods, @ruleNestingOperators, @substitutesEnabled)
     context.parse()
 
   escapeIdentifier: (s) ->
@@ -381,32 +393,36 @@ class exports.CssSelectorParser
           res = parts.join ' '
         when 'selectors'
           res = entity.selectors.map(renderEntity).join ', '
-        else
-          if entity.isRule
-            if entity.tagName
-              res = @escapeIdentifier(entity.tagName)
-            if entity.id
-              res += "##{@escapeIdentifier(entity.id)}"
-            if entity.classNames
-              res += (entity.classNames.map (cn) => ".#{@escapeIdentifier(cn)}").join ''
-            if entity.attrs
-              res += (entity.attrs.map (attr) =>
-                if attr.operator
+        when 'rule'
+          if entity.tagName
+            res = @escapeIdentifier(entity.tagName)
+          if entity.id
+            res += "##{@escapeIdentifier(entity.id)}"
+          if entity.classNames
+            res += (entity.classNames.map (cn) => ".#{@escapeIdentifier(cn)}").join ''
+          if entity.attrs
+            res += (entity.attrs.map (attr) =>
+              if attr.operator
+                if attr.valueType == 'substitute'
+                  "[#{@escapeIdentifier(attr.name)}#{attr.operator}$#{attr.value}]"
+                else
                   "[#{@escapeIdentifier(attr.name)}#{attr.operator}#{@escapeStr(attr.value)}]"
+              else
+                "[#{@escapeIdentifier(attr.name)}]"
+            ).join ''
+          if entity.pseudos
+            res += (entity.pseudos.map (pseudo) =>
+              if pseudo.valueType
+                if pseudo.valueType == 'selector'
+                  ":#{@escapeIdentifier(pseudo.name)}(#{renderEntity(pseudo.value)})"
+                else if pseudo.valueType == 'substitute'
+                  ":#{@escapeIdentifier(pseudo.name)}($#{pseudo.value})"
                 else
-                  "[#{@escapeIdentifier(attr.name)}]"
-              ).join ''
-            if entity.pseudos
-              res += (entity.pseudos.map (pseudo) =>
-                if pseudo.valueType
-                  if pseudo.valueType == 'string'
-                    ":#{@escapeIdentifier(pseudo.name)}(#{@escapeStr(pseudo.value)})"
-                  else if pseudo.valueType == 'selector'
-                    ":#{@escapeIdentifier(pseudo.name)}(#{renderEntity(pseudo.value)})"
-                else
+                  ":#{@escapeIdentifier(pseudo.name)}(#{@escapeStr(pseudo.value)})"
+              else
                   ":#{@escapeIdentifier(pseudo.name)}"
-              ).join ''
-          else throw Error('Unknown entity type: "' + entity.type +'".')
+            ).join ''
+        else throw Error('Unknown entity type: "' + entity.type +'".')
       res
 
     renderEntity path

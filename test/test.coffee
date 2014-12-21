@@ -53,6 +53,10 @@ assertEquals 'tag1:has(.class)', parser.render(parser.parse('tag1:has(.class)'))
 assertEquals 'tag1:has(.class, .class2)', parser.render(parser.parse('tag1:has(.class,.class2)'))
 assertEquals 'tag1:has(.class:has(.subcls), .class2)', parser.render(parser.parse('tag1:has(.class:has(.subcls),.class2)'))
 
+assertEquals '*', parser.render(parser.parse('*'))
+assertEquals '*.class', parser.render(parser.parse('*.class'))
+assertEquals '* + *', parser.render(parser.parse('* + *'))
+
 assertError 'Expected ")" but end of file reached.', ->
   parser.parse(':has(.class')
 assertError 'Expected ")" but end of file reached.', ->

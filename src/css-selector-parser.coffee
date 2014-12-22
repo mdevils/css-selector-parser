@@ -240,6 +240,7 @@ class exports.CssSelectorParser
       while p < l
         c = str.charAt(p)
         if c == '*'
+          p++
           (rule = rule || {}).tagName = '*'
         else if isIdentStart(c) || c == '\\'
           (rule = rule || {}).tagName = getIdent()
@@ -395,7 +396,10 @@ class exports.CssSelectorParser
           res = entity.selectors.map(renderEntity).join ', '
         when 'rule'
           if entity.tagName
-            res = @escapeIdentifier(entity.tagName)
+            if entity.tagName == '*'
+              res = '*'
+            else
+              res = @escapeIdentifier(entity.tagName)
           if entity.id
             res += "##{@escapeIdentifier(entity.id)}"
           if entity.classNames

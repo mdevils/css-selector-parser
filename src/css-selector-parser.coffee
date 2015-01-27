@@ -422,7 +422,7 @@ class exports.CssSelectorParser
                 else if pseudo.valueType == 'substitute'
                   ":#{@escapeIdentifier(pseudo.name)}($#{pseudo.value})"
                 else
-                  ":#{@escapeIdentifier(pseudo.name)}(#{@escapeStr(pseudo.value)})"
+                  ":#{@escapeIdentifier(pseudo.name)}(#{pseudo.value})"
               else
                   ":#{@escapeIdentifier(pseudo.name)}"
             ).join ''

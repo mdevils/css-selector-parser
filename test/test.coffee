@@ -89,6 +89,8 @@ assertError 'Rule expected but "!" found.', ->
   parser.parse('tag!')
 assertError 'Rule expected after ",".', ->
   parser.parse('tag,')
+assertError 'Expected symbol but end of file reached.', ->
+  parser.parse('#iframe_\\')
 
 assertEquals 'tag\\n\\\\name\\.\\[', parser.render(parser.parse('tag\\n\\\\name\\.\\['))
 assertEquals '.cls\\n\\\\name\\.\\[', parser.render(parser.parse('.cls\\n\\\\name\\.\\['))
@@ -123,3 +125,9 @@ assertError 'Expected "=" but ";" found.', ->
   parser.parse('[attr;=val]')
 
 assertEquals '#y.cls1.cls2 .cls3 + abc#def[x="y"] > yy, ff', parser.render(parser.parse('.cls1.cls2#y .cls3+abc#def[x=y]>yy,ff'))
+assertEquals '#google_ads_iframe_\\/100500\\/Pewpew_0', parser.render(parser.parse('#google_ads_iframe_\\/100500\\/Pewpew_0'))
+assertEquals '#\\31 23', parser.render(parser.parse('#\\3123'))
+assertEquals '#\\31 23', parser.render(parser.parse('#\\31 23'))
+assertEquals '#\\31 23', parser.render(parser.parse('#\\00031 23'))
+assertEquals '#\\31 23', parser.render(parser.parse('#\\0003123'))
+assertEquals '#\\34 123', parser.render(parser.parse('#\\0004123'))

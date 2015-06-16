@@ -43,6 +43,7 @@ class exports.CssSelectorParser
   isIdentStart = (c) -> (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z')
   isIdent = (c) -> (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || (c >= '0' && c <= '9') || c == '-' || c == '_'
   isHex = (c) -> (c >= 'a' && c <= 'f') || (c >= 'A' && c <= 'F')  || (c >= '0' && c <= '9')
+  isDecimal = (c) -> (c >= '0' && c <= '9')
   isAttrMatchOperator = (c) -> c == '=' || c == '^' || c == '$' || c == '*' || c == '~'
   identSpecialChars =
     '!': true
@@ -252,8 +253,37 @@ class exports.CssSelectorParser
           p++
           c = str.charAt(p)
           id = ''
-          while isIdent c
-            id += c
+          while c == '\\' || isIdent c
+            # next character after current symbol is escaped
+            if c == '\\'
+              p++
+              throw Error('Expected symbol but end of file reached.') if p >= l
+              escapedCharacter = str.charAt(p)
+
+              # skipping leading zeros
+              while (p < l && escapedCharacter == '0')
+                p++
+                escapedCharacter = str.charAt(p)
+
+              if escapedCharacter == '3'
+                p++
+                # escaped character by \\3 can be empty
+                if p < l
+                  id += str.charAt(p)
+                  p++
+                  followingCharacter = str.charAt(p)
+                  # space after escape sequence should be omitted and
+                  # next character after space should be added to id
+                  if followingCharacter == ' '
+                    p++
+                    if p < l
+                      id += str.charAt(p)
+                  else
+                    id += followingCharacter
+              else
+                id += escapedCharacter
+            else
+              id += c
             p++
             c = str.charAt(p)
           (rule = rule || {}).id = id
@@ -363,6 +393,13 @@ class exports.CssSelectorParser
       i++
     result
 
+  escapeId: (s) ->
+    first = s[0]
+    if isDecimal first
+      return "\\3#{@escapeIdentifier(first)} #{@escapeIdentifier(s.slice 1)}"
+
+    @escapeIdentifier s
+
   escapeStr: (s) ->
     result = ''
     i = 0
@@ -401,7 +438,7 @@ class exports.CssSelectorParser
             else
               res = @escapeIdentifier(entity.tagName)
           if entity.id
-            res += "##{@escapeIdentifier(entity.id)}"
+            res += "##{@escapeId(entity.id)}"
           if entity.classNames
             res += (entity.classNames.map (cn) => ".#{@escapeIdentifier(cn)}").join ''
           if entity.attrs

@@ -32,7 +32,7 @@ console.log(util.inspect(parser.parse('a[href^=/], .container:has(nav) > a[href]
 
 Produces:
 
-```
+```javascript
 { type: 'selectors',
   selectors:
    [ { type: 'ruleSet',

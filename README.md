@@ -1,4 +1,4 @@
-node-css-selector-parser
+node-css-selector-parser [![Build Status](https://travis-ci.org/mdevils/node-css-selector-parser.svg?branch=master)](https://travis-ci.org/mdevils/node-css-selector-parser)
 ========================
 
 Fast and low memory CSS selector parser.

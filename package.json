@@ -26,8 +26,7 @@
   ],
   "license": "MIT",
   "scripts": {
-    "test": "npm run build && coffee test/test.coffee",
-    "build": "coffee -o lib -c src/*.coffee",
-    "benchmark": "npm run build && coffee benchmark/benchmark.coffee"
+    "test": "node test/test.js",
+    "benchmark": "node benchmark/benchmark.js"
   }
 }

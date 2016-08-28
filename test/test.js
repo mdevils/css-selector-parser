@@ -165,13 +165,25 @@ assertError('Expected symbol but end of file reached.', function() {
     return parser.parse('#iframe_\\');
 });
 
-assertEquals('tag\\n\\\\name\\.\\[', parser.render(parser.parse('tag\\n\\\\name\\.\\[')));
+assertEquals('tag\\/name', parser.render(parser.parse('tag\\/name')));
 
-assertEquals('.cls\\n\\\\name\\.\\[', parser.render(parser.parse('.cls\\n\\\\name\\.\\[')));
+assertEquals('.class\\/name', parser.render(parser.parse('.class\\/name')));
 
-assertEquals('[attr\\n\\\\name\\.\\[="1"]', parser.render(parser.parse('[attr\\n\\\\name\\.\\[=1]')));
+assertEquals('#id\\/name', parser.render(parser.parse('#id\\/name')));
 
-assertEquals(':pseudo\\n\\\\name\\.\\[\\(("123")', parser.render(parser.parse(':pseudo\\n\\\\name\\.\\[\\((123)')));
+assertEquals('.\\30 wow', parser.render(parser.parse('.\\30 wow')));
+
+assertEquals('.\\30 wow', parser.render(parser.parse('.\\30wow')));
+
+assertEquals('.\\20 wow', parser.render(parser.parse('.\\20wow')));
+
+assertEquals('tagn\\\\name\\.\\[', parser.render(parser.parse('tag\\n\\\\name\\.\\[')));
+
+assertEquals('.clsn\\\\name\\.\\[', parser.render(parser.parse('.cls\\n\\\\name\\.\\[')));
+
+assertEquals('[attrn\\\\name\\.\\[="1"]', parser.render(parser.parse('[attr\\n\\\\name\\.\\[=1]')));
+
+assertEquals(':pseudon\\\\name\\.\\[\\(("123")', parser.render(parser.parse(':pseudo\\n\\\\name\\.\\[\\((123)')));
 
 assertEquals('[attr="val\\nval"]', parser.render(parser.parse('[attr="val\nval"]')));
 
@@ -231,13 +243,13 @@ assertEquals(
     parser.render(parser.parse('#google_ads_iframe_\\/100500\\/Pewpew_0'))
 );
 
-assertEquals('#\\31 23', parser.render(parser.parse('#\\3123')));
+assertEquals('#\\3123', parser.render(parser.parse('#\\3123')));
 
 assertEquals('#\\31 23', parser.render(parser.parse('#\\31 23')));
 
 assertEquals('#\\31 23', parser.render(parser.parse('#\\00031 23')));
 
-assertEquals('#\\31 23', parser.render(parser.parse('#\\0003123')));
+assertEquals('#\\3123', parser.render(parser.parse('#\\0003123')));
 
-assertEquals('#\\34 123', parser.render(parser.parse('#\\0004123')));
+assertEquals('#\\4123', parser.render(parser.parse('#\\0004123')));
 

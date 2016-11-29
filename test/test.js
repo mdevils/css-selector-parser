@@ -74,15 +74,19 @@ assertEquals('tag1 ~ tag2', parser.render(parser.parse('tag1~tag2')));
 
 assertEquals('tag1:first', parser.render(parser.parse('tag1:first')));
 
-assertEquals('tag1:lt("3")', parser.render(parser.parse('tag1:lt(3)')));
+assertEquals('tag1:lt(\\33 )', parser.render(parser.parse('tag1:lt(3)')));
 
-assertEquals('tag1:lt("3")', parser.render(parser.parse('tag1:lt( 3 )')));
+assertEquals('tag1:lt(\\33 )', parser.render(parser.parse('tag1:lt( 3 )')));
 
-assertEquals('tag1:lt("3")', parser.render(parser.parse('tag1:lt(\'3\')')));
+assertEquals('tag1:lt(\\33 )', parser.render(parser.parse('tag1:lt(\'3\')')));
 
-assertEquals('tag1:lt("3")', parser.render(parser.parse('tag1:lt("3" )')));
+assertEquals('tag1:lt(\\33 )', parser.render(parser.parse('tag1:lt("3" )')));
 
-assertEquals('tag1:has(".class")', parser.render(parser.parse('tag1:has(.class)')));
+parser.registerNumericPseudos('lt');
+
+assertEquals('tag1:lt(3)', parser.render(parser.parse('tag1:lt(3)')));
+
+assertEquals('tag1:has(\\.class)', parser.render(parser.parse('tag1:has(.class)')));
 
 parser.registerSelectorPseudos('has');
 
@@ -111,7 +115,7 @@ assertError('Expected ")" but end of file reached.', function() {
 
 parser.unregisterSelectorPseudos('has');
 
-assertEquals('tag1:has(".class,.class2")', parser.render(parser.parse('tag1:has(.class,.class2)')));
+assertEquals('tag1:has(\\.class\\,\\.class2)', parser.render(parser.parse('tag1:has(.class,.class2)')));
 
 assertError('Expected "]" but "!" found.', function() {
     return parser.parse('[attr="val"!');
@@ -183,7 +187,7 @@ assertEquals('.clsn\\\\name\\.\\[', parser.render(parser.parse('.cls\\n\\\\name\
 
 assertEquals('[attrn\\\\name\\.\\[="1"]', parser.render(parser.parse('[attr\\n\\\\name\\.\\[=1]')));
 
-assertEquals(':pseudon\\\\name\\.\\[\\(("123")', parser.render(parser.parse(':pseudo\\n\\\\name\\.\\[\\((123)')));
+assertEquals(':pseudon\\\\name\\.\\[\\((\\31 23)', parser.render(parser.parse(':pseudo\\n\\\\name\\.\\[\\((123)')));
 
 assertEquals('[attr="val\\nval"]', parser.render(parser.parse('[attr="val\nval"]')));
 
@@ -199,7 +203,7 @@ assertEquals('[attr\\a0 attr]', parser.render(parser.parse('[attr\\a0 attr]')));
 
 assertEquals('[attr="$var"]', parser.render(parser.parse('[attr=$var]')));
 
-assertEquals(':has("$var")', parser.render(parser.parse(':has($var)')));
+assertEquals(':has(\\$var)', parser.render(parser.parse(':has($var)')));
 
 parser.enableSubstitutes();
 
@@ -211,7 +215,7 @@ parser.disableSubstitutes();
 
 assertEquals('[attr="$var"]', parser.render(parser.parse('[attr=$var]')));
 
-assertEquals(':has("$var")', parser.render(parser.parse(':has($var)')));
+assertEquals(':has(\\$var)', parser.render(parser.parse(':has($var)')));
 
 parser.registerNestingOperators(';');
 

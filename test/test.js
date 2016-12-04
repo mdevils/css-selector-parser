@@ -52,6 +52,16 @@ assertEquals('tag#id.class[attr^="value"]', parser.render(parser.parse('tag#id.c
 
 assertEquals('tag#id.class[attr$="value"]', parser.render(parser.parse('tag#id.class[attr$=value]')));
 
+assertEquals('tag#id.class[attr="value" i]', parser.render(parser.parse('tag#id.class[attr=value i]')));
+
+assertEquals('tag#id.class[attr~="value" i]', parser.render(parser.parse('tag#id.class[attr~=value i]')));
+
+assertEquals('tag#id.class[attr*="value" i]', parser.render(parser.parse('tag#id.class[attr*=value i]')));
+
+assertEquals('tag#id.class[attr^="value" i]', parser.render(parser.parse('tag#id.class[attr^=value i]')));
+
+assertEquals('tag#id.class[attr$="value" i]', parser.render(parser.parse('tag#id.class[attr$=value i]')));
+
 assertEquals('tagname[x="y"]', parser.render(parser.parse('tagname[     x =    y    ]')));
 
 assertEquals('tagname[x="y"]', parser.render(parser.parse('tagname[x="y"]')));
@@ -63,6 +73,18 @@ assertEquals('tagname[x="y "]', parser.render(parser.parse('tagname[x="y "]')));
 assertEquals('tagname[x="y \\\""]', parser.render(parser.parse('tagname[x="y \\\""]')));
 
 assertEquals('tagname[x="y\'"]', parser.render(parser.parse('tagname[x="y\'"]')));
+
+assertEquals('tagname[x="y" i]', parser.render(parser.parse('tagname[     x =    y    i]')));
+
+assertEquals('tagname[x="y" i]', parser.render(parser.parse('tagname[x="y"i]')));
+
+assertEquals('tagname[x="y" i][z]', parser.render(parser.parse('tagname[x="y"i][z]')));
+
+assertEquals('tagname[x="y " i]', parser.render(parser.parse('tagname[x="y "i]')));
+
+assertEquals('tagname[x="y \\\"" i]', parser.render(parser.parse('tagname[x="y \\\""i]')));
+
+assertEquals('tagname[x="y\'" i]', parser.render(parser.parse('tagname[x="y\'"  i]')));
 
 assertEquals('tag1 tag2', parser.render(parser.parse('tag1     tag2')));
 
@@ -256,4 +278,3 @@ assertEquals('#\\31 23', parser.render(parser.parse('#\\00031 23')));
 assertEquals('#\\3123', parser.render(parser.parse('#\\0003123')));
 
 assertEquals('#\\4123', parser.render(parser.parse('#\\0004123')));
-

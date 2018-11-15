@@ -257,3 +257,10 @@ assertEquals('#\\3123', parser.render(parser.parse('#\\0003123')));
 
 assertEquals('#\\4123', parser.render(parser.parse('#\\0004123')));
 
+assertEquals('tag1::after', parser.render(parser.parse('tag1::after')));
+assertEquals('tag1:after', parser.render(parser.parse('tag1:after')));
+assertEquals(':after', parser.parse('tag1::after').rule.pseudos[0].name);
+
+assertEquals('tag1::before', parser.render(parser.parse('tag1::before')));
+assertEquals('tag1:before', parser.render(parser.parse('tag1:before')));
+assertEquals(':before', parser.parse('tag1::before').rule.pseudos[0].name);

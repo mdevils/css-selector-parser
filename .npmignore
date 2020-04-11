@@ -1,2 +1,5 @@
 test
 benchmark
+src
+.travis.yml
+tsconfig.json

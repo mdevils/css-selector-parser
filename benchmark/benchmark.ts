@@ -1,27 +1,26 @@
-var CssSelectorParser = require('../index').CssSelectorParser;
-var parser = new CssSelectorParser;
+import {CssSelectorParser} from '../src';
+
+const parser = new CssSelectorParser();
 
 parser.registerAttrEqualityMods('^', '$', '*', '~');
 parser.registerNestingOperators('>', '+', '~');
 parser.enableSubstitutes();
 parser.registerSelectorPseudos('has');
 
-function benchmark(name, tests) {
-  var c;
-  c = 10000;
-  console.log(name + ' ' + c + ' times.');
-  Object.keys(tests).forEach(function(testName) {
-    var cb, i, start, time;
-    cb = tests[testName];
-    i = 0;
-    start = new Date();
-    while (i < c) {
-      cb();
+function benchmark(name: string, tests: {[name: string]: () => void}) {
+  const count = 10000;
+  console.log(name + ' ' + count + ' times.');
+  for (let testName of Object.keys(tests)) {
+    const callback = tests[testName];
+    let i = 0;
+    const start = Date.now();
+    while (i < count) {
+      callback();
       i++;
     }
-    time = (new Date()) - start;
-    return console.log('    "' + testName + '": ' + time + 'ms, ' + (Math.round(c / time)) + 'op/msec');
-  });
+    const time = Date.now() - start;
+    console.log('    "' + testName + '": ' + time + 'ms, ' + Math.round(count / time) + 'op/msec');
+  }
   return console.log('');
 }
 

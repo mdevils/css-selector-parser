@@ -207,7 +207,7 @@ export function parseCssSelector(
             } else if (chr === '[') {
                 pos++;
                 skipWhitespace();
-                const attr: Partial<RuleAttr> = {
+                let attr: any = {
                     name: getIdent()
                 };
                 skipWhitespace();

@@ -13,12 +13,11 @@ export interface Selectors {
 
 export type AttrValueType = 'string' | 'substitute';
 
-export interface RuleAttr {
-    name: string;
+export type RuleAttr = {name: string} & ({} | {
     operator: string;
     valueType: AttrValueType;
     value: string;
-}
+});
 
 export type RulePseudo = {
     name: string;

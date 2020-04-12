@@ -37,7 +37,7 @@ export function renderEntity(entity: SelectorEntity) {
             }
             if (entity.attrs) {
                 res += entity.attrs.map((attr) => {
-                    if (attr.operator) {
+                    if ('operator' in attr) {
                         if (attr.valueType === 'substitute') {
                             return "[" + escapeIdentifier(attr.name) + attr.operator + "$" + attr.value + "]";
                         } else {

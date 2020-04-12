@@ -1,6 +1,10 @@
 import {PseudoSelectorType, parseCssSelector} from './parser-context';
-import {Selector} from './selector';
+import {
+  Selector, RuleAttr, Rule, Selectors, SelectorEntity, RulePseudo, RuleSet, AttrValueType
+} from './selector';
 import {renderEntity} from './render';
+
+export {Selector, RuleAttr, Rule, Selectors, SelectorEntity, RulePseudo, RuleSet, AttrValueType, PseudoSelectorType};
 
 export class CssSelectorParser {
   protected pseudos: {[pseudo: string]: PseudoSelectorType} = {};

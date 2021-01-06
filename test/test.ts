@@ -1,11 +1,10 @@
-import {CssSelectorParser} from '../src';
 import * as colors from 'colors';
+import {CssSelectorParser} from '../src/old';
 
 function assertEquals(str: string, expr: string) {
     if (str === expr) {
         return console.log(
-            (colors.green('OK')) + ": " + (colors.yellow("'" + expr + "'")) +
-            " === " + (colors.yellow("'" + str + "'")) + "."
+            colors.green('OK') + ': ' + colors.yellow("'" + expr + "'") + ' === ' + colors.yellow("'" + str + "'") + '.'
         );
     } else {
         throw Error("Assertion failed: '" + expr + "' should equal to '" + str + "'.");
@@ -43,7 +42,7 @@ assertEquals('tagname[x="y"]', parser.render(parser.parse('tagname[     x =    y
 assertEquals('tagname[x="y"]', parser.render(parser.parse('tagname[x="y"]')));
 assertEquals('tagname[x="y"][z]', parser.render(parser.parse('tagname[x="y"][z]')));
 assertEquals('tagname[x="y "]', parser.render(parser.parse('tagname[x="y "]')));
-assertEquals('tagname[x="y \\\""]', parser.render(parser.parse('tagname[x="y \\\""]')));
+assertEquals('tagname[x="y \\""]', parser.render(parser.parse('tagname[x="y \\""]')));
 assertEquals('tagname[x="y\'"]', parser.render(parser.parse('tagname[x="y\'"]')));
 assertEquals('tag1 tag2', parser.render(parser.parse('tag1     tag2')));
 assertEquals('tag1 > tag2', parser.render(parser.parse('tag1>tag2')));
@@ -52,7 +51,7 @@ assertEquals('tag1 ~ tag2', parser.render(parser.parse('tag1~tag2')));
 assertEquals('tag1:first', parser.render(parser.parse('tag1:first')));
 assertEquals('tag1:lt(\\33 )', parser.render(parser.parse('tag1:lt(3)')));
 assertEquals('tag1:lt(\\33 )', parser.render(parser.parse('tag1:lt( 3 )')));
-assertEquals('tag1:lt(\\33 )', parser.render(parser.parse('tag1:lt(\'3\')')));
+assertEquals('tag1:lt(\\33 )', parser.render(parser.parse("tag1:lt('3')")));
 assertEquals('tag1:lt(\\33 )', parser.render(parser.parse('tag1:lt("3" )')));
 
 parser.registerNumericPseudos('lt');
@@ -71,53 +70,53 @@ assertEquals(
 assertEquals('*', parser.render(parser.parse('*')));
 assertEquals('*.class', parser.render(parser.parse('*.class')));
 assertEquals('* + *', parser.render(parser.parse('* + *')));
-assertError('Expected ")" but end of file reached.', function() {
+assertError('Expected ")" but end of file reached.', function () {
     return parser.parse(':has(.class');
 });
-assertError('Expected ")" but end of file reached.', function() {
+assertError('Expected ")" but end of file reached.', function () {
     return parser.parse(':has(:has(');
 });
 
 parser.unregisterSelectorPseudos('has');
 
 assertEquals('tag1:has(\\.class\\,\\.class2)', parser.render(parser.parse('tag1:has(.class,.class2)')));
-assertError('Expected "]" but "!" found.', function() {
+assertError('Expected "]" but "!" found.', function () {
     return parser.parse('[attr="val"!');
 });
-assertError('Expected "]" but end of file reached.', function() {
+assertError('Expected "]" but end of file reached.', function () {
     return parser.parse('[attr="val"');
 });
-assertError('Expected "=" but "!" found.', function() {
+assertError('Expected "=" but "!" found.', function () {
     return parser.parse('[attr!="val"]');
 });
-assertError('Expected "=" but end of file reached.', function() {
+assertError('Expected "=" but end of file reached.', function () {
     return parser.parse('[attr');
 });
-assertError('Expected ")" but "!" found.', function() {
+assertError('Expected ")" but "!" found.', function () {
     return parser.parse(':pseudoName("pseudoValue"!');
 });
-assertError('Expected ")" but end of file reached.', function() {
+assertError('Expected ")" but end of file reached.', function () {
     return parser.parse(':pseudoName("pseudoValue"');
 });
-assertError('Rule expected after ">".', function() {
+assertError('Rule expected after ">".', function () {
     return parser.parse('tag>');
 });
-assertError('Rule expected after "+".', function() {
+assertError('Rule expected after "+".', function () {
     return parser.parse('tag+');
 });
-assertError('Rule expected after "~".', function() {
+assertError('Rule expected after "~".', function () {
     return parser.parse('tag~');
 });
-assertError('Rule expected but "!" found.', function() {
+assertError('Rule expected but "!" found.', function () {
     return parser.parse('tag !');
 });
-assertError('Rule expected but "!" found.', function() {
+assertError('Rule expected but "!" found.', function () {
     return parser.parse('tag!');
 });
-assertError('Rule expected after ",".', function() {
+assertError('Rule expected after ",".', function () {
     return parser.parse('tag,');
 });
-assertError('Expected symbol but end of file reached.', function() {
+assertError('Expected symbol but end of file reached.', function () {
     return parser.parse('#iframe_\\');
 });
 assertEquals('tag\\/name', parser.render(parser.parse('tag\\/name')));
@@ -155,7 +154,7 @@ assertEquals('tag1 ; tag2', parser.render(parser.parse('tag1 ; tag2')));
 
 parser.unregisterNestingOperators(';');
 
-assertError('Rule expected but ";" found.', function() {
+assertError('Rule expected but ";" found.', function () {
     return parser.parse('tag1 ; tag2');
 });
 
@@ -165,7 +164,7 @@ assertEquals('[attr;="val"]', parser.render(parser.parse('[attr;=val]')));
 
 parser.unregisterAttrEqualityMods(';');
 
-assertError('Expected "=" but ";" found.', function() {
+assertError('Expected "=" but ";" found.', function () {
     return parser.parse('[attr;=val]');
 });
 assertEquals(

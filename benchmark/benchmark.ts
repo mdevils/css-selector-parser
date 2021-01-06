@@ -1,4 +1,4 @@
-import {CssSelectorParser} from '../src';
+import {CssSelectorParser} from '../src/old';
 
 const parser = new CssSelectorParser();
 

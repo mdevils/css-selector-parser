@@ -1,3 +1,4 @@
+import {AttrValueType, Rule, RulePseudoClass, RuleSet, Selector} from './selector';
 import {
     doubleQuotesEscapeChars,
     identSpecialChars,
@@ -5,10 +6,16 @@ import {
     isIdent,
     isIdentStart,
     singleQuoteEscapeChars
-} from "./utils";
-import {Rule, RuleAttr, RulePseudo, RuleSet, Selector} from './selector';
+} from './utils';
 
 export type PseudoSelectorType = 'numeric' | 'selector';
+
+interface PartialRuleAttr {
+    name: string;
+    operator?: string;
+    valueType?: AttrValueType;
+    value?: string;
+}
 
 export function parseCssSelector(
     str: string,
@@ -19,7 +26,7 @@ export function parseCssSelector(
     substitutesEnabled: boolean
 ) {
     const l = str.length;
-    let chr: string = '';
+    let chr: any = '';
 
     function getStr(quote: string, escapeTable: {[key: string]: string}) {
         let result = '';
@@ -108,7 +115,7 @@ export function parseCssSelector(
     function skipWhitespace() {
         chr = str.charAt(pos);
         let result = false;
-        while (chr === ' ' || chr === "\t" || chr === "\n" || chr === "\r" || chr === "\f") {
+        while (chr === ' ' || chr === '\t' || chr === '\n' || chr === '\r' || chr === '\f') {
             result = true;
             pos++;
             chr = str.charAt(pos);
@@ -187,7 +194,6 @@ export function parseCssSelector(
         return selector as RuleSet | null;
     }
 
-    // @ts-ignore no-overlap
     function parseRule(): Rule | null {
         let rule: Partial<Rule> | null = null;
         while (pos < l) {
@@ -207,11 +213,10 @@ export function parseCssSelector(
             } else if (chr === '[') {
                 pos++;
                 skipWhitespace();
-                let attr: any = {
+                const attr: PartialRuleAttr = {
                     name: getIdent()
                 };
                 skipWhitespace();
-                // @ts-ignore
                 if (chr === ']') {
                     pos++;
                 } else {
@@ -232,13 +237,10 @@ export function parseCssSelector(
                     skipWhitespace();
                     let attrValue = '';
                     attr.valueType = 'string';
-                    // @ts-ignore
                     if (chr === '"') {
                         attrValue = getStr('"', doubleQuotesEscapeChars);
-                    // @ts-ignore
-                    } else if (chr === '\'') {
-                        attrValue = getStr('\'', singleQuoteEscapeChars);
-                    // @ts-ignore
+                    } else if (chr === "'") {
+                        attrValue = getStr("'", singleQuoteEscapeChars);
                     } else if (substitutesEnabled && chr === '$') {
                         pos++;
                         attrValue = getIdent();
@@ -265,14 +267,13 @@ export function parseCssSelector(
                     attr.value = attrValue;
                 }
                 rule = rule || {};
-                (rule.attrs = rule.attrs || []).push(attr as RuleAttr);
+                (rule.attrs = rule.attrs || []).push(attr);
             } else if (chr === ':') {
                 pos++;
                 const pseudoName = getIdent();
-                const pseudo: Partial<RulePseudo> = {
+                const pseudo: Partial<RulePseudoClass> = {
                     name: pseudoName
                 };
-                // @ts-ignore
                 if (chr === '(') {
                     pos++;
                     let value: string | Selector | null = '';
@@ -282,13 +283,10 @@ export function parseCssSelector(
                         value = parseSelector() as any;
                     } else {
                         pseudo.valueType = pseudos[pseudoName] || 'string';
-                        // @ts-ignore
                         if (chr === '"') {
                             value = getStr('"', doubleQuotesEscapeChars);
-                        // @ts-ignore
-                        } else if (chr === '\'') {
-                            value = getStr('\'', singleQuoteEscapeChars);
-                        // @ts-ignore
+                        } else if (chr === "'") {
+                            value = getStr("'", singleQuoteEscapeChars);
                         } else if (substitutesEnabled && chr === '$') {
                             pos++;
                             value = getIdent();
@@ -316,7 +314,7 @@ export function parseCssSelector(
                     pseudo.value = value as any;
                 }
                 rule = rule || {};
-                (rule.pseudos = rule.pseudos || []).push(pseudo as RulePseudo);
+                (rule.pseudos = rule.pseudos || []).push(pseudo as RulePseudoClass);
             } else {
                 break;
             }

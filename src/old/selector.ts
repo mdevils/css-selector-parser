@@ -13,18 +13,18 @@ export interface Selectors {
 
 export type AttrValueType = 'string' | 'substitute';
 
-export type RuleAttr = {name: string} & ({} | {
-    operator: string;
-    valueType: AttrValueType;
-    value: string;
-});
+export type RuleAttr = {name: string} & (
+    | {}
+    | {
+          operator: string;
+          valueType: AttrValueType;
+          value: string;
+      }
+);
 
-export type RulePseudo = {
+export type RulePseudoClass = {
     name: string;
-} & (
-    {valueType: 'selector', value: Selector} |
-    {valueType: 'string' | 'substitute' | 'numeric', value: string}
-)
+} & ({valueType: 'selector'; value: Selector} | {valueType: 'string' | 'substitute' | 'numeric'; value: string});
 
 export interface Rule {
     type: 'rule';
@@ -32,7 +32,7 @@ export interface Rule {
     id?: string;
     classNames?: string[];
     attrs: RuleAttr[];
-    pseudos: RulePseudo[];
+    pseudos: RulePseudoClass[];
     nestingOperator: string | null;
     rule?: Rule;
 }

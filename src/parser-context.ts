@@ -17,7 +17,7 @@ export function parseCssSelector(
     attrEqualityMods: {[key: string]: true},
     ruleNestingOperators: {[key: string]: true},
     substitutesEnabled: boolean
-) {
+): Selector | null {
     const l = str.length;
     let chr: string = '';
 

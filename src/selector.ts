@@ -31,7 +31,7 @@ export interface Rule {
     tagName?: string;
     id?: string;
     classNames?: string[];
-    attrs: RuleAttr[];
+    attrs?: RuleAttr[];
     pseudos: RulePseudo[];
     nestingOperator: string | null;
     rule?: Rule;

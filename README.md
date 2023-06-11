@@ -1,5 +1,5 @@
-node-css-selector-parser [![Build Status](https://travis-ci.org/mdevils/node-css-selector-parser.svg?branch=master)](https://travis-ci.org/mdevils/node-css-selector-parser)
-========================
+css-selector-parser
+===================
 
 Fast and low memory CSS selector parser.
 
@@ -74,9 +74,33 @@ Fields for *rule* type.
   * *valueType* — type of comparison value ("string" or "substitute").
   * *operator* — attribute value comparison operator.
   * *value* — comparison attribute value.
-* *pseudos* — list of pseudo class rules; rule may contain fields:
+* *pseudos* — list of pseudo-class rules; rule may contain fields:
   * *name* — pseudo name, required field.
   * *valueType* — argument type ("string", "selector" or "substitute").
   * *value* — pseudo argument.
 * *nestingOperator* — the operator used to nest this rule (e.g. in selector "tag1 > tag2", tag2 will have nestingOperator=">")
 * *rule* — nested rule.
+
+LICENSE
+-------
+
+MIT
+
+Security contact information
+----------------------------
+
+To report a security vulnerability, please use the
+[Tidelift security contact](https://tidelift.com/security). Tidelift will
+coordinate the fix and disclosure.
+
+`css-selector-parser` for enterprise
+------------------------------
+
+Available as part of the Tidelift Subscription
+
+The maintainers of `css-selector-parser` and thousands of other packages are working with
+Tidelift to deliver commercial support and maintenance for the open source
+dependencies you use to build your applications. Save time, reduce risk, and
+improve code health, while paying the maintainers of the exact dependencies you
+use.
+[Learn more.](https://tidelift.com/subscription/pkg/npm-css-selector-parser?utm_source=npm-css-selector-parser&utm_medium=referral&utm_campaign=enterprise)

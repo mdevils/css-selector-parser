@@ -37,11 +37,11 @@
   "license": "MIT",
   "scripts": {
     "build": "tsc",
-    "test": "mocha --recursive -r ts-node/register test/**/*.ts",
+    "test": "jest test",
     "test:lib": "TEST_LIB=1 yarn test",
     "lint": "eslint src/**.ts",
     "lint:fix": "eslint --fix src/**.ts",
     "benchmark": "ts-node benchmark/benchmark.ts",
-    "prepublishOnly": "yarn build"
+    "prepublishOnly": "npm run build"
   }
 }

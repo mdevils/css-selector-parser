@@ -6,6 +6,13 @@ css-selector-parser
 * Compliant with all historical and modern CSS specs.
 * Covered with tests.
 * Documented.
+* Supported CSS selector standards:
+  * `css1`: https://www.w3.org/TR/CSS1/
+  * `css2`: https://www.w3.org/TR/CSS2/
+  * `css3`/`selectors-3`: https://www.w3.org/TR/selectors-3/
+  * `selectors-4`: https://www.w3.org/TR/selectors-4/
+  * `latest`: refers to `selectors-4`
+  * `progressive`: `latest` + accepts unknown psudo-classes, psudo-elements and attribute case sensitivity modifiers
 
 Installation
 ------------
@@ -82,6 +89,8 @@ Produces:
 ### Constructing AST and rendering
 
 ```javascript
+import {ast, render} from 'css-selector-parser';
+
 const selector = ast.selector({
     rules: [
         ast.rule({

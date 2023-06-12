@@ -30,6 +30,23 @@ function renderFormula(a: number, b: number) {
 
 /**
  * Renders CSS Selector AST back to a string.
+ *
+ * @example
+ *
+ * import {ast, render} from 'css-selector-parser';
+ *
+ * const selector = ast.selector({
+ *     rules: [
+ *         ast.rule({
+ *             tag: ast.tagName({name: 'a'}),
+ *             ids: ['user-23'],
+ *             classNames: ['user'],
+ *             pseudoClasses: [ast.pseudoClass({name: 'visited'})]
+ *         })
+ *     ]
+ * });
+ *
+ * console.log(render(selector)); // a#user-23.user:visited
  */
 export function render(entity: AstSelector | AstRule): string {
     if (entity.type === 'Selector') {

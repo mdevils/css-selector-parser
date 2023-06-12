@@ -299,13 +299,13 @@ export function createParser(
         }
     }
 
-    function parseSelector(): AstSelector {
+    function parseSelector(relative = false): AstSelector {
         skipWhitespace();
-        const rules: AstRule[] = [parseRule()];
+        const rules: AstRule[] = [parseRule(relative)];
         while (is(',')) {
             next();
             skipWhitespace();
-            rules.push(parseRule());
+            rules.push(parseRule(relative));
         }
         return {
             type: 'Selector',
@@ -493,7 +493,7 @@ export function createParser(
                 };
                 assert(pseudo.argument.value, 'Expected pseudo-class argument value.');
             } else if (pseudoDefinition.type === 'Selector') {
-                pseudo.argument = parseSelector();
+                pseudo.argument = parseSelector(true);
             } else if (pseudoDefinition.type === 'Formula') {
                 const [a, b] = parseFormula();
                 pseudo.argument = {
@@ -596,9 +596,16 @@ export function createParser(
         }
     }
 
-    function parseRule(): AstRule {
+    function parseRule(relative = false): AstRule {
         const rule: Partial<AstRule> = {};
         let isRuleStart = true;
+        if (relative) {
+            const combinator = matchMulticharIndex(combinatorsIndex);
+            if (combinator) {
+                rule.combinator = combinator;
+                skipWhitespace();
+            }
+        }
         while (pos < l) {
             if (isTagStart()) {
                 assert(isRuleStart, 'Unexpected tag/namespace start.');

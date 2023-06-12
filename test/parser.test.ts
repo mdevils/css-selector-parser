@@ -1123,6 +1123,29 @@ describe('parse()', () => {
                 })
             );
         });
+        it('should parse a relative nested selector', () => {
+            expect(parse(':has(>div)')).toEqual(
+                ast.selector({
+                    rules: [
+                        ast.rule({
+                            pseudoClasses: [
+                                ast.pseudoClass({
+                                    name: 'has',
+                                    argument: ast.selector({
+                                        rules: [
+                                            ast.rule({
+                                                tag: ast.tagName({name: 'div'}),
+                                                combinator: '>'
+                                            })
+                                        ]
+                                    })
+                                })
+                            ]
+                        })
+                    ]
+                })
+            );
+        });
         it('should fail on empty substitute name', () => {
             expect(() =>
                 createParser({

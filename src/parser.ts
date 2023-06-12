@@ -316,10 +316,45 @@ export function createParser(
     function parseAttribute() {
         pass('[');
         skipWhitespace();
-        const attr: AstAttribute = {
-            type: 'Attribute',
-            name: parseIdentifier()
-        };
+        let attr: AstAttribute;
+        if (is('|')) {
+            assert(namespaceEnabled, 'Namespaces are not enabled.');
+            next();
+            attr = {
+                type: 'Attribute',
+                name: parseIdentifier(),
+                namespace: {type: 'NoNamespace'}
+            };
+        } else if (is('*')) {
+            assert(namespaceEnabled, 'Namespaces are not enabled.');
+            assert(namespaceWildcardEnabled, 'Wildcard namespace is not enabled.');
+            next();
+            pass('|');
+            attr = {
+                type: 'Attribute',
+                name: parseIdentifier(),
+                namespace: {type: 'WildcardNamespace'}
+            };
+        } else {
+            const identifier = parseIdentifier();
+            attr = {
+                type: 'Attribute',
+                name: identifier
+            };
+            if (is('|')) {
+                const savedPos = pos;
+                next();
+                if (isIdentStart(chr) || is('\\')) {
+                    attr = {
+                        type: 'Attribute',
+                        name: parseIdentifier(),
+                        namespace: {type: 'NamespaceName', name: identifier}
+                    };
+                } else {
+                    rewind(savedPos);
+                }
+            }
+        }
         assert(attr.name, 'Expected attribute name.');
         skipWhitespace();
         if (isEof() && !strict) {

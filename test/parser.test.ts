@@ -388,6 +388,32 @@ describe('parse()', () => {
                 })
             );
         });
+        it('should parse a attribute with comparison', () => {
+            expect(parse('[attr=val]')).toEqual(
+                ast.selector({
+                    rules: [
+                        ast.rule({
+                            attributes: [
+                                ast.attribute({name: 'attr', operator: '=', value: ast.string({value: 'val'})})
+                            ]
+                        })
+                    ]
+                })
+            );
+        });
+        it('should parse a attribute with multibyte comparison', () => {
+            expect(parse('[attr|=val]')).toEqual(
+                ast.selector({
+                    rules: [
+                        ast.rule({
+                            attributes: [
+                                ast.attribute({name: 'attr', operator: '|=', value: ast.string({value: 'val'})})
+                            ]
+                        })
+                    ]
+                })
+            );
+        });
         it('should parse multiple attributes', () => {
             expect(parse('[attr1][attr2]')).toEqual(
                 ast.selector({
@@ -603,6 +629,150 @@ describe('parse()', () => {
                         ast.rule({
                             pseudoClasses: [ast.pseudoClass({name: 'link'})],
                             attributes: [ast.attribute({name: 'attr'})]
+                        })
+                    ]
+                })
+            );
+        });
+        it('should parse a named namespace', () => {
+            expect(parse('[ns|href]')).toEqual(
+                ast.selector({
+                    rules: [
+                        ast.rule({
+                            attributes: [
+                                ast.attribute({
+                                    name: 'href',
+                                    namespace: ast.namespaceName({name: 'ns'})
+                                })
+                            ]
+                        })
+                    ]
+                })
+            );
+            expect(parse('[ns|href=value]')).toEqual(
+                ast.selector({
+                    rules: [
+                        ast.rule({
+                            attributes: [
+                                ast.attribute({
+                                    name: 'href',
+                                    operator: '=',
+                                    value: ast.string({value: 'value'}),
+                                    namespace: ast.namespaceName({name: 'ns'})
+                                })
+                            ]
+                        })
+                    ]
+                })
+            );
+            expect(parse('[ns|href|=value]')).toEqual(
+                ast.selector({
+                    rules: [
+                        ast.rule({
+                            attributes: [
+                                ast.attribute({
+                                    name: 'href',
+                                    operator: '|=',
+                                    value: ast.string({value: 'value'}),
+                                    namespace: ast.namespaceName({name: 'ns'})
+                                })
+                            ]
+                        })
+                    ]
+                })
+            );
+        });
+        it('should parse a wildcard namespace', () => {
+            expect(parse('[*|href]')).toEqual(
+                ast.selector({
+                    rules: [
+                        ast.rule({
+                            attributes: [
+                                ast.attribute({
+                                    name: 'href',
+                                    namespace: ast.wildcardNamespace()
+                                })
+                            ]
+                        })
+                    ]
+                })
+            );
+            expect(parse('[*|href=value]')).toEqual(
+                ast.selector({
+                    rules: [
+                        ast.rule({
+                            attributes: [
+                                ast.attribute({
+                                    name: 'href',
+                                    operator: '=',
+                                    value: ast.string({value: 'value'}),
+                                    namespace: ast.wildcardNamespace()
+                                })
+                            ]
+                        })
+                    ]
+                })
+            );
+            expect(parse('[*|href|=value]')).toEqual(
+                ast.selector({
+                    rules: [
+                        ast.rule({
+                            attributes: [
+                                ast.attribute({
+                                    name: 'href',
+                                    operator: '|=',
+                                    value: ast.string({value: 'value'}),
+                                    namespace: ast.wildcardNamespace()
+                                })
+                            ]
+                        })
+                    ]
+                })
+            );
+        });
+        it('should parse a no-namespace', () => {
+            expect(parse('[|href]')).toEqual(
+                ast.selector({
+                    rules: [
+                        ast.rule({
+                            attributes: [
+                                ast.attribute({
+                                    name: 'href',
+                                    namespace: ast.noNamespace()
+                                })
+                            ]
+                        })
+                    ]
+                })
+            );
+            expect(parse('[|href=value]')).toEqual(
+                ast.selector({
+                    rules: [
+                        ast.rule({
+                            attributes: [
+                                ast.attribute({
+                                    name: 'href',
+                                    operator: '=',
+                                    value: ast.string({value: 'value'}),
+                                    namespace: ast.noNamespace()
+                                })
+                            ]
+                        })
+                    ]
+                })
+            );
+            expect(parse('[|href|=value]')).toEqual(
+                ast.selector({
+                    rules: [
+                        ast.rule({
+                            attributes: [
+                                ast.attribute({
+                                    name: 'href',
+                                    operator: '|=',
+                                    value: ast.string({value: 'value'}),
+                                    namespace: ast.noNamespace()
+                                })
+                            ]
                         })
                     ]
                 })

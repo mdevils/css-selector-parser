@@ -1,4 +1,4 @@
-[css-selector-parser](../README.md) / AstPseudoClass
+[css-selector-parser](../../README.md) / [Exports](../modules.md) / AstPseudoClass
 
 # Interface: AstPseudoClass
 
@@ -27,7 +27,7 @@ https://developer.mozilla.org/en-US/docs/Learn/CSS/Building_blocks/Selectors/Pse
 
 ### argument
 
-• `Optional` **argument**: [`AstPseudoClassArgument`](../README.md#astpseudoclassargument)
+• `Optional` **argument**: [`AstSelector`](AstSelector.md) \| [`AstSubstitution`](AstSubstitution.md) \| [`AstString`](AstString.md) \| [`AstFormula`](AstFormula.md) \| [`AstFormulaOfSelector`](AstFormulaOfSelector.md)
 
 Pseudo-class value (i.e. `"en"` in case of `":lang(en)"`).
 

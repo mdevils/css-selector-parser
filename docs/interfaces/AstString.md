@@ -1,4 +1,4 @@
-[css-selector-parser](../README.md) / AstString
+[css-selector-parser](../../README.md) / [Exports](../modules.md) / AstString
 
 # Interface: AstString
 

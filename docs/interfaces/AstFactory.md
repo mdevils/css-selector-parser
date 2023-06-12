@@ -1,4 +1,4 @@
-[css-selector-parser](../README.md) / AstFactory
+[css-selector-parser](../../README.md) / [Exports](../modules.md) / AstFactory
 
 # Interface: AstFactory
 
@@ -37,6 +37,8 @@ const selector = ast.selector({
         })
     ]
 });
+console.log(ast.isSelector(selector)); // prints true
+console.log(ast.isRule(selector)); // prints false
 ```
 
 ## Hierarchy
@@ -80,7 +82,7 @@ const selector = ast.selector({
 
 ### attribute
 
-• **attribute**: (`props`: { `caseSensitivityModifier?`: `string` ; `name`: `string` ; `namespace?`: [`AstNamespace`](../README.md#astnamespace) ; `operator?`: `string` ; `value?`: [`AstSubstitution`](AstSubstitution.md) \| [`AstString`](AstString.md)  }) => [`AstAttribute`](AstAttribute.md)
+• **attribute**: (`props`: { `caseSensitivityModifier?`: `string` ; `name`: `string` ; `namespace?`: [`AstNamespaceName`](AstNamespaceName.md) \| [`AstWildcardNamespace`](AstWildcardNamespace.md) \| [`AstNoNamespace`](AstNoNamespace.md) ; `operator?`: `string` ; `value?`: [`AstSubstitution`](AstSubstitution.md) \| [`AstString`](AstString.md)  }) => [`AstAttribute`](AstAttribute.md)
 
 #### Type declaration
 
@@ -93,7 +95,7 @@ const selector = ast.selector({
 | `props` | `Object` | - |
 | `props.caseSensitivityModifier?` | `string` | Comparison case sensitivity modifier (i.e. `"i"` in case if `"[role='button' i]"`). |
 | `props.name` | `string` | Attribute name (i.e. `"href"` in case if `"[href]"`). |
-| `props.namespace?` | [`AstNamespace`](../README.md#astnamespace) | Namespace according to https://drafts.csswg.org/selectors/#attrnmsp. |
+| `props.namespace?` | [`AstNamespaceName`](AstNamespaceName.md) \| [`AstWildcardNamespace`](AstWildcardNamespace.md) \| [`AstNoNamespace`](AstNoNamespace.md) | Namespace according to https://drafts.csswg.org/selectors/#attrnmsp. |
 | `props.operator?` | `string` | Comparison operator (i.e. `"\|="` in case if `"[role\|=button]"`). |
 | `props.value?` | [`AstSubstitution`](AstSubstitution.md) \| [`AstString`](AstString.md) | Comparison value (i.e. `"button"` in case if `"[role=button]"`). |
 
@@ -523,7 +525,7 @@ ___
 
 ### pseudoClass
 
-• **pseudoClass**: (`props`: { `argument?`: [`AstPseudoClassArgument`](../README.md#astpseudoclassargument) ; `name`: `string`  }) => [`AstPseudoClass`](AstPseudoClass.md)
+• **pseudoClass**: (`props`: { `argument?`: [`AstSelector`](AstSelector.md) \| [`AstSubstitution`](AstSubstitution.md) \| [`AstString`](AstString.md) \| [`AstFormula`](AstFormula.md) \| [`AstFormulaOfSelector`](AstFormulaOfSelector.md) ; `name`: `string`  }) => [`AstPseudoClass`](AstPseudoClass.md)
 
 #### Type declaration
 
@@ -534,7 +536,7 @@ ___
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `props` | `Object` | - |
-| `props.argument?` | [`AstPseudoClassArgument`](../README.md#astpseudoclassargument) | Pseudo-class value (i.e. `"en"` in case of `":lang(en)"`). |
+| `props.argument?` | [`AstSelector`](AstSelector.md) \| [`AstSubstitution`](AstSubstitution.md) \| [`AstString`](AstString.md) \| [`AstFormula`](AstFormula.md) \| [`AstFormulaOfSelector`](AstFormulaOfSelector.md) | Pseudo-class value (i.e. `"en"` in case of `":lang(en)"`). |
 | `props.name` | `string` | Pseudo-class name (i.e. `"hover"` in case of `":hover"`). |
 
 ##### Returns
@@ -549,7 +551,7 @@ ___
 
 ### rule
 
-• **rule**: (`props?`: { `attributes?`: [`AstAttribute`](AstAttribute.md)[] ; `classNames?`: `string`[] ; `ids?`: `string`[] ; `nestedRule?`: { `combinator?`: `string` ; `rule`: [`AstRule`](AstRule.md)  } ; `pseudoClasses?`: [`AstPseudoClass`](AstPseudoClass.md)[] ; `pseudoElement?`: `string` ; `tag?`: [`AstTag`](../README.md#asttag)  }) => [`AstRule`](AstRule.md)
+• **rule**: (`props?`: { `attributes?`: [`AstAttribute`](AstAttribute.md)[] ; `classNames?`: `string`[] ; `ids?`: `string`[] ; `nestedRule?`: { `combinator?`: `string` ; `rule`: [`AstRule`](AstRule.md)  } ; `pseudoClasses?`: [`AstPseudoClass`](AstPseudoClass.md)[] ; `pseudoElement?`: `string` ; `tag?`: [`AstTagName`](AstTagName.md) \| [`AstWildcardTag`](AstWildcardTag.md)  }) => [`AstRule`](AstRule.md)
 
 #### Type declaration
 
@@ -568,7 +570,7 @@ ___
 | `props.nestedRule.rule` | [`AstRule`](AstRule.md) | Nested rule definition. |
 | `props.pseudoClasses?` | [`AstPseudoClass`](AstPseudoClass.md)[] | Pseudo-classes (i.e. `":link"` -> `[{name: 'link'}]`). |
 | `props.pseudoElement?` | `string` | Pseudo-element (i.e. `"::before"` -> `'before'`). |
-| `props.tag?` | [`AstTag`](../README.md#asttag) | Tag definition. Can be either TagName (i.e. `"div"`) or WildcardTag (`"*"`) if defined. |
+| `props.tag?` | [`AstTagName`](AstTagName.md) \| [`AstWildcardTag`](AstWildcardTag.md) | Tag definition. Can be either TagName (i.e. `"div"`) or WildcardTag (`"*"`) if defined. |
 
 ##### Returns
 
@@ -657,7 +659,7 @@ ___
 
 ### tagName
 
-• **tagName**: (`props`: { `name`: `string` ; `namespace?`: [`AstNamespace`](../README.md#astnamespace)  }) => [`AstTagName`](AstTagName.md)
+• **tagName**: (`props`: { `name`: `string` ; `namespace?`: [`AstNamespaceName`](AstNamespaceName.md) \| [`AstWildcardNamespace`](AstWildcardNamespace.md) \| [`AstNoNamespace`](AstNoNamespace.md)  }) => [`AstTagName`](AstTagName.md)
 
 #### Type declaration
 
@@ -669,7 +671,7 @@ ___
 | :------ | :------ | :------ |
 | `props` | `Object` | - |
 | `props.name` | `string` | Tag name, i.e. `"div"`. |
-| `props.namespace?` | [`AstNamespace`](../README.md#astnamespace) | Namespace according to https://www.w3.org/TR/css3-namespace/. |
+| `props.namespace?` | [`AstNamespaceName`](AstNamespaceName.md) \| [`AstWildcardNamespace`](AstWildcardNamespace.md) \| [`AstNoNamespace`](AstNoNamespace.md) | Namespace according to https://www.w3.org/TR/css3-namespace/. |
 
 ##### Returns
 
@@ -707,7 +709,7 @@ ___
 
 ### wildcardTag
 
-• **wildcardTag**: (`props?`: { `namespace?`: [`AstNamespace`](../README.md#astnamespace)  }) => [`AstWildcardTag`](AstWildcardTag.md)
+• **wildcardTag**: (`props?`: { `namespace?`: [`AstNamespaceName`](AstNamespaceName.md) \| [`AstWildcardNamespace`](AstWildcardNamespace.md) \| [`AstNoNamespace`](AstNoNamespace.md)  }) => [`AstWildcardTag`](AstWildcardTag.md)
 
 #### Type declaration
 
@@ -718,7 +720,7 @@ ___
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `props?` | `Object` | - |
-| `props.namespace?` | [`AstNamespace`](../README.md#astnamespace) | Namespace according to https://www.w3.org/TR/css3-namespace/. |
+| `props.namespace?` | [`AstNamespaceName`](AstNamespaceName.md) \| [`AstWildcardNamespace`](AstWildcardNamespace.md) \| [`AstNoNamespace`](AstNoNamespace.md) | Namespace according to https://www.w3.org/TR/css3-namespace/. |
 
 ##### Returns
 

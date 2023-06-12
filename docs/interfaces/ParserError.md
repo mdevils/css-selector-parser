@@ -1,6 +1,6 @@
-[css-selector-parser](../README.md) / ParseError
+[css-selector-parser](../../README.md) / [Exports](../modules.md) / ParserError
 
-# Interface: ParseError
+# Interface: ParserError
 
 This error is thrown when parser encounters problems in CSS string.
 On top of the usual error, it has `position` property to indicate where in the input string the error happened.
@@ -9,16 +9,15 @@ On top of the usual error, it has `position` property to indicate where in the i
 
 - `Error`
 
-  ↳ **`ParseError`**
+  ↳ **`ParserError`**
 
 ## Table of contents
 
 ### Properties
 
-- [message](ParseError.md#message)
-- [name](ParseError.md#name)
-- [position](ParseError.md#position)
-- [stack](ParseError.md#stack)
+- [message](ParserError.md#message)
+- [name](ParserError.md#name)
+- [position](ParserError.md#position)
 
 ## Properties
 
@@ -26,7 +25,7 @@ On top of the usual error, it has `position` property to indicate where in the i
 
 • **message**: `string`
 
-#### Inherited from
+#### Overrides
 
 Error.message
 
@@ -34,9 +33,9 @@ ___
 
 ### name
 
-• **name**: `string`
+• **name**: ``"ParserError"``
 
-#### Inherited from
+#### Overrides
 
 Error.name
 
@@ -45,13 +44,3 @@ ___
 ### position
 
 • **position**: `number`
-
-___
-
-### stack
-
-• `Optional` **stack**: `string`
-
-#### Inherited from
-
-Error.stack

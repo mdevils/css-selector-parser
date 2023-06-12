@@ -1,4 +1,4 @@
-[css-selector-parser](../README.md) / AstAttribute
+[css-selector-parser](../../README.md) / [Exports](../modules.md) / AstAttribute
 
 # Interface: AstAttribute
 
@@ -42,7 +42,7 @@ ___
 
 ### namespace
 
-• `Optional` **namespace**: [`AstNamespace`](../README.md#astnamespace)
+• `Optional` **namespace**: [`AstNamespaceName`](AstNamespaceName.md) \| [`AstWildcardNamespace`](AstWildcardNamespace.md) \| [`AstNoNamespace`](AstNoNamespace.md)
 
 Namespace according to https://drafts.csswg.org/selectors/#attrnmsp.
 

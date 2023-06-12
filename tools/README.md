@@ -1,5 +1,3 @@
-css-selector-parser / [Exports](css-selector-parser/modules.md)
-
 css-selector-parser
 ===================
 
@@ -124,6 +122,7 @@ const selector = ast.selector({
 
 console.log(render(selector)); // a[href^="/"], .container:has(nav) > a[href]:nth-child(2)::before
 ```
+
 
 API
 ---

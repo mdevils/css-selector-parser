@@ -1,4 +1,4 @@
-[css-selector-parser](../README.md) / AstRule
+[css-selector-parser](../../README.md) / [Exports](../modules.md) / AstRule
 
 # Interface: AstRule
 
@@ -78,7 +78,7 @@ ___
 
 ### tag
 
-• `Optional` **tag**: [`AstTag`](../README.md#asttag)
+• `Optional` **tag**: [`AstTagName`](AstTagName.md) \| [`AstWildcardTag`](AstWildcardTag.md)
 
 Tag definition. Can be either TagName (i.e. `"div"`) or WildcardTag (`"*"`) if defined.
 

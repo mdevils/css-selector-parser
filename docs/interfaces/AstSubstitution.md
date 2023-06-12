@@ -1,4 +1,4 @@
-[css-selector-parser](../README.md) / AstSubstitution
+[css-selector-parser](../../README.md) / [Exports](../modules.md) / AstSubstitution
 
 # Interface: AstSubstitution
 

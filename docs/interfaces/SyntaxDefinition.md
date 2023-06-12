@@ -1,4 +1,4 @@
-[css-selector-parser](../README.md) / SyntaxDefinition
+[css-selector-parser](../../README.md) / [Exports](../modules.md) / SyntaxDefinition
 
 # Interface: SyntaxDefinition
 
@@ -40,7 +40,7 @@ ___
 
 ### baseSyntax
 
-• `Optional` **baseSyntax**: [`CssLevel`](../README.md#csslevel)
+• `Optional` **baseSyntax**: [`CssLevel`](../modules.md#csslevel)
 
 When specified, syntax will be based on the specified predefined CSS standard.
 If not specified, syntax will be defined from scratch.

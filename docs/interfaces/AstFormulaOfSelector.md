@@ -1,4 +1,4 @@
-[css-selector-parser](../README.md) / AstFormulaOfSelector
+[css-selector-parser](../../README.md) / [Exports](../modules.md) / AstFormulaOfSelector
 
 # Interface: AstFormulaOfSelector
 

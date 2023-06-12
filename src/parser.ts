@@ -1,4 +1,4 @@
-import {AstAttribute, AstPseudoClass, AstRule, AstSelector, AstTag} from './ast';
+import {AstAttribute, AstPseudoClass, AstRule, AstSelector, AstTagName, AstWildcardTag} from './ast';
 import {
     createMulticharIndex,
     createRegularIndex,
@@ -21,36 +21,12 @@ import {
 import {digitsChars, isHex, isIdent, isIdentStart, quoteChars, stringEscapeChars, whitespaceChars} from './utils';
 
 /**
- * Options used to create a parse function to be used later to parse CSS selectors.
- */
-export interface CreateParserOptions {
-    /**
-     * CSS Syntax options to be used for parsing.
-     * Can either be one of the predefined CSS levels ({@link CssLevel}) or a more detailed syntax definition ({@link SyntaxDefinition}).
-     * @default "latest"
-     */
-    syntax?: CssLevel | SyntaxDefinition;
-    /**
-     * Flag to enable substitutes.
-     * This is not part of CSS syntax, but rather a useful feature to pass variables into CSS selectors.
-     * @example "[attr=$variable]"
-     * @default fase
-     */
-    substitutes?: boolean;
-    /**
-     * CSS selector parser in modern browsers is very forgiving. For instance, it works fine with unclosed attribute
-     * selectors: `"[attr=value"`.
-     * Set to `false` in order to mimic browser behaviour.
-     * @default true
-     */
-    strict?: boolean;
-}
-
-/**
  * This error is thrown when parser encounters problems in CSS string.
  * On top of the usual error, it has `position` property to indicate where in the input string the error happened.
  */
-export interface ParseError extends Error {
+export interface ParserError extends Error {
+    message: string;
+    name: 'ParserError';
     position: number;
 }
 
@@ -58,14 +34,37 @@ const errorPrefix = `css-selector-parser parse error: `;
 
 /**
  * Parses CSS selector string and returns CSS selector AST.
- * @throws {ParseError}
+ * @throws {ParserError}
  */
-export type Parse = (input: string) => AstSelector;
+export type Parser = (input: string) => AstSelector;
 
 /**
  * Creates a parse function to be used later to parse CSS selectors.
  */
-export function createParser(options: CreateParserOptions = {}): Parse {
+export function createParser(
+    options: {
+        /**
+         * CSS Syntax options to be used for parsing.
+         * Can either be one of the predefined CSS levels ({@link CssLevel}) or a more detailed syntax definition ({@link SyntaxDefinition}).
+         * @default "latest"
+         */
+        syntax?: CssLevel | SyntaxDefinition;
+        /**
+         * Flag to enable substitutes.
+         * This is not part of CSS syntax, but rather a useful feature to pass variables into CSS selectors.
+         * @example "[attr=$variable]"
+         * @default fase
+         */
+        substitutes?: boolean;
+        /**
+         * CSS selector parser in modern browsers is very forgiving. For instance, it works fine with unclosed attribute
+         * selectors: `"[attr=value"`.
+         * Set to `false` in order to mimic browser behaviour.
+         * @default true
+         */
+        strict?: boolean;
+    } = {}
+): Parser {
     const {syntax = 'latest', substitutes, strict = true} = options;
     // noinspection SuspiciousTypeOfGuard
     let syntaxDefinition: SyntaxDefinition = typeof syntax === 'string' ? cssSyntaxDefinitions[syntax] : syntax;
@@ -165,11 +164,12 @@ export function createParser(options: CreateParserOptions = {}): Parse {
         chr = str.charAt(pos);
         return current;
     };
-    /** @throws ParseError */
+    /** @throws ParserError */
     function fail(errorMessage: string): never {
         const position = Math.min(l - 1, pos);
-        const error = new Error(`${errorPrefix}${errorMessage} Pos: ${position}.`) as ParseError;
+        const error = new Error(`${errorPrefix}${errorMessage} Pos: ${position}.`) as ParserError;
         error.position = position;
+        error.name = 'ParserError';
         throw error;
     }
     function assert(condition: unknown, errorMessage: string): asserts condition {
@@ -493,7 +493,7 @@ export function createParser(options: CreateParserOptions = {}): Parse {
         return pseudo;
     }
 
-    function parseTagName(): AstTag {
+    function parseTagName(): AstTagName | AstWildcardTag {
         if (is('*')) {
             assert(tagNameWildcardEnabled, 'Wildcard tag name is not enabled.');
             next();
@@ -509,7 +509,7 @@ export function createParser(options: CreateParserOptions = {}): Parse {
         }
     }
 
-    function parseTagNameWithNamespace(): AstTag {
+    function parseTagNameWithNamespace(): AstTagName | AstWildcardTag {
         if (is('*')) {
             const savedPos = pos;
             next();

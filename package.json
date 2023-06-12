@@ -46,5 +46,10 @@
     "lint:fix": "eslint --fix src/**.ts",
     "benchmark": "ts-node benchmark/benchmark.ts",
     "prepublishOnly": "npm run build"
-  }
+  },
+  "files": [
+    "lib",
+    "README.md",
+    "LICENSE"
+  ]
 }

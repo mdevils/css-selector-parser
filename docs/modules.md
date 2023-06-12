@@ -150,6 +150,25 @@ ___
 
 Renders CSS Selector AST back to a string.
 
+**`Example`**
+
+```ts
+import {ast, render} from 'css-selector-parser';
+
+const selector = ast.selector({
+    rules: [
+        ast.rule({
+            tag: ast.tagName({name: 'a'}),
+            ids: ['user-23'],
+            classNames: ['user'],
+            pseudoClasses: [ast.pseudoClass({name: 'visited'})]
+        })
+    ]
+});
+
+console.log(render(selector)); // a#user-23.user:visited
+```
+
 #### Parameters
 
 | Name | Type |

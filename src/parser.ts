@@ -345,6 +345,7 @@ export function createParser(
                 const savedPos = pos;
                 next();
                 if (isIdentStart(chr) || is('\\')) {
+                    assert(namespaceEnabled, 'Namespaces are not enabled.');
                     attr = {
                         type: 'Attribute',
                         name: parseIdentifier(),

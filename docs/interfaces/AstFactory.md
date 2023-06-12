@@ -41,12 +41,6 @@ console.log(ast.isSelector(selector)); // prints true
 console.log(ast.isRule(selector)); // prints false
 ```
 
-## Hierarchy
-
-- `AstFactoryBase`
-
-  ↳ **`AstFactory`**
-
 ## Table of contents
 
 ### Properties
@@ -103,9 +97,6 @@ console.log(ast.isRule(selector)); // prints false
 
 [`AstAttribute`](AstAttribute.md)
 
-#### Inherited from
-
-AstFactoryBase.attribute
 
 ___
 
@@ -129,9 +120,6 @@ ___
 
 [`AstFormula`](AstFormula.md)
 
-#### Inherited from
-
-AstFactoryBase.formula
 
 ___
 
@@ -156,9 +144,6 @@ ___
 
 [`AstFormulaOfSelector`](AstFormulaOfSelector.md)
 
-#### Inherited from
-
-AstFactoryBase.formulaOfSelector
 
 ___
 
@@ -180,9 +165,6 @@ ___
 
 entity is AstAttribute
 
-#### Inherited from
-
-AstFactoryBase.isAttribute
 
 ___
 
@@ -204,9 +186,6 @@ ___
 
 entity is AstFormula
 
-#### Inherited from
-
-AstFactoryBase.isFormula
 
 ___
 
@@ -228,9 +207,6 @@ ___
 
 entity is AstFormulaOfSelector
 
-#### Inherited from
-
-AstFactoryBase.isFormulaOfSelector
 
 ___
 
@@ -252,9 +228,6 @@ ___
 
 entity is AstNamespaceName
 
-#### Inherited from
-
-AstFactoryBase.isNamespaceName
 
 ___
 
@@ -276,9 +249,6 @@ ___
 
 entity is AstNoNamespace
 
-#### Inherited from
-
-AstFactoryBase.isNoNamespace
 
 ___
 
@@ -300,9 +270,6 @@ ___
 
 entity is AstPseudoClass
 
-#### Inherited from
-
-AstFactoryBase.isPseudoClass
 
 ___
 
@@ -324,9 +291,6 @@ ___
 
 entity is AstRule
 
-#### Inherited from
-
-AstFactoryBase.isRule
 
 ___
 
@@ -348,9 +312,6 @@ ___
 
 entity is AstSelector
 
-#### Inherited from
-
-AstFactoryBase.isSelector
 
 ___
 
@@ -372,9 +333,6 @@ ___
 
 entity is AstString
 
-#### Inherited from
-
-AstFactoryBase.isString
 
 ___
 
@@ -396,9 +354,6 @@ ___
 
 entity is AstSubstitution
 
-#### Inherited from
-
-AstFactoryBase.isSubstitution
 
 ___
 
@@ -420,9 +375,6 @@ ___
 
 entity is AstTagName
 
-#### Inherited from
-
-AstFactoryBase.isTagName
 
 ___
 
@@ -444,9 +396,6 @@ ___
 
 entity is AstWildcardNamespace
 
-#### Inherited from
-
-AstFactoryBase.isWildcardNamespace
 
 ___
 
@@ -468,9 +417,6 @@ ___
 
 entity is AstWildcardTag
 
-#### Inherited from
-
-AstFactoryBase.isWildcardTag
 
 ___
 
@@ -493,9 +439,6 @@ ___
 
 [`AstNamespaceName`](AstNamespaceName.md)
 
-#### Inherited from
-
-AstFactoryBase.namespaceName
 
 ___
 
@@ -517,9 +460,6 @@ ___
 
 [`AstNoNamespace`](AstNoNamespace.md)
 
-#### Inherited from
-
-AstFactoryBase.noNamespace
 
 ___
 
@@ -543,9 +483,6 @@ ___
 
 [`AstPseudoClass`](AstPseudoClass.md)
 
-#### Inherited from
-
-AstFactoryBase.pseudoClass
 
 ___
 
@@ -576,9 +513,6 @@ ___
 
 [`AstRule`](AstRule.md)
 
-#### Inherited from
-
-AstFactoryBase.rule
 
 ___
 
@@ -601,9 +535,6 @@ ___
 
 [`AstSelector`](AstSelector.md)
 
-#### Inherited from
-
-AstFactoryBase.selector
 
 ___
 
@@ -626,9 +557,6 @@ ___
 
 [`AstString`](AstString.md)
 
-#### Inherited from
-
-AstFactoryBase.string
 
 ___
 
@@ -651,9 +579,6 @@ ___
 
 [`AstSubstitution`](AstSubstitution.md)
 
-#### Inherited from
-
-AstFactoryBase.substitution
 
 ___
 
@@ -677,9 +602,6 @@ ___
 
 [`AstTagName`](AstTagName.md)
 
-#### Inherited from
-
-AstFactoryBase.tagName
 
 ___
 
@@ -701,9 +623,6 @@ ___
 
 [`AstWildcardNamespace`](AstWildcardNamespace.md)
 
-#### Inherited from
-
-AstFactoryBase.wildcardNamespace
 
 ___
 
@@ -726,6 +645,3 @@ ___
 
 [`AstWildcardTag`](AstWildcardTag.md)
 
-#### Inherited from
-
-AstFactoryBase.wildcardTag

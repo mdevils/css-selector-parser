@@ -7,6 +7,7 @@ css-selector-parser
 ### Interfaces
 
 - [AstAttribute](interfaces/AstAttribute.md)
+- [AstFactory](interfaces/AstFactory.md)
 - [AstFormula](interfaces/AstFormula.md)
 - [AstFormulaOfSelector](interfaces/AstFormulaOfSelector.md)
 - [AstNamespaceName](interfaces/AstNamespaceName.md)
@@ -20,8 +21,6 @@ css-selector-parser
 - [AstWildcardNamespace](interfaces/AstWildcardNamespace.md)
 - [AstWildcardTag](interfaces/AstWildcardTag.md)
 - [ParseError](interfaces/ParseError.md)
-- [PseudoClassesSyntaxDefinition](interfaces/PseudoClassesSyntaxDefinition.md)
-- [PseudoElementsSyntaxDefinition](interfaces/PseudoElementsSyntaxDefinition.md)
 - [SyntaxDefinition](interfaces/SyntaxDefinition.md)
 
 ### Type Aliases
@@ -31,7 +30,6 @@ css-selector-parser
 - [AstPseudoClassArgument](README.md#astpseudoclassargument)
 - [AstTag](README.md#asttag)
 - [CssLevel](README.md#csslevel)
-- [PseudoClassDefinitions](README.md#pseudoclassdefinitions)
 - [PseudoClassType](README.md#pseudoclasstype)
 
 ### Variables
@@ -49,7 +47,7 @@ css-selector-parser
 
 Ƭ **AstEntity**: [`AstSelector`](interfaces/AstSelector.md) \| [`AstRule`](interfaces/AstRule.md) \| [`AstTag`](README.md#asttag) \| [`AstNamespace`](README.md#astnamespace) \| [`AstPseudoClassArgument`](README.md#astpseudoclassargument) \| [`AstPseudoClass`](interfaces/AstPseudoClass.md) \| [`AstAttribute`](interfaces/AstAttribute.md)
 
-Any CSS element.
+One of CSS AST entity types.
 
 ___
 
@@ -57,13 +55,19 @@ ___
 
 Ƭ **AstNamespace**: [`AstNamespaceName`](interfaces/AstNamespaceName.md) \| [`AstWildcardNamespace`](interfaces/AstWildcardNamespace.md) \| [`AstNoNamespace`](interfaces/AstNoNamespace.md)
 
+One of the namespace types. Part of CSS Qualified Names.
+
+**`See`**
+
+https://drafts.csswg.org/css-namespaces-3/#css-qnames
+
 ___
 
 ### AstPseudoClassArgument
 
 Ƭ **AstPseudoClassArgument**: [`AstSubstitution`](interfaces/AstSubstitution.md) \| [`AstSelector`](interfaces/AstSelector.md) \| [`AstString`](interfaces/AstString.md) \| [`AstFormula`](interfaces/AstFormula.md) \| [`AstFormulaOfSelector`](interfaces/AstFormulaOfSelector.md)
 
-Any pseudo-class argument type.
+One of pseudo-class argument types.
 
 ___
 
@@ -71,17 +75,18 @@ ___
 
 Ƭ **AstTag**: [`AstTagName`](interfaces/AstTagName.md) \| [`AstWildcardTag`](interfaces/AstWildcardTag.md)
 
+One of the tag types. Part of CSS Qualified Names.
+
+**`See`**
+
+ - https://developer.mozilla.org/en-US/docs/Web/CSS/Type_selectors
+ - https://drafts.csswg.org/css-namespaces-3/#css-qnames
+
 ___
 
 ### CssLevel
 
 Ƭ **CssLevel**: ``"css1"`` \| ``"css2"`` \| ``"css3"`` \| ``"selectors-3"`` \| ``"selectors-4"`` \| ``"latest"`` \| ``"progressive"``
-
-___
-
-### PseudoClassDefinitions
-
-Ƭ **PseudoClassDefinitions**: { [K in PseudoClassType]?: string[] }
 
 ___
 
@@ -93,42 +98,44 @@ ___
 
 ### ast
 
-• `Const` **ast**: `Object`
+• `Const` **ast**: [`AstFactory`](interfaces/AstFactory.md)
 
 AST structure generators and matchers.
 For instance, `ast.selector({rules: [...]})` creates AstSelector and `ast.isSelector(...)` checks if
 AstSelector was specified.
 
-#### Type declaration
+**`Example`**
 
-| Name | Type |
-| :------ | :------ |
-| `attribute` | (`props`: `Omit`<[`AstAttribute`](interfaces/AstAttribute.md), ``"type"``\>) => [`AstAttribute`](interfaces/AstAttribute.md) |
-| `formula` | (`props`: `Omit`<[`AstFormula`](interfaces/AstFormula.md), ``"type"``\>) => [`AstFormula`](interfaces/AstFormula.md) |
-| `formulaOfSelector` | (`props`: `Omit`<[`AstFormulaOfSelector`](interfaces/AstFormulaOfSelector.md), ``"type"``\>) => [`AstFormulaOfSelector`](interfaces/AstFormulaOfSelector.md) |
-| `isAttribute` | (`entity`: `unknown`) => entity is AstAttribute |
-| `isFormula` | (`entity`: `unknown`) => entity is AstFormula |
-| `isFormulaOfSelector` | (`entity`: `unknown`) => entity is AstFormulaOfSelector |
-| `isNamespaceName` | (`entity`: `unknown`) => entity is AstNamespaceName |
-| `isNoNamespace` | (`entity`: `unknown`) => entity is AstNoNamespace |
-| `isPseudoClass` | (`entity`: `unknown`) => entity is AstPseudoClass |
-| `isRule` | (`entity`: `unknown`) => entity is AstRule |
-| `isSelector` | (`entity`: `unknown`) => entity is AstSelector |
-| `isString` | (`entity`: `unknown`) => entity is AstString |
-| `isSubstitution` | (`entity`: `unknown`) => entity is AstSubstitution |
-| `isTagName` | (`entity`: `unknown`) => entity is AstTagName |
-| `isWildcardNamespace` | (`entity`: `unknown`) => entity is AstWildcardNamespace |
-| `isWildcardTag` | (`entity`: `unknown`) => entity is AstWildcardTag |
-| `namespaceName` | (`props`: `Omit`<[`AstNamespaceName`](interfaces/AstNamespaceName.md), ``"type"``\>) => [`AstNamespaceName`](interfaces/AstNamespaceName.md) |
-| `noNamespace` | (`props?`: `Omit`<[`AstNoNamespace`](interfaces/AstNoNamespace.md), ``"type"``\>) => [`AstNoNamespace`](interfaces/AstNoNamespace.md) |
-| `pseudoClass` | (`props`: `Omit`<[`AstPseudoClass`](interfaces/AstPseudoClass.md), ``"type"``\>) => [`AstPseudoClass`](interfaces/AstPseudoClass.md) |
-| `rule` | (`props?`: `Omit`<[`AstRule`](interfaces/AstRule.md), ``"type"``\>) => [`AstRule`](interfaces/AstRule.md) |
-| `selector` | (`props`: `Omit`<[`AstSelector`](interfaces/AstSelector.md), ``"type"``\>) => [`AstSelector`](interfaces/AstSelector.md) |
-| `string` | (`props`: `Omit`<[`AstString`](interfaces/AstString.md), ``"type"``\>) => [`AstString`](interfaces/AstString.md) |
-| `substitution` | (`props`: `Omit`<[`AstSubstitution`](interfaces/AstSubstitution.md), ``"type"``\>) => [`AstSubstitution`](interfaces/AstSubstitution.md) |
-| `tagName` | (`props`: `Omit`<[`AstTagName`](interfaces/AstTagName.md), ``"type"``\>) => [`AstTagName`](interfaces/AstTagName.md) |
-| `wildcardNamespace` | (`props?`: `Omit`<[`AstWildcardNamespace`](interfaces/AstWildcardNamespace.md), ``"type"``\>) => [`AstWildcardNamespace`](interfaces/AstWildcardNamespace.md) |
-| `wildcardTag` | (`props?`: `Omit`<[`AstWildcardTag`](interfaces/AstWildcardTag.md), ``"type"``\>) => [`AstWildcardTag`](interfaces/AstWildcardTag.md) |
+```ts
+// Represents CSS selector: ns|div#user-34.user.user-active[role=button]:lang(en) > *
+const selector = ast.selector({
+    rules: [
+        ast.rule({
+            tag: ast.tagName({name: 'div', namespace: ast.namespaceName({name: 'ns'})}),
+            ids: ['user-34'],
+            classNames: ['user', 'user-active'],
+            attributes: [
+                ast.attribute({
+                    name: 'role',
+                    operator: '=',
+                    value: ast.string({value: 'button'})
+                })
+            ],
+            pseudoClasses: [
+                ast.pseudoClass({
+                    name: 'lang',
+                    argument: ast.string({value: 'eng'})
+                })
+            ],
+            pseudoElement: 'before',
+            nestedRule: {
+                rule: ast.rule({tag: ast.wildcardTag()}),
+                combinator: '>'
+            }
+        })
+    ]
+});
+```
 
 ## Functions
 
@@ -136,11 +143,13 @@ AstSelector was specified.
 
 ▸ **createParser**(`options?`): `Parse`
 
+Creates a parse function to be used later to parse CSS selectors.
+
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `options` | `ParseOptions` |
+| `options` | `CreateParserOptions` |
 
 #### Returns
 

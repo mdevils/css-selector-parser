@@ -4,6 +4,7 @@ export {
     ast,
     AstAttribute,
     AstEntity,
+    AstFactory,
     AstFormula,
     AstFormulaOfSelector,
     AstNamespace,
@@ -20,11 +21,4 @@ export {
     AstWildcardNamespace,
     AstWildcardTag
 } from './ast';
-export {
-    CssLevel,
-    PseudoClassDefinitions,
-    PseudoClassType,
-    PseudoClassesSyntaxDefinition,
-    PseudoElementsSyntaxDefinition,
-    SyntaxDefinition
-} from './syntax-definitions';
+export {CssLevel, PseudoClassType, SyntaxDefinition} from './syntax-definitions';

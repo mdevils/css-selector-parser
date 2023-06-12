@@ -20,12 +20,36 @@ import {
 } from './syntax-definitions';
 import {digitsChars, isHex, isIdent, isIdentStart, quoteChars, stringEscapeChars, whitespaceChars} from './utils';
 
-interface ParseOptions {
+/**
+ * Options used to create a parse function to be used later to parse CSS selectors.
+ */
+export interface CreateParserOptions {
+    /**
+     * CSS Syntax options to be used for parsing.
+     * Can either be one of the predefined CSS levels ({@link CssLevel}) or a more detailed syntax definition ({@link SyntaxDefinition}).
+     * @default "latest"
+     */
     syntax?: CssLevel | SyntaxDefinition;
+    /**
+     * Flag to enable substitutes.
+     * This is not part of CSS syntax, but rather a useful feature to pass variables into CSS selectors.
+     * @example "[attr=$variable]"
+     * @default fase
+     */
     substitutes?: boolean;
+    /**
+     * CSS selector parser in modern browsers is very forgiving. For instance, it works fine with unclosed attribute
+     * selectors: `"[attr=value"`.
+     * Set to `false` in order to mimic browser behaviour.
+     * @default true
+     */
     strict?: boolean;
 }
 
+/**
+ * This error is thrown when parser encounters problems in CSS string.
+ * On top of the usual error, it has `position` property to indicate where in the input string the error happened.
+ */
 export interface ParseError extends Error {
     position: number;
 }
@@ -38,7 +62,10 @@ const errorPrefix = `css-selector-parser parse error: `;
  */
 export type Parse = (input: string) => AstSelector;
 
-export function createParser(options: ParseOptions = {}): Parse {
+/**
+ * Creates a parse function to be used later to parse CSS selectors.
+ */
+export function createParser(options: CreateParserOptions = {}): Parse {
     const {syntax = 'latest', substitutes, strict = true} = options;
     // noinspection SuspiciousTypeOfGuard
     let syntaxDefinition: SyntaxDefinition = typeof syntax === 'string' ? cssSyntaxDefinitions[syntax] : syntax;

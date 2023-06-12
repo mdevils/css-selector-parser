@@ -2,6 +2,9 @@
 
 # Interface: ParseError
 
+This error is thrown when parser encounters problems in CSS string.
+On top of the usual error, it has `position` property to indicate where in the input string the error happened.
+
 ## Hierarchy
 
 - `Error`

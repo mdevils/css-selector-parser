@@ -1,4 +1,4 @@
-import {PseudoClassDefinitions, PseudoClassType} from './syntax-definitions';
+import {PseudoClassType} from './syntax-definitions';
 
 export type PseudoClassSignature = {optional: boolean} & (
     | {
@@ -69,7 +69,7 @@ export function inverseCategories<T1 extends string, T2 extends string>(obj: Cat
     return result;
 }
 
-export function calculatePseudoClassSignatures(definitions: PseudoClassDefinitions) {
+export function calculatePseudoClassSignatures(definitions: {[K in PseudoClassType]?: string[]}) {
     const pseudoClassesToArgumentTypes = inverseCategories(definitions);
     const result: PseudoClassSignatures = {};
 

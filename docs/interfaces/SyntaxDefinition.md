@@ -22,7 +22,7 @@ CSS Selector Syntax Definition can be used to define custom CSS selector parsing
 
 ### attributes
 
-• `Optional` **attributes**: ``false`` \| { `caseSensitivityModifiers?`: `string`[] ; `operators?`: `string`[] ; `unknownCaseSensitivityModifiers?`: `UnknownInputBehavior`  }
+• `Optional` **attributes**: ``false`` \| { `caseSensitivityModifiers?`: `string`[] ; `operators?`: `string`[] ; `unknownCaseSensitivityModifiers?`: ``"accept"`` \| ``"reject"``  }
 
 CSS Attribute Selector.
 
@@ -103,7 +103,7 @@ ___
 
 ### namespace
 
-• `Optional` **namespace**: `boolean` \| `SyntaxDefinitionXmlOptions`
+• `Optional` **namespace**: `boolean` \| { `wildcard?`: `boolean`  }
 
 CSS3 Namespaces.
 
@@ -121,7 +121,7 @@ ___
 
 ### pseudoClasses
 
-• `Optional` **pseudoClasses**: ``false`` \| [`PseudoClassesSyntaxDefinition`](PseudoClassesSyntaxDefinition.md)
+• `Optional` **pseudoClasses**: ``false`` \| { `definitions?`: { `Formula`: `undefined` \| `string`[] ; `FormulaOfSelector`: `undefined` \| `string`[] ; `NoArgument`: `undefined` \| `string`[] ; `Selector`: `undefined` \| `string`[] ; `String`: `undefined` \| `string`[] ; `Substitution`: `undefined` \| `string`[]  } ; `unknown?`: ``"accept"`` \| ``"reject"``  }
 
 CSS Pseudo-classes.
 
@@ -139,7 +139,7 @@ ___
 
 ### pseudoElements
 
-• `Optional` **pseudoElements**: ``false`` \| [`PseudoElementsSyntaxDefinition`](PseudoElementsSyntaxDefinition.md)
+• `Optional` **pseudoElements**: ``false`` \| { `definitions?`: `string`[] ; `notation?`: ``"both"`` \| ``"singleColon"`` \| ``"doubleColon"`` ; `unknown?`: ``"accept"`` \| ``"reject"``  }
 
 CSS Pseudo-elements.
 
@@ -157,7 +157,7 @@ ___
 
 ### tag
 
-• `Optional` **tag**: `boolean` \| `SyntaxDefinitionXmlOptions`
+• `Optional` **tag**: `boolean` \| { `wildcard?`: `boolean`  }
 
 CSS Tag (type).
 

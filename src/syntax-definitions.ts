@@ -3,59 +3,6 @@ import {AstPseudoClassArgument} from './ast';
 export type PseudoClassType = 'NoArgument' | AstPseudoClassArgument['type'];
 export type CssLevel = 'css1' | 'css2' | 'css3' | 'selectors-3' | 'selectors-4' | 'latest' | 'progressive';
 
-type UnknownInputBehavior = 'accept' | 'reject';
-
-export type PseudoClassDefinitions = {[K in PseudoClassType]?: string[]};
-
-/**
- * CSS Pseudo Classes Syntax Definition options.
- */
-export interface PseudoClassesSyntaxDefinition {
-    /**
-     * How to handle unknown pseudo-classes.
-     * `accept` - still parse.
-     * `reject` - throw an error.
-     */
-    unknown?: UnknownInputBehavior;
-    /**
-     * Predefined pseudo-classes.
-     * @example {NoArgument: ['first-child'], Formula: ['nth-child'], String: ['dir'], Selector: ['not']}
-     */
-    definitions?: PseudoClassDefinitions;
-}
-
-/**
- * CSS Pseudo Elements Syntax Definition options.
- */
-export interface PseudoElementsSyntaxDefinition {
-    /**
-     * How to handle unknown pseudo-elements.
-     * `accept` - still parse.
-     * `reject` - throw an error.
-     */
-    unknown?: UnknownInputBehavior;
-    /**
-     * In the past pseudo selements were defined starting with a single colon.
-     * Later this notation changed to double colon.
-     */
-    notation?: 'singleColon' | 'doubleColon' | 'both';
-    /**
-     * List of predefined pseudo-elements.
-     * @example ['before', 'after']
-     */
-    definitions?: string[];
-}
-
-/**
- * XML-Related Syntax Definition options.
- */
-interface SyntaxDefinitionXmlOptions {
-    /**
-     * Allows using wildcard (*).
-     */
-    wildcard?: boolean;
-}
-
 /**
  * CSS Selector Syntax Definition can be used to define custom CSS selector parsing rules.
  */
@@ -70,13 +17,27 @@ export interface SyntaxDefinition {
      * @example div
      * @see https://developer.mozilla.org/en-US/docs/Learn/CSS/Building_blocks/Selectors/Type_Class_and_ID_Selectors
      */
-    tag?: SyntaxDefinitionXmlOptions | boolean;
+    tag?:
+        | {
+              /**
+               * Allows using wildcard (*).
+               */
+              wildcard?: boolean;
+          }
+        | boolean;
     /**
      * CSS3 Namespaces.
      * @example ns|div
      * @see https://www.w3.org/TR/css3-namespace/
      */
-    namespace?: SyntaxDefinitionXmlOptions | boolean;
+    namespace?:
+        | {
+              /**
+               * Allows using wildcard (*).
+               */
+              wildcard?: boolean;
+          }
+        | boolean;
     /**
      * CSS IDs (yes, there can be multiple).
      * @example #root#root
@@ -113,7 +74,7 @@ export interface SyntaxDefinition {
                * `accept` - still parse.
                * `reject` - throw an error.
                */
-              unknownCaseSensitivityModifiers?: UnknownInputBehavior;
+              unknownCaseSensitivityModifiers?: 'accept' | 'reject';
               /**
                * List of pre-defined case sensitivity modifiers.
                * @example ['i', 'I', 's', 'S']
@@ -127,13 +88,50 @@ export interface SyntaxDefinition {
      * @example ::before
      * @see https://developer.mozilla.org/en-US/docs/Learn/CSS/Building_blocks/Selectors/Pseudo-classes_and_pseudo-elements
      */
-    pseudoElements?: PseudoElementsSyntaxDefinition | false;
+    pseudoElements?:
+        | {
+              /**
+               * How to handle unknown pseudo-elements.
+               * `accept` - still parse.
+               * `reject` - throw an error.
+               */
+              unknown?: 'accept' | 'reject';
+              /**
+               * In the past pseudo selements were defined starting with a single colon.
+               * Later this notation changed to double colon.
+               */
+              notation?: 'singleColon' | 'doubleColon' | 'both';
+              /**
+               * List of predefined pseudo-elements.
+               * @example ['before', 'after']
+               */
+              definitions?: string[];
+          }
+        | false;
     /**
      * CSS Pseudo-classes.
      * @example :nth-child(2n+1)
      * @see https://developer.mozilla.org/en-US/docs/Learn/CSS/Building_blocks/Selectors/Pseudo-classes_and_pseudo-elements
      */
-    pseudoClasses?: PseudoClassesSyntaxDefinition | false;
+    pseudoClasses?:
+        | {
+              /**
+               * How to handle unknown pseudo-classes.
+               * `accept` - still parse.
+               * `reject` - throw an error.
+               */
+              unknown?: 'accept' | 'reject';
+              /**
+               * Predefined pseudo-classes.
+               * @example {NoArgument: ['first-child'], Formula: ['nth-child'], String: ['dir'], Selector: ['not']}
+               */
+              definitions?: {[K in PseudoClassType]?: string[]};
+          }
+        | false;
+}
+
+interface SyntaxDefinitionXmlOptions {
+    wildcard?: boolean;
 }
 
 const emptyXmlOptions: SyntaxDefinitionXmlOptions = {};

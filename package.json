@@ -39,7 +39,7 @@
   "license": "MIT",
   "scripts": {
     "build": "tsc",
-    "build:docs": "rm -Rf docs && typedoc --disableSources --plugin typedoc-plugin-markdown --out docs --readme none src/index.ts",
+    "build:docs": "rm -Rf docs && typedoc --excludeInternal --disableSources --plugin typedoc-plugin-markdown --out docs --readme none src/index.ts",
     "test": "jest test",
     "test:lib": "TEST_LIB=1 npm run test",
     "lint": "eslint src/**.ts",

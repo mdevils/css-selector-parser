@@ -41,7 +41,7 @@
     "build": "tsc",
     "build:docs": "rm -Rf docs && typedoc --plugin typedoc-plugin-markdown --out docs --readme none src/index.ts",
     "test": "jest test",
-    "test:lib": "TEST_LIB=1 yarn test",
+    "test:lib": "TEST_LIB=1 npm run test",
     "lint": "eslint src/**.ts",
     "lint:fix": "eslint --fix src/**.ts",
     "benchmark": "ts-node benchmark/benchmark.ts",

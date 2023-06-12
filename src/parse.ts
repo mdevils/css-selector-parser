@@ -38,7 +38,9 @@ const errorPrefix = `css-selector-parser parse error: `;
  */
 export type Parse = (input: string) => AstSelector;
 
-export function createParser({syntax = 'latest', substitutes, strict = true}: ParseOptions = {}): Parse {
+export function createParser(options: ParseOptions = {}): Parse {
+    const {syntax = 'latest', substitutes, strict = true} = options;
+    // noinspection SuspiciousTypeOfGuard
     let syntaxDefinition: SyntaxDefinition = typeof syntax === 'string' ? cssSyntaxDefinitions[syntax] : syntax;
 
     if (syntaxDefinition.baseSyntax) {

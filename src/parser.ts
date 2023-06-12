@@ -46,21 +46,21 @@ export function createParser(
         /**
          * CSS Syntax options to be used for parsing.
          * Can either be one of the predefined CSS levels ({@link CssLevel}) or a more detailed syntax definition ({@link SyntaxDefinition}).
-         * @default "latest"
+         * Default: `"latest"`
          */
         syntax?: CssLevel | SyntaxDefinition;
         /**
          * Flag to enable substitutes.
          * This is not part of CSS syntax, but rather a useful feature to pass variables into CSS selectors.
+         * Default: `false`
          * @example "[attr=$variable]"
-         * @default fase
          */
         substitutes?: boolean;
         /**
          * CSS selector parser in modern browsers is very forgiving. For instance, it works fine with unclosed attribute
          * selectors: `"[attr=value"`.
          * Set to `false` in order to mimic browser behaviour.
-         * @default true
+         * Default: `true`
          */
         strict?: boolean;
     } = {}

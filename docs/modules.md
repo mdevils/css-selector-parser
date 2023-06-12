@@ -134,9 +134,9 @@ Creates a parse function to be used later to parse CSS selectors.
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `options` | `Object` | - |
-| `options.strict?` | `boolean` | CSS selector parser in modern browsers is very forgiving. For instance, it works fine with unclosed attribute selectors: `"[attr=value"`. Set to `false` in order to mimic browser behaviour. **`Default`** ```ts true ``` |
-| `options.substitutes?` | `boolean` | Flag to enable substitutes. This is not part of CSS syntax, but rather a useful feature to pass variables into CSS selectors. **`Example`** ```ts "[attr=$variable]" ``` **`Default`** ```ts fase ``` |
-| `options.syntax?` | [`CssLevel`](modules.md#csslevel) \| [`SyntaxDefinition`](interfaces/SyntaxDefinition.md) | CSS Syntax options to be used for parsing. Can either be one of the predefined CSS levels ([CssLevel](modules.md#csslevel)) or a more detailed syntax definition ([SyntaxDefinition](interfaces/SyntaxDefinition.md)). **`Default`** ```ts "latest" ``` |
+| `options.strict?` | `boolean` | CSS selector parser in modern browsers is very forgiving. For instance, it works fine with unclosed attribute selectors: `"[attr=value"`. Set to `false` in order to mimic browser behaviour. Default: `true` |
+| `options.substitutes?` | `boolean` | Flag to enable substitutes. This is not part of CSS syntax, but rather a useful feature to pass variables into CSS selectors. Default: `false` **`Example`** ```ts "[attr=$variable]" ``` |
+| `options.syntax?` | [`CssLevel`](modules.md#csslevel) \| [`SyntaxDefinition`](interfaces/SyntaxDefinition.md) | CSS Syntax options to be used for parsing. Can either be one of the predefined CSS levels ([CssLevel](modules.md#csslevel)) or a more detailed syntax definition ([SyntaxDefinition](interfaces/SyntaxDefinition.md)). Default: `"latest"` |
 
 #### Returns
 

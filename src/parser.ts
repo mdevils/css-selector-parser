@@ -686,10 +686,8 @@ export function createParser(
         if (!isEof() && !is(',') && !is(')')) {
             const combinator = matchMulticharIndex(combinatorsIndex);
             skipWhitespace();
-            rule.nestedRule = {
-                combinator,
-                rule: parseRule()
-            };
+            rule.nestedRule = parseRule();
+            rule.nestedRule.combinator = combinator;
         }
         return rule as AstRule;
     }

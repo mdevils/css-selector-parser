@@ -110,10 +110,7 @@ const selector = ast.selector({
                 })
             ],
             pseudoElement: 'before',
-            nestedRule: {
-                rule: ast.rule({tag: ast.wildcardTag()}),
-                combinator: '>'
-            }
+            nestedRule: ast.rule({combinator: '>', tag: ast.wildcardTag()})
         })
     ]
 });

@@ -1316,9 +1316,7 @@ describe('parse()', () => {
                     rules: [
                         ast.rule({
                             tag: ast.tagName({name: 'div'}),
-                            nestedRule: {
-                                rule: ast.rule({classNames: ['class']})
-                            }
+                            nestedRule: ast.rule({classNames: ['class']})
                         })
                     ]
                 })
@@ -1330,10 +1328,7 @@ describe('parse()', () => {
                     rules: [
                         ast.rule({
                             tag: ast.tagName({name: 'div'}),
-                            nestedRule: {
-                                rule: ast.rule({classNames: ['class']}),
-                                combinator: '>'
-                            }
+                            nestedRule: ast.rule({classNames: ['class'], combinator: '>'})
                         })
                     ]
                 })
@@ -1345,10 +1340,7 @@ describe('parse()', () => {
                     rules: [
                         ast.rule({
                             tag: ast.tagName({name: 'div'}),
-                            nestedRule: {
-                                rule: ast.rule({classNames: ['class']}),
-                                combinator: '>'
-                            }
+                            nestedRule: ast.rule({classNames: ['class'], combinator: '>'})
                         })
                     ]
                 })
@@ -1360,10 +1352,7 @@ describe('parse()', () => {
                     rules: [
                         ast.rule({
                             tag: ast.tagName({name: 'div'}),
-                            nestedRule: {
-                                rule: ast.rule({classNames: ['class']}),
-                                combinator: '||'
-                            }
+                            nestedRule: ast.rule({classNames: ['class'], combinator: '||'})
                         })
                     ]
                 })
@@ -1375,10 +1364,7 @@ describe('parse()', () => {
                     rules: [
                         ast.rule({
                             tag: ast.tagName({name: 'div'}),
-                            nestedRule: {
-                                rule: ast.rule({classNames: ['class']}),
-                                combinator: '||'
-                            }
+                            nestedRule: ast.rule({classNames: ['class'], combinator: '||'})
                         })
                     ]
                 })

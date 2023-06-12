@@ -132,7 +132,7 @@ export function render(entity: AstSelector | AstRule): string {
             if (nestedRule.combinator) {
                 result += ` ${nestedRule.combinator}`;
             }
-            result += ` ${render(nestedRule.rule)}`;
+            result += ` ${render(nestedRule)}`;
         }
         return result;
     }

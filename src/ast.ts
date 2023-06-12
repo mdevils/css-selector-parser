@@ -31,13 +31,10 @@ export interface AstRule {
     pseudoClasses?: AstPseudoClass[];
     /** List of attributes (i.e. `"[href][role=button]"` -> `[{name: 'href'}, {name: 'role', operator: '=', value: {type: 'String', value: 'button'}}]`) */
     attributes?: AstAttribute[];
-    /** Nested rule and combinator if specified (i.e. `"div > span"`). */
-    nestedRule?: {
-        /** Nested rule combinator (i.e. `">"` in case of `"div > span"`). */
-        combinator?: string;
-        /** Nested rule definition. */
-        rule: AstRule;
-    };
+    /** Rule combinator which was used to nest this rule (i.e. `">"` in case of `"div > span"` if the current rule is `"span"`). */
+    combinator?: string;
+    /** Nested rule if specified (i.e. `"div > span"`). */
+    nestedRule?: AstRule;
 }
 
 /**
@@ -261,10 +258,7 @@ type AstFactoryBase = {[K in keyof ToAstFactory<AstEntity>]: ToAstFactory<AstEnt
  *                 })
  *             ],
  *             pseudoElement: 'before',
- *             nestedRule: {
- *                 rule: ast.rule({tag: ast.wildcardTag()}),
- *                 combinator: '>'
- *             }
+ *             nestedRule: ast.rule({combinator: '>', tag: ast.wildcardTag()})
  *         })
  *     ]
  * });
@@ -301,10 +295,7 @@ export interface AstFactory extends AstFactoryBase {}
  *                 })
  *             ],
  *             pseudoElement: 'before',
- *             nestedRule: {
- *                 rule: ast.rule({tag: ast.wildcardTag()}),
- *                 combinator: '>'
- *             }
+ *             nestedRule: ast.rule({combinator: '>', tag: ast.wildcardTag()})
  *         })
  *     ]
  * });

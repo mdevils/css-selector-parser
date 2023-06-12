@@ -30,10 +30,7 @@ const selector = ast.selector({
                 })
             ],
             pseudoElement: 'before',
-            nestedRule: {
-                rule: ast.rule({tag: ast.wildcardTag()}),
-                combinator: '>'
-            }
+            nestedRule: ast.rule({combinator: '>', tag: ast.wildcardTag()})
         })
     ]
 });
@@ -488,7 +485,7 @@ ___
 
 ### rule
 
-• **rule**: (`props?`: { `attributes?`: [`AstAttribute`](AstAttribute.md)[] ; `classNames?`: `string`[] ; `ids?`: `string`[] ; `nestedRule?`: { `combinator?`: `string` ; `rule`: [`AstRule`](AstRule.md)  } ; `pseudoClasses?`: [`AstPseudoClass`](AstPseudoClass.md)[] ; `pseudoElement?`: `string` ; `tag?`: [`AstTagName`](AstTagName.md) \| [`AstWildcardTag`](AstWildcardTag.md)  }) => [`AstRule`](AstRule.md)
+• **rule**: (`props?`: { `attributes?`: [`AstAttribute`](AstAttribute.md)[] ; `classNames?`: `string`[] ; `combinator?`: `string` ; `ids?`: `string`[] ; `nestedRule?`: [`AstRule`](AstRule.md) ; `pseudoClasses?`: [`AstPseudoClass`](AstPseudoClass.md)[] ; `pseudoElement?`: `string` ; `tag?`: [`AstTagName`](AstTagName.md) \| [`AstWildcardTag`](AstWildcardTag.md)  }) => [`AstRule`](AstRule.md)
 
 #### Type declaration
 
@@ -501,10 +498,9 @@ ___
 | `props?` | `Object` | - |
 | `props.attributes?` | [`AstAttribute`](AstAttribute.md)[] | List of attributes (i.e. `"[href][role=button]"` -> `[{name: 'href'}, {name: 'role', operator: '=', value: {type: 'String', value: 'button'}}]`) |
 | `props.classNames?` | `string`[] | List of CSS classes (i.e. `".c1.c2"` -> `['c1', 'c2']`) |
+| `props.combinator?` | `string` | Rule combinator which was used to nest this rule (i.e. `">"` in case of `"div > span"` if the current rule is `"span"`). |
 | `props.ids?` | `string`[] | List of IDs (i.e. `"#root"` -> `['root']`). |
-| `props.nestedRule?` | `Object` | Nested rule and combinator if specified (i.e. `"div > span"`). |
-| `props.nestedRule.combinator?` | `string` | Nested rule combinator (i.e. `">"` in case of `"div > span"`). |
-| `props.nestedRule.rule` | [`AstRule`](AstRule.md) | Nested rule definition. |
+| `props.nestedRule?` | [`AstRule`](AstRule.md) | Nested rule if specified (i.e. `"div > span"`). |
 | `props.pseudoClasses?` | [`AstPseudoClass`](AstPseudoClass.md)[] | Pseudo-classes (i.e. `":link"` -> `[{name: 'link'}]`). |
 | `props.pseudoElement?` | `string` | Pseudo-element (i.e. `"::before"` -> `'before'`). |
 | `props.tag?` | [`AstTagName`](AstTagName.md) \| [`AstWildcardTag`](AstWildcardTag.md) | Tag definition. Can be either TagName (i.e. `"div"`) or WildcardTag (`"*"`) if defined. |

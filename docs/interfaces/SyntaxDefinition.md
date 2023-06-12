@@ -36,10 +36,6 @@ CSS Attribute Selector.
 
 https://developer.mozilla.org/en-US/docs/Learn/CSS/Building_blocks/Selectors/Attribute_selectors
 
-#### Defined in
-
-[src/syntax-definitions.ts:103](https://github.com/mdevils/css-selector-parser/blob/f7b90ac/src/syntax-definitions.ts#L103)
-
 ___
 
 ### baseSyntax
@@ -48,10 +44,6 @@ ___
 
 When specified, syntax will be based on the specified predefined CSS standard.
 If not specified, syntax will be defined from scratch.
-
-#### Defined in
-
-[src/syntax-definitions.ts:67](https://github.com/mdevils/css-selector-parser/blob/f7b90ac/src/syntax-definitions.ts#L67)
 
 ___
 
@@ -71,10 +63,6 @@ CSS Class Names
 
 https://developer.mozilla.org/en-US/docs/Learn/CSS/Building_blocks/Selectors/Type_Class_and_ID_Selectors
 
-#### Defined in
-
-[src/syntax-definitions.ts:91](https://github.com/mdevils/css-selector-parser/blob/f7b90ac/src/syntax-definitions.ts#L91)
-
 ___
 
 ### combinators
@@ -92,10 +80,6 @@ div.class > span
 **`See`**
 
 https://developer.mozilla.org/en-US/docs/Learn/CSS/Building_blocks/Selectors/Combinators
-
-#### Defined in
-
-[src/syntax-definitions.ts:97](https://github.com/mdevils/css-selector-parser/blob/f7b90ac/src/syntax-definitions.ts#L97)
 
 ___
 
@@ -115,10 +99,6 @@ CSS IDs (yes, there can be multiple).
 
 https://developer.mozilla.org/en-US/docs/Learn/CSS/Building_blocks/Selectors/Type_Class_and_ID_Selectors
 
-#### Defined in
-
-[src/syntax-definitions.ts:85](https://github.com/mdevils/css-selector-parser/blob/f7b90ac/src/syntax-definitions.ts#L85)
-
 ___
 
 ### namespace
@@ -136,10 +116,6 @@ ns|div
 **`See`**
 
 https://www.w3.org/TR/css3-namespace/
-
-#### Defined in
-
-[src/syntax-definitions.ts:79](https://github.com/mdevils/css-selector-parser/blob/f7b90ac/src/syntax-definitions.ts#L79)
 
 ___
 
@@ -159,10 +135,6 @@ CSS Pseudo-classes.
 
 https://developer.mozilla.org/en-US/docs/Learn/CSS/Building_blocks/Selectors/Pseudo-classes_and_pseudo-elements
 
-#### Defined in
-
-[src/syntax-definitions.ts:136](https://github.com/mdevils/css-selector-parser/blob/f7b90ac/src/syntax-definitions.ts#L136)
-
 ___
 
 ### pseudoElements
@@ -181,10 +153,6 @@ CSS Pseudo-elements.
 
 https://developer.mozilla.org/en-US/docs/Learn/CSS/Building_blocks/Selectors/Pseudo-classes_and_pseudo-elements
 
-#### Defined in
-
-[src/syntax-definitions.ts:130](https://github.com/mdevils/css-selector-parser/blob/f7b90ac/src/syntax-definitions.ts#L130)
-
 ___
 
 ### tag
@@ -202,7 +170,3 @@ div
 **`See`**
 
 https://developer.mozilla.org/en-US/docs/Learn/CSS/Building_blocks/Selectors/Type_Class_and_ID_Selectors
-
-#### Defined in
-
-[src/syntax-definitions.ts:73](https://github.com/mdevils/css-selector-parser/blob/f7b90ac/src/syntax-definitions.ts#L73)

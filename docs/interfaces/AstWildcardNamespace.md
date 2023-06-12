@@ -13,7 +13,3 @@
 ### type
 
 • **type**: ``"WildcardNamespace"``
-
-#### Defined in
-
-[src/ast.ts:62](https://github.com/mdevils/css-selector-parser/blob/f7b90ac/src/ast.ts#L62)

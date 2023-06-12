@@ -26,10 +26,6 @@ List of predefined pseudo-elements.
 ['before', 'after']
 ```
 
-#### Defined in
-
-[src/syntax-definitions.ts:46](https://github.com/mdevils/css-selector-parser/blob/f7b90ac/src/syntax-definitions.ts#L46)
-
 ___
 
 ### notation
@@ -38,10 +34,6 @@ ___
 
 In the past pseudo selements were defined starting with a single colon.
 Later this notation changed to double colon.
-
-#### Defined in
-
-[src/syntax-definitions.ts:41](https://github.com/mdevils/css-selector-parser/blob/f7b90ac/src/syntax-definitions.ts#L41)
 
 ___
 
@@ -52,7 +44,3 @@ ___
 How to handle unknown pseudo-elements.
 `accept` - still parse.
 `reject` - throw an error.
-
-#### Defined in
-
-[src/syntax-definitions.ts:36](https://github.com/mdevils/css-selector-parser/blob/f7b90ac/src/syntax-definitions.ts#L36)

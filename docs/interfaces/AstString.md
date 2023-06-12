@@ -18,16 +18,8 @@ For instance `:lang(en)` -> `{type: 'AstPseudoClass'..., argument: {type: 'Strin
 
 • **type**: ``"String"``
 
-#### Defined in
-
-[src/ast.ts:89](https://github.com/mdevils/css-selector-parser/blob/f7b90ac/src/ast.ts#L89)
-
 ___
 
 ### value
 
 • **value**: `string`
-
-#### Defined in
-
-[src/ast.ts:90](https://github.com/mdevils/css-selector-parser/blob/f7b90ac/src/ast.ts#L90)

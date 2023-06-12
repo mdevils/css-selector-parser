@@ -19,16 +19,8 @@ Wildcard tag: `*`.
 
 Namespace according to https://www.w3.org/TR/css3-namespace/
 
-#### Defined in
-
-[src/ast.ts:53](https://github.com/mdevils/css-selector-parser/blob/f7b90ac/src/ast.ts#L53)
-
 ___
 
 ### type
 
 • **type**: ``"WildcardTag"``
-
-#### Defined in
-
-[src/ast.ts:51](https://github.com/mdevils/css-selector-parser/blob/f7b90ac/src/ast.ts#L51)

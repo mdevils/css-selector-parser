@@ -51,19 +51,11 @@ css-selector-parser
 
 Any CSS element.
 
-#### Defined in
-
-[src/ast.ts:122](https://github.com/mdevils/css-selector-parser/blob/f7b90ac/src/ast.ts#L122)
-
 ___
 
 ### AstNamespace
 
 Ƭ **AstNamespace**: [`AstNamespaceName`](interfaces/AstNamespaceName.md) \| [`AstWildcardNamespace`](interfaces/AstWildcardNamespace.md) \| [`AstNoNamespace`](interfaces/AstNoNamespace.md)
-
-#### Defined in
-
-[src/ast.ts:67](https://github.com/mdevils/css-selector-parser/blob/f7b90ac/src/ast.ts#L67)
 
 ___
 
@@ -73,19 +65,11 @@ ___
 
 Any pseudo-class argument type.
 
-#### Defined in
-
-[src/ast.ts:119](https://github.com/mdevils/css-selector-parser/blob/f7b90ac/src/ast.ts#L119)
-
 ___
 
 ### AstTag
 
 Ƭ **AstTag**: [`AstTagName`](interfaces/AstTagName.md) \| [`AstWildcardTag`](interfaces/AstWildcardTag.md)
-
-#### Defined in
-
-[src/ast.ts:55](https://github.com/mdevils/css-selector-parser/blob/f7b90ac/src/ast.ts#L55)
 
 ___
 
@@ -93,29 +77,17 @@ ___
 
 Ƭ **CssLevel**: ``"css1"`` \| ``"css2"`` \| ``"css3"`` \| ``"selectors-3"`` \| ``"selectors-4"`` \| ``"latest"`` \| ``"progressive"``
 
-#### Defined in
-
-[src/syntax-definitions.ts:4](https://github.com/mdevils/css-selector-parser/blob/f7b90ac/src/syntax-definitions.ts#L4)
-
 ___
 
 ### PseudoClassDefinitions
 
 Ƭ **PseudoClassDefinitions**: { [K in PseudoClassType]?: string[] }
 
-#### Defined in
-
-[src/syntax-definitions.ts:8](https://github.com/mdevils/css-selector-parser/blob/f7b90ac/src/syntax-definitions.ts#L8)
-
 ___
 
 ### PseudoClassType
 
 Ƭ **PseudoClassType**: ``"NoArgument"`` \| [`AstPseudoClassArgument`](README.md#astpseudoclassargument)[``"type"``]
-
-#### Defined in
-
-[src/syntax-definitions.ts:3](https://github.com/mdevils/css-selector-parser/blob/f7b90ac/src/syntax-definitions.ts#L3)
 
 ## Variables
 
@@ -158,29 +130,21 @@ AstSelector was specified.
 | `wildcardNamespace` | (`props?`: `Omit`<[`AstWildcardNamespace`](interfaces/AstWildcardNamespace.md), ``"type"``\>) => [`AstWildcardNamespace`](interfaces/AstWildcardNamespace.md) |
 | `wildcardTag` | (`props?`: `Omit`<[`AstWildcardTag`](interfaces/AstWildcardTag.md), ``"type"``\>) => [`AstWildcardTag`](interfaces/AstWildcardTag.md) |
 
-#### Defined in
-
-[src/ast.ts:152](https://github.com/mdevils/css-selector-parser/blob/f7b90ac/src/ast.ts#L152)
-
 ## Functions
 
 ### createParser
 
-▸ **createParser**(`«destructured»?`): `Parse`
+▸ **createParser**(`options?`): `Parse`
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `«destructured»` | `ParseOptions` |
+| `options` | `ParseOptions` |
 
 #### Returns
 
 `Parse`
-
-#### Defined in
-
-[src/parse.ts:41](https://github.com/mdevils/css-selector-parser/blob/f7b90ac/src/parse.ts#L41)
 
 ___
 
@@ -199,7 +163,3 @@ Renders CSS Selector AST back to a string.
 #### Returns
 
 `string`
-
-#### Defined in
-
-[src/render.ts:34](https://github.com/mdevils/css-selector-parser/blob/f7b90ac/src/render.ts#L34)

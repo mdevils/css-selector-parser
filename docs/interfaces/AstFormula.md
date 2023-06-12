@@ -21,10 +21,6 @@ For instance `:nth-child(2n + 1)` -> `{type: 'AstPseudoClass'..., argument: {typ
 
 Multiplier of `n`.
 
-#### Defined in
-
-[src/ast.ts:100](https://github.com/mdevils/css-selector-parser/blob/f7b90ac/src/ast.ts#L100)
-
 ___
 
 ### b
@@ -33,16 +29,8 @@ ___
 
 Constant added to `a*n`.
 
-#### Defined in
-
-[src/ast.ts:102](https://github.com/mdevils/css-selector-parser/blob/f7b90ac/src/ast.ts#L102)
-
 ___
 
 ### type
 
 • **type**: ``"Formula"``
-
-#### Defined in
-
-[src/ast.ts:98](https://github.com/mdevils/css-selector-parser/blob/f7b90ac/src/ast.ts#L98)

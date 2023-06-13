@@ -1,5 +1,5 @@
-import {createParser} from '../src';
-import {ast} from '../src/ast';
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const {createParser, ast} = require('./import');
 
 describe('parse()', () => {
     const parse = createParser({

@@ -1,16 +1,31 @@
 {
   "name": "css-selector-parser",
   "version": "2.2.1",
-  "description": "Just a CSS selector parser.",
+  "description": "Powerful and compliant CSS selector parser.",
   "keywords": [
     "css",
     "css selector",
-    "css selector parser"
+    "css selector parser",
+    "pseudo-classes",
+    "pseudo-elements",
+    "css attributes",
+    "css tags",
+    "css classes"
   ],
   "author": {
     "name": "Marat Dulin",
     "email": "mdevils@yandex.ru"
   },
+  "funding": [
+    {
+      "type": "github",
+      "url": "https://github.com/sponsors/mdevils"
+    },
+    {
+      "type": "patreon",
+      "url": "https://patreon.com/mdevils"
+    }
+  ],
   "devDependencies": {
     "@types/colors": "^1.2.1",
     "@types/jest": "^29.5.2",
@@ -21,6 +36,7 @@
     "eslint-config-prettier": "^7.1.0",
     "eslint-plugin-import": "^2.22.1",
     "eslint-plugin-prettier": "^3.3.0",
+    "husky": "^4.3.8",
     "jest": "^29.5.0",
     "prettier": "^2.2.1",
     "ts-jest": "^29.1.0",
@@ -51,5 +67,10 @@
     "lib",
     "README.md",
     "LICENSE"
-  ]
+  ],
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run lint && npm run test"
+    }
+  }
 }

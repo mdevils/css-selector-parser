@@ -42,6 +42,7 @@ Produces:
   type: 'Selector',
   rules: [
     {
+      type: 'Rule',
       tag: { type: 'TagName', name: 'a' },
       attributes: [
         {
@@ -50,10 +51,10 @@ Produces:
           operator: '^=',
           value: { type: 'String', value: '/' }
         }
-      ],
-      type: 'Rule'
+      ]
     },
     {
+      type: 'Rule',
       classNames: [ 'container' ],
       pseudoClasses: [
         {
@@ -61,25 +62,22 @@ Produces:
           name: 'has',
           argument: {
             type: 'Selector',
-            rules: [ { tag: { type: 'TagName', name: 'nav' }, type: 'Rule' } ]
+            rules: [ { type: 'Rule', tag: { type: 'TagName', name: 'nav' } } ]
           }
         }
       ],
-      type: 'Rule',
       nestedRule: {
+        type: 'Rule',
         combinator: '>',
-        rule: {
-          tag: { type: 'TagName', name: 'a' },
-          attributes: [ { type: 'Attribute', name: 'href' } ],
-          pseudoClasses: [
-            {
-              type: 'PseudoClass',
-              name: 'nth-child',
-              argument: { type: 'Formula', a: 0, b: 2 }
-            }
-          ],
-          type: 'Rule'
-        }
+        tag: { type: 'TagName', name: 'a' },
+        attributes: [ { type: 'Attribute', name: 'href' } ],
+        pseudoClasses: [
+          {
+            type: 'PseudoClass',
+            name: 'nth-child',
+            argument: { type: 'Formula', a: 0, b: 2 }
+          }
+        ]
       }
     }
   ]
@@ -111,20 +109,18 @@ const selector = ast.selector({
                     })
                 })
             ],
-            nestedRule: {
+            nestedRule: ast.rule({
                 combinator: '>',
-                rule: ast.rule({
-                    tag: ast.tagName({name: 'a'}),
-                    attributes: [ast.attribute({name: 'href'})],
-                    pseudoClasses: [
-                        ast.pseudoClass({
-                            name: 'nth-child',
-                            argument: ast.formula({a: 0, b: 2})
-                        })
-                    ],
-                    pseudoElement: 'before'
-                })
-            }
+                tag: ast.tagName({name: 'a'}),
+                attributes: [ast.attribute({name: 'href'})],
+                pseudoClasses: [
+                    ast.pseudoClass({
+                        name: 'nth-child',
+                        argument: ast.formula({a: 0, b: 2})
+                    })
+                ],
+                pseudoElement: 'before'
+            })
         })
     ]
 });

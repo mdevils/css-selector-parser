@@ -39,7 +39,7 @@
   "license": "MIT",
   "scripts": {
     "build": "tsc",
-    "build:docs": "rm -Rf docs && typedoc --excludeInternal --excludeExternals --disableSources --plugin typedoc-plugin-markdown --readme tools/README.md --entryDocument ../README.md --out docs src/index.ts && ts-node tools/cleanup-docs.ts",
+    "build:docs": "rm -Rf docs && typedoc --excludeInternal --excludeExternals --disableSources --plugin typedoc-plugin-markdown --entryDocument ../README.md --out docs src/index.ts && ts-node tools/cleanup-docs.ts",
     "test": "jest test",
     "test:lib": "TEST_LIB=1 npm run test",
     "lint": "eslint src/**.ts",

@@ -1,5 +1,4 @@
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const {createParser, render} = require('./import');
+import {createParser, render} from './import';
 
 const testCases = {
     '.class': '.class',

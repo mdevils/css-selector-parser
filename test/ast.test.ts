@@ -1,6 +1,5 @@
+import {ast} from './import';
 import {AstEntity} from '../src';
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const {ast} = require('./import');
 
 const lcFirst = (s: string) => s[0].toLowerCase() + s.slice(1);
 

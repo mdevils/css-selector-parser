@@ -29,7 +29,7 @@ parser.registerNumericPseudos('nth-child');
 parser.registerNestingOperators('>', '+', '~');
 parser.registerAttrEqualityMods('^', '$', '*', '~');
 
-const selector = 'a[href^=/], .container:has(nav) > a[href]:lt($var):nth-child(5)';
+const selector = parser.parse('a[href^=/], .container:has(nav) > a[href]:lt($var):nth-child(5)');
 ```
 
 After:

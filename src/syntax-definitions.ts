@@ -316,7 +316,8 @@ const selectors3SyntaxDefinition = extendSyntaxDefinition(css2SyntaxDefinition, 
         operators: ['^=', '$=', '*=']
     },
     pseudoElements: {
-        notation: 'both'
+        notation: 'both',
+        definitions: ['selection']
     },
     pseudoClasses: {
         definitions: {

@@ -14,6 +14,8 @@ css-selector-parser
   * `latest`: refers to `selectors-4`
   * `progressive`: `latest` + accepts unknown psudo-classes, psudo-elements and attribute case sensitivity modifiers
 
+Important: [Migrating from 1.x](CHANGELOG.md#220).
+
 Installation
 ------------
 

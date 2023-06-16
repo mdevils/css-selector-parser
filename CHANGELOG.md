@@ -65,9 +65,9 @@ const parse = createParser({
 const selector = parse('a[href^=/], .container:has(nav) > a[href]:lt($var):nth-child(5)');
 ```
 
-* [All syntax definition options.](docs/interfaces/SyntaxDefinition.md).
-* [All the psudo-class definition options.](docs/interfaces/SyntaxDefinition.md#pseudoclasses).
-* [All the attribute definition options.](docs/interfaces/SyntaxDefinition.md#attributes).
+* [All syntax definition options.](docs/interfaces/SyntaxDefinition.md)
+* [All the psudo-class definition options.](docs/interfaces/SyntaxDefinition.md#pseudoclasses)
+* [All the attribute definition options.](docs/interfaces/SyntaxDefinition.md#attributes)
 
 #### Predefined CSS syntax definitions
 

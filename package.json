@@ -73,7 +73,7 @@
     "prepublishOnly": "npm run build"
   },
   "files": [
-    "lib",
+    "dist",
     "README.md",
     "LICENSE"
   ],

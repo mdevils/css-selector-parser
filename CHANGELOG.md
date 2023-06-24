@@ -9,11 +9,11 @@ All notable changes to this project will be documented in this file. See [standa
 
 * publish hybrid package: CommonJS and ESM modules ([16fd8a1](https://github.com/mdevils/css-selector-parser/commit/16fd8a1b1b4b8bc2107ccba5b36b05ea1384b8c2))
 
-### 2.2.1-2.2.3
+## 2.2.1-2.2.3
 
 * Update published docs.
 
-### 2.2.0
+## 2.2.0
 
 * Full refactoring.
 * Switch to typescript.

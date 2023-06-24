@@ -2,15 +2,11 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
-### [2.2.4](https://github.com/mdevils/css-selector-parser/compare/v2.2.3...v2.2.4) (2023-06-24)
-
-2.2.1-2.2.3
------------
+### 2.2.1-2.2.3
 
 * Update published docs.
 
-2.2.0
------
+### 2.2.0
 
 * Full refactoring.
 * Switch to typescript.

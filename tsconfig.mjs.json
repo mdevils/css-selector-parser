@@ -1,0 +1,9 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "outDir": "dist/mjs",
+    "module": "esnext",
+    "target": "esnext",
+    "skipLibCheck": true
+  }
+}

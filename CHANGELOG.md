@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.3.0](https://github.com/mdevils/css-selector-parser/compare/v2.2.3...v2.3.0) (2023-06-24)
+
+
+### Features
+
+* publish hybrid package: CommonJS and ESM modules ([16fd8a1](https://github.com/mdevils/css-selector-parser/commit/16fd8a1b1b4b8bc2107ccba5b36b05ea1384b8c2))
+
 ### 2.2.1-2.2.3
 
 * Update published docs.

@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.3.2](https://github.com/mdevils/css-selector-parser/compare/v2.3.1...v2.3.2) (2023-06-25)
+
+
+### Bug Fixes
+
+* fix foruma parsing with negative A, closes [#28](https://github.com/mdevils/css-selector-parser/issues/28) ([824312f](https://github.com/mdevils/css-selector-parser/commit/824312fc65a677a78699814ad222af3298afd772))
+* include js file extension into the mjs build, closes [#22](https://github.com/mdevils/css-selector-parser/issues/22) ([f50b350](https://github.com/mdevils/css-selector-parser/commit/f50b350bd28db0085d4fc05a3f74475c812b05c3))
+* rendering nested selectors with combinators, closes [#27](https://github.com/mdevils/css-selector-parser/issues/27) ([40fb434](https://github.com/mdevils/css-selector-parser/commit/40fb4345f3d720bf27e6d8a7809ee51e282bc512))
+
 ### [2.3.1](https://github.com/mdevils/css-selector-parser/compare/v2.3.0...v2.3.1) (2023-06-24)
 
 

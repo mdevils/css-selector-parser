@@ -54,7 +54,10 @@ export function render(entity: AstSelector | AstRule): string {
     }
     if (entity.type === 'Rule') {
         let result = '';
-        const {tag, ids, classNames, attributes, pseudoClasses, pseudoElement, nestedRule} = entity;
+        const {tag, ids, classNames, attributes, pseudoClasses, pseudoElement, combinator, nestedRule} = entity;
+        if (combinator) {
+            result += `${combinator} `;
+        }
         if (tag) {
             const namespace = tag.namespace;
             if (namespace) {
@@ -129,9 +132,6 @@ export function render(entity: AstSelector | AstRule): string {
             result += `::${escapeIdentifier(pseudoElement)}`;
         }
         if (nestedRule) {
-            if (nestedRule.combinator) {
-                result += ` ${nestedRule.combinator}`;
-            }
             result += ` ${render(nestedRule)}`;
         }
         return result;

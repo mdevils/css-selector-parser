@@ -46,6 +46,7 @@ const testCases = {
     'tag1:has(.class)': 'tag1:has(.class)',
     'tag1:has(.class,.class2)': 'tag1:has(.class, .class2)',
     'tag1:has(.class:has(.subcls),.class2)': 'tag1:has(.class:has(.subcls), .class2)',
+    'tag1:has(> div)': 'tag1:has(> div)',
     'tag1:current(.class:has(.subcls),.class2)': 'tag1:current(.class:has(.subcls), .class2)',
     'tag1:current': 'tag1:current',
     '*': '*',

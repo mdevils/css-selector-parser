@@ -65,6 +65,7 @@
     "build": "rm -Rf dist && tsc -p tsconfig.json && tsc -p tsconfig.mjs.json && echo '{\"type\": \"commonjs\"}' > dist/cjs/package.json && echo '{\"type\": \"module\"}' > dist/mjs/package.json",
     "build:docs": "rm -Rf docs && typedoc --excludeInternal --excludeExternals --disableSources --plugin typedoc-plugin-markdown --entryDocument ../README.md --out docs src/index.ts && ts-node tools/cleanup-docs.ts",
     "test": "jest test",
+    "test:watch": "jest --watch test",
     "test:dist": "TEST_DIST=cjs npm run test",
     "lint": "eslint src/**.ts",
     "lint:fix": "eslint --fix src/**.ts",

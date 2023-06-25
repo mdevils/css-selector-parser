@@ -38,6 +38,7 @@
     "eslint-plugin-prettier": "^4.2.1",
     "husky": "^4.3.8",
     "jest": "^29.5.0",
+    "jest-ts-webcompat-resolver": "^1.0.0",
     "prettier": "^2.2.1",
     "standard-version": "^9.5.0",
     "ts-jest": "^29.1.0",
@@ -67,8 +68,8 @@
     "test": "jest test",
     "test:watch": "jest --watch test",
     "test:dist": "TEST_DIST=cjs npm run test",
-    "lint": "eslint src/**.ts",
-    "lint:fix": "eslint --fix src/**.ts",
+    "lint": "eslint {src,test,benchmark}/**.ts",
+    "lint:fix": "eslint --fix {src,test,benchmark}/**.ts",
     "benchmark": "ts-node benchmark/benchmark.ts",
     "release": "standard-version",
     "prepublishOnly": "npm run build"

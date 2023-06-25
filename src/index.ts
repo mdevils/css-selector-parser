@@ -1,5 +1,5 @@
-export {createParser, Parser, ParserError} from './parser';
-export {render} from './render';
+export {createParser, Parser, ParserError} from './parser.js';
+export {render} from './render.js';
 export {
     ast,
     AstAttribute,
@@ -17,5 +17,5 @@ export {
     AstTagName,
     AstWildcardNamespace,
     AstWildcardTag
-} from './ast';
-export {CssLevel, SyntaxDefinition} from './syntax-definitions';
+} from './ast.js';
+export {CssLevel, SyntaxDefinition} from './syntax-definitions.js';

@@ -48,7 +48,8 @@
         "order": "asc",
         "caseInsensitive": true
       }
-    }]
+    }],
+    "import/extensions": ["error", "always"]
   },
   "settings": {
     "import/resolver": {

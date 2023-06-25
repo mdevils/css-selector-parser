@@ -1,4 +1,4 @@
-import {PseudoClassType} from './syntax-definitions';
+import {PseudoClassType} from './syntax-definitions.js';
 
 export type PseudoClassSignature = {optional: boolean} & (
     | {

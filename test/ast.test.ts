@@ -1,5 +1,5 @@
-import {ast} from './import';
-import {AstEntity} from '../src';
+import {ast} from './import.js';
+import {AstEntity} from '../src/index.js';
 
 const lcFirst = (s: string) => s[0].toLowerCase() + s.slice(1);
 

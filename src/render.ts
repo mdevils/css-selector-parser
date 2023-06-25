@@ -1,5 +1,5 @@
-import {AstNamespaceName, AstNoNamespace, AstRule, AstSelector, AstSubstitution, AstWildcardNamespace} from './ast';
-import {escapeIdentifier, escapePseudoClassString, escapeStr} from './utils';
+import {AstNamespaceName, AstNoNamespace, AstRule, AstSelector, AstSubstitution, AstWildcardNamespace} from './ast.js';
+import {escapeIdentifier, escapePseudoClassString, escapeStr} from './utils.js';
 
 function renderNamespace(namespace: AstNamespaceName | AstWildcardNamespace | AstNoNamespace) {
     if (namespace.type === 'WildcardNamespace') {

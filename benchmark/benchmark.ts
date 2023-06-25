@@ -1,4 +1,4 @@
-import {createParser} from '../src';
+import {createParser} from '../src/index.js';
 
 const parse = createParser({substitutes: true});
 

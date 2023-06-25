@@ -1,4 +1,4 @@
-import {AstPseudoClassArgument} from './ast';
+import {AstPseudoClassArgument} from './ast.js';
 
 export type PseudoClassType = 'NoArgument' | AstPseudoClassArgument['type'];
 export type CssLevel = 'css1' | 'css2' | 'css3' | 'selectors-3' | 'selectors-4' | 'latest' | 'progressive';

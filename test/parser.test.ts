@@ -1,4 +1,4 @@
-import {createParser, ast} from './import';
+import {createParser, ast} from './import.js';
 
 describe('parse()', () => {
     const parse = createParser({

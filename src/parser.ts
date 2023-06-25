@@ -1,24 +1,24 @@
-import {AstAttribute, AstPseudoClass, AstRule, AstSelector, AstTagName, AstWildcardTag} from './ast';
+import {AstAttribute, AstPseudoClass, AstRule, AstSelector, AstTagName, AstWildcardTag} from './ast.js';
 import {
     createMulticharIndex,
     createRegularIndex,
     emptyMulticharIndex,
     emptyRegularIndex,
     MulticharIndex
-} from './indexes';
+} from './indexes.js';
 import {
     calculatePseudoClassSignatures,
     defaultPseudoClassSignature,
     emptyPseudoClassSignatures
-} from './pseudo-class-signatures';
+} from './pseudo-class-signatures.js';
 import {
     CssLevel,
     cssSyntaxDefinitions,
     extendSyntaxDefinition,
     getXmlOptions,
     SyntaxDefinition
-} from './syntax-definitions';
-import {digitsChars, isHex, isIdent, isIdentStart, quoteChars, stringEscapeChars, whitespaceChars} from './utils';
+} from './syntax-definitions.js';
+import {digitsChars, isHex, isIdent, isIdentStart, quoteChars, stringEscapeChars, whitespaceChars} from './utils.js';
 
 /**
  * This error is thrown when parser encounters problems in CSS string.

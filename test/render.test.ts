@@ -1,4 +1,4 @@
-import {createParser, render} from './import';
+import {createParser, render} from './import.js';
 
 const testCases = {
     '.class': '.class',

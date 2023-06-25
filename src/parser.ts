@@ -413,51 +413,67 @@ export function createParser(
         return attr;
     }
 
-    function parseNumber(signed: boolean) {
+    function parseNumber() {
         let result = '';
-        if (signed && is('-')) {
-            result = readAndNext();
-        }
         while (digitsChars[chr]) {
             result += readAndNext();
         }
-        assert(result !== '' && result !== '-', 'Formula parse error.');
+        assert(result !== '', 'Formula parse error.');
         return parseInt(result);
     }
 
     const isNumberStart = () => is('-') || is('+') || digitsChars[chr];
 
     function parseFormula(): [number, number] {
+        if (is('e') || is('o')) {
+            const ident = parseIdentifier();
+            if (ident === 'even') {
+                skipWhitespace();
+                return [2, 0];
+            }
+            if (ident === 'odd') {
+                skipWhitespace();
+                return [2, 1];
+            }
+        }
+
         let firstNumber: null | number = null;
+        let firstNumberMultiplier = 1;
+        if (is('-')) {
+            next();
+            firstNumberMultiplier = -1;
+        }
         if (isNumberStart()) {
             if (is('+')) {
                 next();
-                assert(!is('-'), 'Formula parse error.');
             }
-            firstNumber = parseNumber(true);
+            firstNumber = parseNumber();
             if (!is('\\') && !is('n')) {
-                return [0, firstNumber];
+                return [0, firstNumber * firstNumberMultiplier];
             }
         }
         if (firstNumber === null) {
             firstNumber = 1;
         }
-        const ident = parseIdentifier();
-        if (ident === 'even') {
-            skipWhitespace();
-            return [2, 0];
+        firstNumber *= firstNumberMultiplier;
+        let identifier;
+        if (is('\\')) {
+            next();
+            if (isHex(chr)) {
+                identifier = parseHex();
+            } else {
+                identifier = readAndNext();
+            }
+        } else {
+            identifier = readAndNext();
         }
-        if (ident === 'odd') {
-            skipWhitespace();
-            return [2, 1];
-        }
-        assert(ident === 'n', 'Formula parse error');
+        assert(identifier === 'n', 'Formula parse error: expected "n".');
         skipWhitespace();
         if (is('+') || is('-')) {
             const sign = is('+') ? 1 : -1;
             next();
             skipWhitespace();
-            return [firstNumber, sign * parseNumber(false)];
+            return [firstNumber, sign * parseNumber()];
         } else {
             return [firstNumber, 0];
         }

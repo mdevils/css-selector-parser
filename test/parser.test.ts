@@ -921,6 +921,32 @@ describe('parse()', () => {
                 );
             }
         });
+        it('should properly parse with 0n and negative B', () => {
+            const sameFormulas = [
+                ':nth-child(0n-5)',
+                ':nth-child( 0n - 5 )',
+                ':nth-child( 0n-5 )',
+                ':nth-child(-5)',
+                ':nth-child( -5 )',
+                ':nth-child( -5 )'
+            ];
+            for (const formula of sameFormulas) {
+                expect(parse(formula)).toEqual(
+                    ast.selector({
+                        rules: [
+                            ast.rule({
+                                pseudoClasses: [
+                                    ast.pseudoClass({
+                                        name: 'nth-child',
+                                        argument: ast.formula({a: 0, b: -5})
+                                    })
+                                ]
+                            })
+                        ]
+                    })
+                );
+            }
+        });
         it('should properly parse with 0 B', () => {
             const sameFormulas = [
                 ':nth-child(3n+0)',

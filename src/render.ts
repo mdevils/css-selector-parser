@@ -18,7 +18,7 @@ function renderSubstitution(sub: AstSubstitution) {
 
 function renderFormula(a: number, b: number) {
     if (a) {
-        let result = `${a === 1 ? '' : a}n`;
+        let result = `${a === 1 ? '' : a === -1 ? '-' : a}n`;
         if (b) {
             result += `${b > 0 ? '+' : ''}${b}`;
         }

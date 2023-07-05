@@ -11,7 +11,7 @@ describe('parse()', () => {
                 ast.selector({
                     rules: [
                         ast.rule({
-                            tag: ast.tagName({name: 'div'})
+                            items: [ast.tagName({name: 'div'})]
                         })
                     ]
                 })
@@ -22,7 +22,7 @@ describe('parse()', () => {
                 ast.selector({
                     rules: [
                         ast.rule({
-                            tag: ast.wildcardTag()
+                            items: [ast.wildcardTag()]
                         })
                     ]
                 })
@@ -33,7 +33,7 @@ describe('parse()', () => {
                 ast.selector({
                     rules: [
                         ast.rule({
-                            tag: ast.tagName({name: '*'})
+                            items: [ast.tagName({name: '*'})]
                         })
                     ]
                 })
@@ -44,7 +44,7 @@ describe('parse()', () => {
                 ast.selector({
                     rules: [
                         ast.rule({
-                            tag: ast.tagName({name: 'd i v'})
+                            items: [ast.tagName({name: 'd i v'})]
                         })
                     ]
                 })
@@ -55,6 +55,9 @@ describe('parse()', () => {
         });
         it('should not be parsed after a pseudo-class', () => {
             expect(() => parse(':nth-child(2n)a')).toThrow('Unexpected tag/namespace start.');
+        });
+        it('should not be parsed after a pseudo-element', () => {
+            expect(() => parse(':unknown(hello)a')).toThrow('Unexpected tag/namespace start.');
         });
         it('should throw if not enabled', () => {
             expect(() => createParser({syntax: {}})('div')).toThrow('Tag names are not enabled.');
@@ -70,7 +73,7 @@ describe('parse()', () => {
                 ast.selector({
                     rules: [
                         ast.rule({
-                            tag: ast.tagName({name: 'div', namespace: ast.namespaceName({name: 'ns'})})
+                            items: [ast.tagName({name: 'div', namespace: ast.namespaceName({name: 'ns'})})]
                         })
                     ]
                 })
@@ -81,7 +84,7 @@ describe('parse()', () => {
                 ast.selector({
                     rules: [
                         ast.rule({
-                            tag: ast.tagName({name: 'div', namespace: ast.noNamespace()})
+                            items: [ast.tagName({name: 'div', namespace: ast.noNamespace()})]
                         })
                     ]
                 })
@@ -92,7 +95,7 @@ describe('parse()', () => {
                 ast.selector({
                     rules: [
                         ast.rule({
-                            tag: ast.tagName({name: 'div', namespace: ast.wildcardNamespace()})
+                            items: [ast.tagName({name: 'div', namespace: ast.wildcardNamespace()})]
                         })
                     ]
                 })
@@ -103,7 +106,7 @@ describe('parse()', () => {
                 ast.selector({
                     rules: [
                         ast.rule({
-                            tag: ast.wildcardTag({namespace: ast.wildcardNamespace()})
+                            items: [ast.wildcardTag({namespace: ast.wildcardNamespace()})]
                         })
                     ]
                 })
@@ -114,7 +117,7 @@ describe('parse()', () => {
                 ast.selector({
                     rules: [
                         ast.rule({
-                            tag: ast.wildcardTag({namespace: ast.namespaceName({name: '*'})})
+                            items: [ast.wildcardTag({namespace: ast.namespaceName({name: '*'})})]
                         })
                     ]
                 })
@@ -125,7 +128,7 @@ describe('parse()', () => {
                 ast.selector({
                     rules: [
                         ast.rule({
-                            tag: ast.tagName({name: '|div'})
+                            items: [ast.tagName({name: '|div'})]
                         })
                     ]
                 })
@@ -136,7 +139,7 @@ describe('parse()', () => {
                 ast.selector({
                     rules: [
                         ast.rule({
-                            tag: ast.tagName({name: '*', namespace: ast.namespaceName({name: '*'})})
+                            items: [ast.tagName({name: '*', namespace: ast.namespaceName({name: '*'})})]
                         })
                     ]
                 })
@@ -147,7 +150,7 @@ describe('parse()', () => {
                 ast.selector({
                     rules: [
                         ast.rule({
-                            tag: ast.tagName({name: 'd i v', namespace: ast.namespaceName({name: 'n a m'})})
+                            items: [ast.tagName({name: 'd i v', namespace: ast.namespaceName({name: 'n a m'})})]
                         })
                     ]
                 })
@@ -155,9 +158,15 @@ describe('parse()', () => {
         });
         it('should not be parsed after an attribute', () => {
             expect(() => parse('[href="#"]a|b')).toThrow('Unexpected tag/namespace start.');
+            expect(() => parse('[href="#"]|b')).toThrow('Unexpected tag/namespace start.');
         });
         it('should not be parsed after a pseudo-class', () => {
             expect(() => parse(':nth-child(2n)a|b')).toThrow('Unexpected tag/namespace start.');
+            expect(() => parse(':nth-child(2n)|b')).toThrow('Unexpected tag/namespace start.');
+        });
+        it('should not be parsed after a pseudo-element', () => {
+            expect(() => parse(':unknown(hello)a|b')).toThrow('Unexpected tag/namespace start.');
+            expect(() => parse(':unknown(hello)|b')).toThrow('Unexpected tag/namespace start.');
         });
         it('should throw if not enabled', () => {
             expect(() => createParser({syntax: {tag: true}})('ns|div')).toThrow('Namespaces are not enabled.');
@@ -181,7 +190,7 @@ describe('parse()', () => {
                 ast.selector({
                     rules: [
                         ast.rule({
-                            classNames: ['class']
+                            items: [ast.className({name: 'class'})]
                         })
                     ]
                 })
@@ -192,7 +201,7 @@ describe('parse()', () => {
                 ast.selector({
                     rules: [
                         ast.rule({
-                            classNames: ['class1', 'class2']
+                            items: [ast.className({name: 'class1'}), ast.className({name: 'class2'})]
                         })
                     ]
                 })
@@ -203,7 +212,7 @@ describe('parse()', () => {
                 ast.selector({
                     rules: [
                         ast.rule({
-                            classNames: ['cla ss.name']
+                            items: [ast.className({name: 'cla ss.name'})]
                         })
                     ]
                 })
@@ -214,8 +223,7 @@ describe('parse()', () => {
                 ast.selector({
                     rules: [
                         ast.rule({
-                            tag: ast.tagName({name: 'div'}),
-                            classNames: ['class']
+                            items: [ast.tagName({name: 'div'}), ast.className({name: 'class'})]
                         })
                     ]
                 })
@@ -226,8 +234,7 @@ describe('parse()', () => {
                 ast.selector({
                     rules: [
                         ast.rule({
-                            ids: ['id'],
-                            classNames: ['class']
+                            items: [ast.id({name: 'id'}), ast.className({name: 'class'})]
                         })
                     ]
                 })
@@ -238,8 +245,7 @@ describe('parse()', () => {
                 ast.selector({
                     rules: [
                         ast.rule({
-                            attributes: [ast.attribute({name: 'href'})],
-                            classNames: ['class']
+                            items: [ast.attribute({name: 'href'}), ast.className({name: 'class'})]
                         })
                     ]
                 })
@@ -250,8 +256,18 @@ describe('parse()', () => {
                 ast.selector({
                     rules: [
                         ast.rule({
-                            pseudoClasses: [ast.pseudoClass({name: 'link'})],
-                            classNames: ['class']
+                            items: [ast.pseudoClass({name: 'link'}), ast.className({name: 'class'})]
+                        })
+                    ]
+                })
+            );
+        });
+        it('should parse after a pseudo-element', () => {
+            expect(parse('::before.class')).toEqual(
+                ast.selector({
+                    rules: [
+                        ast.rule({
+                            items: [ast.pseudoElement({name: 'before'}), ast.className({name: 'class'})]
                         })
                     ]
                 })
@@ -259,11 +275,6 @@ describe('parse()', () => {
         });
         it('should fail on empty class name', () => {
             expect(() => parse('.')).toThrow('Expected class name.');
-        });
-        it('should fail after pseudo-element', () => {
-            expect(() => parse('::before.class')).toThrow(
-                'Pseudo-element should be the last component of a CSS selector rule.'
-            );
         });
         it('should fail if not enabled', () => {
             expect(() => createParser({syntax: {}})('.class')).toThrow('Class names are not enabled.');
@@ -275,7 +286,7 @@ describe('parse()', () => {
                 ast.selector({
                     rules: [
                         ast.rule({
-                            ids: ['id']
+                            items: [ast.id({name: 'id'})]
                         })
                     ]
                 })
@@ -286,7 +297,7 @@ describe('parse()', () => {
                 ast.selector({
                     rules: [
                         ast.rule({
-                            ids: ['id1', 'id2']
+                            items: [ast.id({name: 'id1'}), ast.id({name: 'id2'})]
                         })
                     ]
                 })
@@ -297,7 +308,7 @@ describe('parse()', () => {
                 ast.selector({
                     rules: [
                         ast.rule({
-                            ids: ['id name# with escapes']
+                            items: [ast.id({name: 'id name# with escapes'})]
                         })
                     ]
                 })
@@ -308,8 +319,7 @@ describe('parse()', () => {
                 ast.selector({
                     rules: [
                         ast.rule({
-                            tag: ast.tagName({name: 'div'}),
-                            ids: ['id']
+                            items: [ast.tagName({name: 'div'}), ast.id({name: 'id'})]
                         })
                     ]
                 })
@@ -320,8 +330,7 @@ describe('parse()', () => {
                 ast.selector({
                     rules: [
                         ast.rule({
-                            ids: ['id'],
-                            classNames: ['class']
+                            items: [ast.className({name: 'class'}), ast.id({name: 'id'})]
                         })
                     ]
                 })
@@ -332,8 +341,12 @@ describe('parse()', () => {
                 ast.selector({
                     rules: [
                         ast.rule({
-                            ids: ['id1', 'id2'],
-                            classNames: ['class1', 'class2']
+                            items: [
+                                ast.className({name: 'class1'}),
+                                ast.id({name: 'id1'}),
+                                ast.className({name: 'class2'}),
+                                ast.id({name: 'id2'})
+                            ]
                         })
                     ]
                 })
@@ -344,8 +357,7 @@ describe('parse()', () => {
                 ast.selector({
                     rules: [
                         ast.rule({
-                            attributes: [ast.attribute({name: 'href'})],
-                            ids: ['id']
+                            items: [ast.attribute({name: 'href'}), ast.id({name: 'id'})]
                         })
                     ]
                 })
@@ -356,8 +368,18 @@ describe('parse()', () => {
                 ast.selector({
                     rules: [
                         ast.rule({
-                            pseudoClasses: [ast.pseudoClass({name: 'link'})],
-                            ids: ['id']
+                            items: [ast.pseudoClass({name: 'link'}), ast.id({name: 'id'})]
+                        })
+                    ]
+                })
+            );
+        });
+        it('should parse after a pseudo-element', () => {
+            expect(parse('::before#id')).toEqual(
+                ast.selector({
+                    rules: [
+                        ast.rule({
+                            items: [ast.pseudoElement({name: 'before'}), ast.id({name: 'id'})]
                         })
                     ]
                 })
@@ -365,11 +387,6 @@ describe('parse()', () => {
         });
         it('should fail on empty ID name', () => {
             expect(() => parse('#')).toThrow('Expected ID name.');
-        });
-        it('should fail after pseudo-element', () => {
-            expect(() => parse('::before#id')).toThrow(
-                'Pseudo-element should be the last component of a CSS selector rule.'
-            );
         });
         it('should fail if not enabled', () => {
             expect(() => createParser({syntax: {}})('#id')).toThrow('IDs are not enabled.');
@@ -381,7 +398,7 @@ describe('parse()', () => {
                 ast.selector({
                     rules: [
                         ast.rule({
-                            attributes: [ast.attribute({name: 'attr'})]
+                            items: [ast.attribute({name: 'attr'})]
                         })
                     ]
                 })
@@ -392,9 +409,7 @@ describe('parse()', () => {
                 ast.selector({
                     rules: [
                         ast.rule({
-                            attributes: [
-                                ast.attribute({name: 'attr', operator: '=', value: ast.string({value: 'val'})})
-                            ]
+                            items: [ast.attribute({name: 'attr', operator: '=', value: ast.string({value: 'val'})})]
                         })
                     ]
                 })
@@ -405,9 +420,7 @@ describe('parse()', () => {
                 ast.selector({
                     rules: [
                         ast.rule({
-                            attributes: [
-                                ast.attribute({name: 'attr', operator: '|=', value: ast.string({value: 'val'})})
-                            ]
+                            items: [ast.attribute({name: 'attr', operator: '|=', value: ast.string({value: 'val'})})]
                         })
                     ]
                 })
@@ -418,7 +431,7 @@ describe('parse()', () => {
                 ast.selector({
                     rules: [
                         ast.rule({
-                            attributes: [ast.attribute({name: 'attr1'}), ast.attribute({name: 'attr2'})]
+                            items: [ast.attribute({name: 'attr1'}), ast.attribute({name: 'attr2'})]
                         })
                     ]
                 })
@@ -429,7 +442,7 @@ describe('parse()', () => {
                 ast.selector({
                     rules: [
                         ast.rule({
-                            attributes: [ast.attribute({name: 'attr .name'})]
+                            items: [ast.attribute({name: 'attr .name'})]
                         })
                     ]
                 })
@@ -440,7 +453,7 @@ describe('parse()', () => {
                 ast.selector({
                     rules: [
                         ast.rule({
-                            attributes: [
+                            items: [
                                 ast.attribute({
                                     name: 'attr',
                                     operator: '=',
@@ -459,7 +472,7 @@ describe('parse()', () => {
                 ast.selector({
                     rules: [
                         ast.rule({
-                            attributes: [
+                            items: [
                                 ast.attribute({
                                     name: 'attr',
                                     operator: '=',
@@ -479,7 +492,7 @@ describe('parse()', () => {
                 ast.selector({
                     rules: [
                         ast.rule({
-                            attributes: [
+                            items: [
                                 ast.attribute({
                                     name: 'attr',
                                     operator: '=',
@@ -499,7 +512,7 @@ describe('parse()', () => {
                 ast.selector({
                     rules: [
                         ast.rule({
-                            attributes: [
+                            items: [
                                 ast.attribute({
                                     name: 'attr',
                                     operator: '=',
@@ -519,7 +532,7 @@ describe('parse()', () => {
                 ast.selector({
                     rules: [
                         ast.rule({
-                            attributes: [
+                            items: [
                                 ast.attribute({
                                     name: 'attr',
                                     operator: '=',
@@ -550,7 +563,7 @@ describe('parse()', () => {
                 ast.selector({
                     rules: [
                         ast.rule({
-                            attributes: [
+                            items: [
                                 ast.attribute({
                                     name: 'attr',
                                     operator: '=',
@@ -572,7 +585,7 @@ describe('parse()', () => {
                 ast.selector({
                     rules: [
                         ast.rule({
-                            attributes: [
+                            items: [
                                 ast.attribute({
                                     name: 'attr',
                                     operator: '=',
@@ -590,8 +603,7 @@ describe('parse()', () => {
                 ast.selector({
                     rules: [
                         ast.rule({
-                            tag: ast.tagName({name: 'div'}),
-                            attributes: [ast.attribute({name: 'attr'})]
+                            items: [ast.tagName({name: 'div'}), ast.attribute({name: 'attr'})]
                         })
                     ]
                 })
@@ -602,8 +614,7 @@ describe('parse()', () => {
                 ast.selector({
                     rules: [
                         ast.rule({
-                            ids: ['id'],
-                            attributes: [ast.attribute({name: 'attr'})]
+                            items: [ast.id({name: 'id'}), ast.attribute({name: 'attr'})]
                         })
                     ]
                 })
@@ -614,8 +625,7 @@ describe('parse()', () => {
                 ast.selector({
                     rules: [
                         ast.rule({
-                            classNames: ['class'],
-                            attributes: [ast.attribute({name: 'attr'})]
+                            items: [ast.className({name: 'class'}), ast.attribute({name: 'attr'})]
                         })
                     ]
                 })
@@ -626,8 +636,18 @@ describe('parse()', () => {
                 ast.selector({
                     rules: [
                         ast.rule({
-                            pseudoClasses: [ast.pseudoClass({name: 'link'})],
-                            attributes: [ast.attribute({name: 'attr'})]
+                            items: [ast.pseudoClass({name: 'link'}), ast.attribute({name: 'attr'})]
+                        })
+                    ]
+                })
+            );
+        });
+        it('should parse after a pseudo-element', () => {
+            expect(parse('::before[attr]')).toEqual(
+                ast.selector({
+                    rules: [
+                        ast.rule({
+                            items: [ast.pseudoElement({name: 'before'}), ast.attribute({name: 'attr'})]
                         })
                     ]
                 })
@@ -638,7 +658,7 @@ describe('parse()', () => {
                 ast.selector({
                     rules: [
                         ast.rule({
-                            attributes: [
+                            items: [
                                 ast.attribute({
                                     name: 'href',
                                     namespace: ast.namespaceName({name: 'ns'})
@@ -652,7 +672,7 @@ describe('parse()', () => {
                 ast.selector({
                     rules: [
                         ast.rule({
-                            attributes: [
+                            items: [
                                 ast.attribute({
                                     name: 'href',
                                     operator: '=',
@@ -668,7 +688,7 @@ describe('parse()', () => {
                 ast.selector({
                     rules: [
                         ast.rule({
-                            attributes: [
+                            items: [
                                 ast.attribute({
                                     name: 'href',
                                     operator: '|=',
@@ -686,7 +706,7 @@ describe('parse()', () => {
                 ast.selector({
                     rules: [
                         ast.rule({
-                            attributes: [
+                            items: [
                                 ast.attribute({
                                     name: 'href',
                                     namespace: ast.wildcardNamespace()
@@ -700,7 +720,7 @@ describe('parse()', () => {
                 ast.selector({
                     rules: [
                         ast.rule({
-                            attributes: [
+                            items: [
                                 ast.attribute({
                                     name: 'href',
                                     operator: '=',
@@ -716,7 +736,7 @@ describe('parse()', () => {
                 ast.selector({
                     rules: [
                         ast.rule({
-                            attributes: [
+                            items: [
                                 ast.attribute({
                                     name: 'href',
                                     operator: '|=',
@@ -734,7 +754,7 @@ describe('parse()', () => {
                 ast.selector({
                     rules: [
                         ast.rule({
-                            attributes: [
+                            items: [
                                 ast.attribute({
                                     name: 'href',
                                     namespace: ast.noNamespace()
@@ -748,7 +768,7 @@ describe('parse()', () => {
                 ast.selector({
                     rules: [
                         ast.rule({
-                            attributes: [
+                            items: [
                                 ast.attribute({
                                     name: 'href',
                                     operator: '=',
@@ -764,7 +784,7 @@ describe('parse()', () => {
                 ast.selector({
                     rules: [
                         ast.rule({
-                            attributes: [
+                            items: [
                                 ast.attribute({
                                     name: 'href',
                                     operator: '|=',
@@ -842,7 +862,7 @@ describe('parse()', () => {
                 ast.selector({
                     rules: [
                         ast.rule({
-                            attributes: [
+                            items: [
                                 ast.attribute({
                                     name: 'attr',
                                     operator: '=',
@@ -855,11 +875,6 @@ describe('parse()', () => {
                 })
             );
         });
-        it('should fail after pseudo-element', () => {
-            expect(() => parse('::before[attr]')).toThrow(
-                'Pseudo-element should be the last component of a CSS selector rule.'
-            );
-        });
     });
     describe('Pseudo Classes', () => {
         it('should parse a pseudo-class', () => {
@@ -867,7 +882,7 @@ describe('parse()', () => {
                 ast.selector({
                     rules: [
                         ast.rule({
-                            pseudoClasses: [ast.pseudoClass({name: 'link'})]
+                            items: [ast.pseudoClass({name: 'link'})]
                         })
                     ]
                 })
@@ -878,7 +893,7 @@ describe('parse()', () => {
                 ast.selector({
                     rules: [
                         ast.rule({
-                            pseudoClasses: [ast.pseudoClass({name: 'link'}), ast.pseudoClass({name: 'visited'})]
+                            items: [ast.pseudoClass({name: 'link'}), ast.pseudoClass({name: 'visited'})]
                         })
                     ]
                 })
@@ -889,7 +904,7 @@ describe('parse()', () => {
                 ast.selector({
                     rules: [
                         ast.rule({
-                            pseudoClasses: [ast.pseudoClass({name: 'link'})]
+                            items: [ast.pseudoClass({name: 'link'})]
                         })
                     ]
                 })
@@ -909,7 +924,7 @@ describe('parse()', () => {
                     ast.selector({
                         rules: [
                             ast.rule({
-                                pseudoClasses: [
+                                items: [
                                     ast.pseudoClass({
                                         name: 'nth-child',
                                         argument: ast.formula({a: 0, b: 5})
@@ -935,7 +950,7 @@ describe('parse()', () => {
                     ast.selector({
                         rules: [
                             ast.rule({
-                                pseudoClasses: [
+                                items: [
                                     ast.pseudoClass({
                                         name: 'nth-child',
                                         argument: ast.formula({a: 0, b: -5})
@@ -961,7 +976,7 @@ describe('parse()', () => {
                     ast.selector({
                         rules: [
                             ast.rule({
-                                pseudoClasses: [
+                                items: [
                                     ast.pseudoClass({
                                         name: 'nth-child',
                                         argument: ast.formula({a: 3, b: 0})
@@ -980,7 +995,7 @@ describe('parse()', () => {
                     ast.selector({
                         rules: [
                             ast.rule({
-                                pseudoClasses: [
+                                items: [
                                     ast.pseudoClass({
                                         name: 'nth-child',
                                         argument: ast.formula({a: 2, b: 0})
@@ -999,7 +1014,7 @@ describe('parse()', () => {
                     ast.selector({
                         rules: [
                             ast.rule({
-                                pseudoClasses: [
+                                items: [
                                     ast.pseudoClass({
                                         name: 'nth-child',
                                         argument: ast.formula({a: 2, b: 1})
@@ -1016,7 +1031,7 @@ describe('parse()', () => {
                 ast.selector({
                     rules: [
                         ast.rule({
-                            pseudoClasses: [
+                            items: [
                                 ast.pseudoClass({
                                     name: 'lang',
                                     argument: ast.string({
@@ -1034,8 +1049,7 @@ describe('parse()', () => {
                 ast.selector({
                     rules: [
                         ast.rule({
-                            tag: ast.tagName({name: 'div'}),
-                            pseudoClasses: [ast.pseudoClass({name: 'link'})]
+                            items: [ast.tagName({name: 'div'}), ast.pseudoClass({name: 'link'})]
                         })
                     ]
                 })
@@ -1046,8 +1060,7 @@ describe('parse()', () => {
                 ast.selector({
                     rules: [
                         ast.rule({
-                            ids: ['id'],
-                            pseudoClasses: [ast.pseudoClass({name: 'link'})]
+                            items: [ast.id({name: 'id'}), ast.pseudoClass({name: 'link'})]
                         })
                     ]
                 })
@@ -1058,8 +1071,7 @@ describe('parse()', () => {
                 ast.selector({
                     rules: [
                         ast.rule({
-                            classNames: ['class'],
-                            pseudoClasses: [ast.pseudoClass({name: 'link'})]
+                            items: [ast.className({name: 'class'}), ast.pseudoClass({name: 'link'})]
                         })
                     ]
                 })
@@ -1070,13 +1082,13 @@ describe('parse()', () => {
                 ast.selector({
                     rules: [
                         ast.rule({
-                            pseudoClasses: [
+                            items: [
                                 ast.pseudoClass({
                                     name: 'not',
                                     argument: ast.selector({
                                         rules: [
                                             ast.rule({
-                                                pseudoClasses: [
+                                                items: [
                                                     ast.pseudoClass({
                                                         name: 'lang',
                                                         argument: ast.string({value: 'en'})
@@ -1084,7 +1096,7 @@ describe('parse()', () => {
                                                 ]
                                             }),
                                             ast.rule({
-                                                tag: ast.tagName({name: 'div'})
+                                                items: [ast.tagName({name: 'div'})]
                                             })
                                         ]
                                     })
@@ -1098,19 +1110,22 @@ describe('parse()', () => {
         it('should require a nested selector', () => {
             expect(() => parse(':not')).toThrow('Argument is required for pseudo-class "not".');
         });
+        it('should require a string', () => {
+            expect(() => parse(':lang')).toThrow('Argument is required for pseudo-class "lang".');
+        });
         it('should properly handle optional values in pseudo-classes', () => {
             expect(parse(':current, :current(div)')).toEqual(
                 ast.selector({
                     rules: [
                         ast.rule({
-                            pseudoClasses: [ast.pseudoClass({name: 'current'})]
+                            items: [ast.pseudoClass({name: 'current'})]
                         }),
                         ast.rule({
-                            pseudoClasses: [
+                            items: [
                                 ast.pseudoClass({
                                     name: 'current',
                                     argument: ast.selector({
-                                        rules: [ast.rule({tag: ast.tagName({name: 'div'})})]
+                                        rules: [ast.rule({items: [ast.tagName({name: 'div'})]})]
                                     })
                                 })
                             ]
@@ -1124,7 +1139,18 @@ describe('parse()', () => {
                 ast.selector({
                     rules: [
                         ast.rule({
-                            pseudoClasses: [ast.pseudoClass({name: 'link'}), ast.pseudoClass({name: 'hover'})]
+                            items: [ast.pseudoClass({name: 'link'}), ast.pseudoClass({name: 'hover'})]
+                        })
+                    ]
+                })
+            );
+        });
+        it('should parse after a pseudo-element', () => {
+            expect(parse('::before:hover')).toEqual(
+                ast.selector({
+                    rules: [
+                        ast.rule({
+                            items: [ast.pseudoElement({name: 'before'}), ast.pseudoClass({name: 'hover'})]
                         })
                     ]
                 })
@@ -1140,9 +1166,7 @@ describe('parse()', () => {
                 ast.selector({
                     rules: [
                         ast.rule({
-                            pseudoClasses: [
-                                ast.pseudoClass({name: 'nth-child', argument: ast.substitution({name: 'formula'})})
-                            ]
+                            items: [ast.pseudoClass({name: 'nth-child', argument: ast.substitution({name: 'formula'})})]
                         })
                     ]
                 })
@@ -1153,13 +1177,13 @@ describe('parse()', () => {
                 ast.selector({
                     rules: [
                         ast.rule({
-                            pseudoClasses: [
+                            items: [
                                 ast.pseudoClass({
                                     name: 'has',
                                     argument: ast.selector({
                                         rules: [
                                             ast.rule({
-                                                tag: ast.tagName({name: 'div'}),
+                                                items: [ast.tagName({name: 'div'})],
                                                 combinator: '>'
                                             })
                                         ]
@@ -1199,7 +1223,7 @@ describe('parse()', () => {
                 ast.selector({
                     rules: [
                         ast.rule({
-                            pseudoClasses: [
+                            items: [
                                 ast.pseudoClass({
                                     name: 'lang'
                                 })
@@ -1214,7 +1238,7 @@ describe('parse()', () => {
                 ast.selector({
                     rules: [
                         ast.rule({
-                            pseudoClasses: [
+                            items: [
                                 ast.pseudoClass({
                                     name: 'lang',
                                     argument: ast.string({value: 'en'})
@@ -1225,13 +1249,10 @@ describe('parse()', () => {
                 })
             );
         });
-        it('should fail after pseudo-element', () => {
-            expect(() => parse('::before:link')).toThrow(
-                'Pseudo-element should be the last component of a CSS selector rule.'
-            );
-        });
         it('should fail if not enabled', () => {
-            expect(() => createParser({syntax: {}})(':lang')).toThrow('Pseudo classes are not enabled.');
+            expect(() => createParser({syntax: {baseSyntax: 'progressive', pseudoClasses: false}})(':lang')).toThrow(
+                'Pseudo-classes are not enabled.'
+            );
         });
     });
     describe('Pseudo Elements', () => {
@@ -1240,7 +1261,7 @@ describe('parse()', () => {
                 ast.selector({
                     rules: [
                         ast.rule({
-                            pseudoElement: 'before'
+                            items: [ast.pseudoElement({name: 'before'})]
                         })
                     ]
                 })
@@ -1251,7 +1272,7 @@ describe('parse()', () => {
                 ast.selector({
                     rules: [
                         ast.rule({
-                            pseudoElement: 'before'
+                            items: [ast.pseudoElement({name: 'before'})]
                         })
                     ]
                 })
@@ -1262,7 +1283,7 @@ describe('parse()', () => {
                 ast.selector({
                     rules: [
                         ast.rule({
-                            pseudoElement: 'before'
+                            items: [ast.pseudoElement({name: 'before'})]
                         })
                     ]
                 })
@@ -1273,8 +1294,7 @@ describe('parse()', () => {
                 ast.selector({
                     rules: [
                         ast.rule({
-                            tag: ast.tagName({name: 'div'}),
-                            pseudoElement: 'before'
+                            items: [ast.tagName({name: 'div'}), ast.pseudoElement({name: 'before'})]
                         })
                     ]
                 })
@@ -1285,8 +1305,7 @@ describe('parse()', () => {
                 ast.selector({
                     rules: [
                         ast.rule({
-                            ids: ['id'],
-                            pseudoElement: 'before'
+                            items: [ast.id({name: 'id'}), ast.pseudoElement({name: 'before'})]
                         })
                     ]
                 })
@@ -1297,8 +1316,7 @@ describe('parse()', () => {
                 ast.selector({
                     rules: [
                         ast.rule({
-                            attributes: [ast.attribute({name: 'attr'})],
-                            pseudoElement: 'before'
+                            items: [ast.attribute({name: 'attr'}), ast.pseudoElement({name: 'before'})]
                         })
                     ]
                 })
@@ -1309,11 +1327,64 @@ describe('parse()', () => {
                 ast.selector({
                     rules: [
                         ast.rule({
-                            pseudoElement: 'before'
+                            items: [ast.pseudoElement({name: 'before'})]
                         })
                     ]
                 })
             );
+        });
+        it('should parse with string argument in case of unknown pseudo elements', () => {
+            expect(createParser({syntax: {pseudoElements: {unknown: 'accept'}}})('::highlight(color-1)')).toEqual(
+                ast.selector({
+                    rules: [
+                        ast.rule({
+                            items: [ast.pseudoElement({name: 'highlight', argument: ast.string({value: 'color-1'})})]
+                        })
+                    ]
+                })
+            );
+        });
+        it('should parse a substitution argument', () => {
+            expect(
+                createParser({
+                    syntax: 'progressive',
+                    substitutes: true
+                })('::unknown($var)')
+            ).toEqual(
+                ast.selector({
+                    rules: [
+                        ast.rule({
+                            items: [ast.pseudoElement({name: 'unknown', argument: ast.substitution({name: 'var'})})]
+                        })
+                    ]
+                })
+            );
+        });
+        it('should require a nested selector', () => {
+            expect(() =>
+                createParser({
+                    syntax: {
+                        pseudoElements: {
+                            definitions: {
+                                Selector: ['slotted']
+                            }
+                        }
+                    }
+                })('::slotted')
+            ).toThrow('Argument is required for pseudo-element "slotted".');
+        });
+        it('should require string', () => {
+            expect(() =>
+                createParser({
+                    syntax: {
+                        pseudoElements: {
+                            definitions: {
+                                String: ['highlight']
+                            }
+                        }
+                    }
+                })('::highlight')
+            ).toThrow('Argument is required for pseudo-element "highlight".');
         });
         it('should fail on empty pseudo-element name', () => {
             expect(() => parse('::')).toThrow('Expected pseudo-element name.');
@@ -1326,27 +1397,51 @@ describe('parse()', () => {
                 'Unknown pseudo-element "before".'
             );
         });
-        it('should fail after pseudo-element', () => {
-            expect(() => parse('::before::before')).toThrow(
-                'Pseudo-element should be the last component of a CSS selector rule.'
+        it('should not fail after pseudo-element', () => {
+            expect(parse('::before::after')).toEqual(
+                ast.selector({
+                    rules: [
+                        ast.rule({
+                            items: [
+                                {
+                                    type: 'PseudoElement',
+                                    name: 'before'
+                                },
+                                {
+                                    type: 'PseudoElement',
+                                    name: 'after'
+                                }
+                            ]
+                        })
+                    ]
+                })
             );
         });
         it('should fail if not enabled', () => {
             expect(() => createParser({syntax: {}})('::before')).toThrow('Pseudo elements are not enabled.');
+            expect(() =>
+                createParser({syntax: {baseSyntax: 'progressive', pseudoElements: false}})('::before')
+            ).toThrow('Pseudo elements are not enabled.');
         });
     });
     describe('Multiple rules', () => {
         it('should parse multiple rules', () => {
             expect(parse('div,.class')).toEqual(
                 ast.selector({
-                    rules: [ast.rule({tag: ast.tagName({name: 'div'})}), ast.rule({classNames: ['class']})]
+                    rules: [
+                        ast.rule({items: [ast.tagName({name: 'div'})]}),
+                        ast.rule({items: [ast.className({name: 'class'})]})
+                    ]
                 })
             );
         });
         it('should properly handle whitespace', () => {
             expect(parse('  div  ,  .class  ')).toEqual(
                 ast.selector({
-                    rules: [ast.rule({tag: ast.tagName({name: 'div'})}), ast.rule({classNames: ['class']})]
+                    rules: [
+                        ast.rule({items: [ast.tagName({name: 'div'})]}),
+                        ast.rule({items: [ast.className({name: 'class'})]})
+                    ]
                 })
             );
         });
@@ -1363,8 +1458,8 @@ describe('parse()', () => {
                 ast.selector({
                     rules: [
                         ast.rule({
-                            tag: ast.tagName({name: 'div'}),
-                            nestedRule: ast.rule({classNames: ['class']})
+                            items: [ast.tagName({name: 'div'})],
+                            nestedRule: ast.rule({items: [ast.className({name: 'class'})]})
                         })
                     ]
                 })
@@ -1375,8 +1470,8 @@ describe('parse()', () => {
                 ast.selector({
                     rules: [
                         ast.rule({
-                            tag: ast.tagName({name: 'div'}),
-                            nestedRule: ast.rule({classNames: ['class'], combinator: '>'})
+                            items: [ast.tagName({name: 'div'})],
+                            nestedRule: ast.rule({items: [ast.className({name: 'class'})], combinator: '>'})
                         })
                     ]
                 })
@@ -1387,8 +1482,8 @@ describe('parse()', () => {
                 ast.selector({
                     rules: [
                         ast.rule({
-                            tag: ast.tagName({name: 'div'}),
-                            nestedRule: ast.rule({classNames: ['class'], combinator: '>'})
+                            items: [ast.tagName({name: 'div'})],
+                            nestedRule: ast.rule({items: [ast.className({name: 'class'})], combinator: '>'})
                         })
                     ]
                 })
@@ -1399,8 +1494,8 @@ describe('parse()', () => {
                 ast.selector({
                     rules: [
                         ast.rule({
-                            tag: ast.tagName({name: 'div'}),
-                            nestedRule: ast.rule({classNames: ['class'], combinator: '||'})
+                            items: [ast.tagName({name: 'div'})],
+                            nestedRule: ast.rule({items: [ast.className({name: 'class'})], combinator: '||'})
                         })
                     ]
                 })
@@ -1411,8 +1506,8 @@ describe('parse()', () => {
                 ast.selector({
                     rules: [
                         ast.rule({
-                            tag: ast.tagName({name: 'div'}),
-                            nestedRule: ast.rule({classNames: ['class'], combinator: '||'})
+                            items: [ast.tagName({name: 'div'})],
+                            nestedRule: ast.rule({items: [ast.className({name: 'class'})], combinator: '||'})
                         })
                     ]
                 })

@@ -7,12 +7,15 @@
 ### Interfaces
 
 - [AstAttribute](interfaces/AstAttribute.md)
+- [AstClassName](interfaces/AstClassName.md)
 - [AstFactory](interfaces/AstFactory.md)
 - [AstFormula](interfaces/AstFormula.md)
 - [AstFormulaOfSelector](interfaces/AstFormulaOfSelector.md)
+- [AstId](interfaces/AstId.md)
 - [AstNamespaceName](interfaces/AstNamespaceName.md)
 - [AstNoNamespace](interfaces/AstNoNamespace.md)
 - [AstPseudoClass](interfaces/AstPseudoClass.md)
+- [AstPseudoElement](interfaces/AstPseudoElement.md)
 - [AstRule](interfaces/AstRule.md)
 - [AstSelector](interfaces/AstSelector.md)
 - [AstString](interfaces/AstString.md)
@@ -42,7 +45,7 @@
 
 ### AstEntity
 
-Ƭ **AstEntity**: [`AstSelector`](interfaces/AstSelector.md) \| [`AstRule`](interfaces/AstRule.md) \| [`AstTagName`](interfaces/AstTagName.md) \| [`AstWildcardTag`](interfaces/AstWildcardTag.md) \| [`AstNamespaceName`](interfaces/AstNamespaceName.md) \| [`AstWildcardNamespace`](interfaces/AstWildcardNamespace.md) \| [`AstNoNamespace`](interfaces/AstNoNamespace.md) \| [`AstSubstitution`](interfaces/AstSubstitution.md) \| [`AstString`](interfaces/AstString.md) \| [`AstFormula`](interfaces/AstFormula.md) \| [`AstFormulaOfSelector`](interfaces/AstFormulaOfSelector.md) \| [`AstPseudoClass`](interfaces/AstPseudoClass.md) \| [`AstAttribute`](interfaces/AstAttribute.md)
+Ƭ **AstEntity**: [`AstSelector`](interfaces/AstSelector.md) \| [`AstRule`](interfaces/AstRule.md) \| [`AstTagName`](interfaces/AstTagName.md) \| [`AstWildcardTag`](interfaces/AstWildcardTag.md) \| [`AstId`](interfaces/AstId.md) \| [`AstClassName`](interfaces/AstClassName.md) \| [`AstNamespaceName`](interfaces/AstNamespaceName.md) \| [`AstWildcardNamespace`](interfaces/AstWildcardNamespace.md) \| [`AstNoNamespace`](interfaces/AstNoNamespace.md) \| [`AstSubstitution`](interfaces/AstSubstitution.md) \| [`AstString`](interfaces/AstString.md) \| [`AstFormula`](interfaces/AstFormula.md) \| [`AstFormulaOfSelector`](interfaces/AstFormulaOfSelector.md) \| [`AstPseudoClass`](interfaces/AstPseudoClass.md) \| [`AstAttribute`](interfaces/AstAttribute.md) \| [`AstPseudoElement`](interfaces/AstPseudoElement.md)
 
 One of CSS AST entity types.
 
@@ -89,28 +92,27 @@ AstSelector was specified.
 **`Example`**
 
 ```ts
-// Represents CSS selector: ns|div#user-34.user.user-active[role=button]:lang(en) > *
+// Represents CSS selector: ns|div#user-34.user.user-active[role="button"]:lang(en)::before > *
 const selector = ast.selector({
     rules: [
         ast.rule({
-            tag: ast.tagName({name: 'div', namespace: ast.namespaceName({name: 'ns'})}),
-            ids: ['user-34'],
-            classNames: ['user', 'user-active'],
-            attributes: [
+            items: [
+                ast.tagName({name: 'div', namespace: ast.namespaceName({name: 'ns'})}),
+                ast.id({name: 'user-34'}),
+                ast.className({name: 'user'}),
+                ast.className({name: 'user-active'}),
                 ast.attribute({
                     name: 'role',
                     operator: '=',
                     value: ast.string({value: 'button'})
-                })
-            ],
-            pseudoClasses: [
+                }),
                 ast.pseudoClass({
                     name: 'lang',
-                    argument: ast.string({value: 'eng'})
-                })
+                    argument: ast.string({value: 'en'})
+                }),
+                ast.pseudoElement({name: 'before'})
             ],
-            pseudoElement: 'before',
-            nestedRule: ast.rule({combinator: '>', tag: ast.wildcardTag()})
+            nestedRule: ast.rule({combinator: '>', items: [ast.wildcardTag()]})
         })
     ]
 });
@@ -155,10 +157,12 @@ import {ast, render} from 'css-selector-parser';
 const selector = ast.selector({
     rules: [
         ast.rule({
-            tag: ast.tagName({name: 'a'}),
-            ids: ['user-23'],
-            classNames: ['user'],
-            pseudoClasses: [ast.pseudoClass({name: 'visited'})]
+            items: [
+                ast.tagName({name: 'a'}),
+                ast.id({name: 'user-23'}),
+                ast.className({name: 'user'}),
+                ast.pseudoClass({name: 'visited'})
+            ]
         })
     ]
 });
@@ -170,7 +174,7 @@ console.log(render(selector)); // a#user-23.user:visited
 
 | Name | Type |
 | :------ | :------ |
-| `entity` | [`AstSelector`](interfaces/AstSelector.md) \| [`AstRule`](interfaces/AstRule.md) |
+| `entity` | [`AstEntity`](modules.md#astentity) |
 
 #### Returns
 

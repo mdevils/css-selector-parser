@@ -7,14 +7,16 @@ css-selector-parser
 * Covered with tests.
 * Documented.
 * Supported CSS selector standards:
-  * `css1`: https://www.w3.org/TR/CSS1/
-  * `css2`: https://www.w3.org/TR/CSS2/
-  * `css3`/`selectors-3`: https://www.w3.org/TR/selectors-3/
-  * `selectors-4`: https://www.w3.org/TR/selectors-4/
-  * `latest`: refers to `selectors-4`
-  * `progressive`: `latest` + accepts unknown psudo-classes, psudo-elements and attribute case sensitivity modifiers
+    * `css1`: https://www.w3.org/TR/CSS1/
+    * `css2`: https://www.w3.org/TR/CSS2/
+    * `css3`/`selectors-3`: https://www.w3.org/TR/selectors-3/
+    * `selectors-4`: https://www.w3.org/TR/selectors-4/
+    * `latest`: refers to `selectors-4`
+    * `progressive`: `latest` + accepts unknown psudo-classes, psudo-elements and attribute case sensitivity modifiers
 
 **Important:** [Migrating from 1.x](CHANGELOG.md#220).
+
+Latest releases: [Changelog](CHANGELOG.md).
 
 Installation
 ------------
@@ -41,48 +43,53 @@ Produces:
 
 ```javascript
 ({
-  type: 'Selector',
-  rules: [
-    {
-      type: 'Rule',
-      tag: { type: 'TagName', name: 'a' },
-      attributes: [
+    type: 'Selector',
+    rules: [
         {
-          type: 'Attribute',
-          name: 'href',
-          operator: '^=',
-          value: { type: 'String', value: '/' }
-        }
-      ]
-    },
-    {
-      type: 'Rule',
-      classNames: [ 'container' ],
-      pseudoClasses: [
+            type: 'Rule',
+            items: [
+                { type: 'TagName', name: 'a' },
+                {
+                    type: 'Attribute',
+                    name: 'href',
+                    operator: '^=',
+                    value: { type: 'String', value: '/' }
+                }
+            ]
+        },
         {
-          type: 'PseudoClass',
-          name: 'has',
-          argument: {
-            type: 'Selector',
-            rules: [ { type: 'Rule', tag: { type: 'TagName', name: 'nav' } } ]
-          }
+            type: 'Rule',
+            items: [
+                { type: 'ClassName', name: 'container' },
+                {
+                    type: 'PseudoClass',
+                    name: 'has',
+                    argument: {
+                        type: 'Selector',
+                        rules: [
+                            {
+                                type: 'Rule',
+                                items: [ { type: 'TagName', name: 'nav' } ]
+                            }
+                        ]
+                    }
+                }
+            ],
+            nestedRule: {
+                type: 'Rule',
+                items: [
+                    { type: 'TagName', name: 'a' },
+                    { type: 'Attribute', name: 'href' },
+                    {
+                        type: 'PseudoClass',
+                        name: 'nth-child',
+                        argument: { type: 'Formula', a: 0, b: 2 }
+                    }
+                ],
+                combinator: '>'
+            }
         }
-      ],
-      nestedRule: {
-        type: 'Rule',
-        combinator: '>',
-        tag: { type: 'TagName', name: 'a' },
-        attributes: [ { type: 'Attribute', name: 'href' } ],
-        pseudoClasses: [
-          {
-            type: 'PseudoClass',
-            name: 'nth-child',
-            argument: { type: 'Formula', a: 0, b: 2 }
-          }
-        ]
-      }
-    }
-  ]
+    ]
 })
 ```
 
@@ -94,34 +101,32 @@ import {ast, render} from 'css-selector-parser';
 const selector = ast.selector({
     rules: [
         ast.rule({
-            tag: ast.tagName({name: 'a'}),
-            attributes: [
+            items: [
+                ast.tagName({name: 'a'}),
                 ast.attribute({name: 'href', operator: '^=', value: ast.string({value: '/'})})
             ]
         }),
         ast.rule({
-            classNames: ['container'],
-            pseudoClasses: [
+            items: [
+                ast.className({name: 'container'}),
                 ast.pseudoClass({
                     name: 'has',
                     argument: ast.selector({
-                        rules: [
-                            ast.rule({tag: ast.tagName({name: 'nav'})})
-                        ]
+                        rules: [ast.rule({items: [ast.tagName({name: 'nav'})]})]
                     })
                 })
             ],
             nestedRule: ast.rule({
                 combinator: '>',
-                tag: ast.tagName({name: 'a'}),
-                attributes: [ast.attribute({name: 'href'})],
-                pseudoClasses: [
+                items: [
+                    ast.tagName({name: 'a'}),
+                    ast.attribute({name: 'href'}),
                     ast.pseudoClass({
                         name: 'nth-child',
                         argument: ast.formula({a: 0, b: 2})
-                    })
-                ],
-                pseudoElement: 'before'
+                    }),
+                    ast.pseudoElement({name: 'before'})
+                ]
             })
         })
     ]

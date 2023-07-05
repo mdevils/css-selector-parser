@@ -1,4 +1,14 @@
-import {AstAttribute, AstPseudoClass, AstRule, AstSelector, AstTagName, AstWildcardTag} from './ast.js';
+import {
+    AstAttribute,
+    AstPseudoClass,
+    AstPseudoClassArgument,
+    AstPseudoElement,
+    AstPseudoElementArgument,
+    AstRule,
+    AstSelector,
+    AstTagName,
+    AstWildcardTag
+} from './ast.js';
 import {
     createMulticharIndex,
     createRegularIndex,
@@ -7,10 +17,11 @@ import {
     MulticharIndex
 } from './indexes.js';
 import {
-    calculatePseudoClassSignatures,
-    defaultPseudoClassSignature,
-    emptyPseudoClassSignatures
-} from './pseudo-class-signatures.js';
+    calculatePseudoSignatures,
+    defaultPseudoSignature,
+    emptyPseudoSignatures,
+    PseudoSignature
+} from './pseudo-signatures.js';
 import {
     CssLevel,
     cssSyntaxDefinitions,
@@ -66,8 +77,7 @@ export function createParser(
     } = {}
 ): Parser {
     const {syntax = 'latest', substitutes, strict = true} = options;
-    // noinspection SuspiciousTypeOfGuard
-    let syntaxDefinition: SyntaxDefinition = typeof syntax === 'string' ? cssSyntaxDefinitions[syntax] : syntax;
+    let syntaxDefinition: SyntaxDefinition = typeof syntax === 'object' ? syntax : cssSyntaxDefinitions[syntax];
 
     if (syntaxDefinition.baseSyntax) {
         syntaxDefinition = extendSyntaxDefinition(cssSyntaxDefinitions[syntaxDefinition.baseSyntax], syntaxDefinition);
@@ -112,21 +122,21 @@ export function createParser(
     const attributesCaseSensitivityModifiersEnabled =
         attributesAcceptUnknownCaseSensitivityModifiers || Object.keys(attributesCaseSensitivityModifiers).length > 0;
 
-    const [pseudoClassesEnabled, paeudoClassesDefinitions, pseudoClassesAcceptUnknown] = syntaxDefinition.pseudoClasses
+    const [pseudoClassesEnabled, pseudoClassesDefinitions, pseudoClassesAcceptUnknown] = syntaxDefinition.pseudoClasses
         ? [
               true,
               syntaxDefinition.pseudoClasses.definitions
-                  ? calculatePseudoClassSignatures(syntaxDefinition.pseudoClasses.definitions)
-                  : emptyPseudoClassSignatures,
+                  ? calculatePseudoSignatures(syntaxDefinition.pseudoClasses.definitions)
+                  : emptyPseudoSignatures,
               syntaxDefinition.pseudoClasses.unknown === 'accept'
           ]
-        : [false, emptyPseudoClassSignatures, false];
+        : [false, emptyPseudoSignatures, false];
 
     const [
         pseudoElementsEnabled,
         pseudoElementsSingleColonNotationEnabled,
         pseudoElementsDoubleColonNotationEnabled,
-        pseudoElementsIndex,
+        pseudoElementsDefinitions,
         pseudoElementsAcceptUnknown
     ] = syntaxDefinition.pseudoElements
         ? [
@@ -137,11 +147,15 @@ export function createParser(
                   syntaxDefinition.pseudoElements.notation === 'doubleColon' ||
                   syntaxDefinition.pseudoElements.notation === 'both',
               syntaxDefinition.pseudoElements.definitions
-                  ? createRegularIndex(syntaxDefinition.pseudoElements.definitions)
-                  : emptyRegularIndex,
+                  ? calculatePseudoSignatures(
+                        Array.isArray(syntaxDefinition.pseudoElements.definitions)
+                            ? {NoArgument: syntaxDefinition.pseudoElements.definitions}
+                            : syntaxDefinition.pseudoElements.definitions
+                    )
+                  : emptyPseudoSignatures,
               syntaxDefinition.pseudoElements.unknown === 'accept'
           ]
-        : [false, false, false, emptyRegularIndex, false];
+        : [false, false, false, emptyPseudoSignatures, false];
 
     let str = '';
     let l = str.length;
@@ -149,7 +163,7 @@ export function createParser(
     let chr = '';
 
     const is = (comparison: string) => chr === comparison;
-    const isTagStart = () => is('*') || isIdentStart(chr) || is('\\');
+    const isTagStart = () => is('*') || isIdentStart(chr);
     const rewind = (newPos: number) => {
         pos = newPos;
         chr = str.charAt(pos);
@@ -344,7 +358,7 @@ export function createParser(
             if (is('|')) {
                 const savedPos = pos;
                 next();
-                if (isIdentStart(chr) || is('\\')) {
+                if (isIdentStart(chr)) {
                     assert(namespaceEnabled, 'Namespaces are not enabled.');
                     attr = {
                         type: 'Attribute',
@@ -479,51 +493,45 @@ export function createParser(
         }
     }
 
-    function parsePseudoClass(pseudoName: string) {
-        const pseudo: AstPseudoClass = {
-            type: 'PseudoClass',
-            name: pseudoName
-        };
-
-        let pseudoDefinition = paeudoClassesDefinitions[pseudoName];
-        if (!pseudoDefinition && pseudoClassesAcceptUnknown) {
-            pseudoDefinition = defaultPseudoClassSignature;
-        }
-        assert(pseudoDefinition, `Unknown pseudo-class: "${pseudoName}".`);
-        pseudoDefinition = pseudoDefinition!;
+    function parsePseudoArgument(
+        pseudoName: string,
+        type: 'pseudo-class' | 'pseudo-element',
+        signature: PseudoSignature
+    ): AstPseudoClassArgument | AstPseudoElementArgument | undefined {
+        let argument: AstPseudoClassArgument | AstPseudoElementArgument | undefined;
 
         if (is('(')) {
             next();
             skipWhitespace();
             if (substitutesEnabled && is('$')) {
                 next();
-                pseudo.argument = {
+                argument = {
                     type: 'Substitution',
                     name: parseIdentifier()
                 };
-                assert(pseudo.argument.name, 'Expected substitute name.');
-            } else if (pseudoDefinition.type === 'String') {
-                pseudo.argument = {
+                assert(argument.name, 'Expected substitute name.');
+            } else if (signature.type === 'String') {
+                argument = {
                     type: 'String',
                     value: parsePseudoClassString()
                 };
-                assert(pseudo.argument.value, 'Expected pseudo-class argument value.');
-            } else if (pseudoDefinition.type === 'Selector') {
-                pseudo.argument = parseSelector(true);
-            } else if (pseudoDefinition.type === 'Formula') {
+                assert(argument.value, `Expected ${type} argument value.`);
+            } else if (signature.type === 'Selector') {
+                argument = parseSelector(true);
+            } else if (signature.type === 'Formula') {
                 const [a, b] = parseFormula();
-                pseudo.argument = {
+                argument = {
                     type: 'Formula',
                     a,
                     b
                 };
-                if (pseudoDefinition.ofSelector) {
+                if (signature.ofSelector) {
                     skipWhitespace();
                     if (is('o') || is('\\')) {
                         const ident = parseIdentifier();
                         assert(ident === 'of', 'Formula of selector parse error.');
                         skipWhitespace();
-                        pseudo.argument = {
+                        argument = {
                             type: 'FormulaOfSelector',
                             a,
                             b,
@@ -532,17 +540,17 @@ export function createParser(
                     }
                 }
             } else {
-                return fail('Invalid pseudo-class signature.');
+                return fail(`Invalid ${type} signature.`);
             }
             skipWhitespace();
             if (isEof() && !strict) {
-                return pseudo;
+                return argument;
             }
             pass(')');
         } else {
-            assert(pseudoDefinition.optional, `Argument is required for pseudo-class "${pseudoName}".`);
+            assert(signature.optional, `Argument is required for ${type} "${pseudoName}".`);
         }
-        return pseudo;
+        return argument;
     }
 
     function parseTagName(): AstTagName | AstWildcardTag {
@@ -550,7 +558,7 @@ export function createParser(
             assert(tagNameWildcardEnabled, 'Wildcard tag name is not enabled.');
             next();
             return {type: 'WildcardTag'};
-        } else if (isIdentStart(chr) || is('\\')) {
+        } else if (isIdentStart(chr)) {
             assert(tagNameEnabled, 'Tag names are not enabled.');
             return {
                 type: 'TagName',
@@ -585,7 +593,7 @@ export function createParser(
             const tagName = parseTagName();
             tagName.namespace = {type: 'NoNamespace'};
             return tagName;
-        } else if (isIdentStart(chr) || is('\\')) {
+        } else if (isIdentStart(chr)) {
             const identifier = parseIdentifier();
             if (!is('|')) {
                 assert(tagNameEnabled, 'Tag names are not enabled.');
@@ -613,8 +621,7 @@ export function createParser(
     }
 
     function parseRule(relative = false): AstRule {
-        const rule: Partial<AstRule> = {};
-        let isRuleStart = true;
+        const rule: AstRule = {type: 'Rule', items: []};
         if (relative) {
             const combinator = matchMulticharIndex(combinatorsIndex);
             if (combinator) {
@@ -624,15 +631,15 @@ export function createParser(
         }
         while (pos < l) {
             if (isTagStart()) {
-                assert(isRuleStart, 'Unexpected tag/namespace start.');
-                rule.tag = parseTagNameWithNamespace();
+                assert(rule.items.length === 0, 'Unexpected tag/namespace start.');
+                rule.items.push(parseTagNameWithNamespace());
             } else if (is('|')) {
                 const savedPos = pos;
                 next();
                 if (isTagStart()) {
-                    assert(isRuleStart, 'Unexpected tag/namespace start.');
+                    assert(rule.items.length === 0, 'Unexpected tag/namespace start.');
                     rewind(savedPos);
-                    rule.tag = parseTagNameWithNamespace();
+                    rule.items.push(parseTagNameWithNamespace());
                 } else {
                     rewind(savedPos);
                     break;
@@ -642,16 +649,16 @@ export function createParser(
                 next();
                 const className = parseIdentifier();
                 assert(className, 'Expected class name.');
-                (rule.classNames = rule.classNames || []).push(className);
+                rule.items.push({type: 'ClassName', name: className});
             } else if (is('#')) {
                 assert(idEnabled, 'IDs are not enabled.');
                 next();
                 const idName = parseIdentifier();
                 assert(idName, 'Expected ID name.');
-                (rule.ids = rule.ids || []).push(idName);
+                rule.items.push({type: 'Id', name: idName});
             } else if (is('[')) {
                 assert(attributesEnabled, 'Attributes are not enabled.');
-                (rule.attributes = rule.attributes || []).push(parseAttribute());
+                rule.items.push(parseAttribute());
             } else if (is(':')) {
                 let isDoubleColon = false;
                 let isPseudoElement = false;
@@ -671,7 +678,9 @@ export function createParser(
                 assert(isDoubleColon || pseudoName, 'Expected pseudo-class name.');
                 assert(!isDoubleColon || pseudoName, 'Expected pseudo-element name.');
                 assert(
-                    !isDoubleColon || pseudoElementsAcceptUnknown || pseudoElementsIndex[pseudoName],
+                    !isDoubleColon ||
+                        pseudoElementsAcceptUnknown ||
+                        Object.prototype.hasOwnProperty.call(pseudoElementsDefinitions, pseudoName),
                     `Unknown pseudo-element "${pseudoName}".`
                 );
 
@@ -680,31 +689,53 @@ export function createParser(
                     (isDoubleColon ||
                         (!isDoubleColon &&
                             pseudoElementsSingleColonNotationEnabled &&
-                            pseudoElementsIndex[pseudoName]));
+                            Object.prototype.hasOwnProperty.call(pseudoElementsDefinitions, pseudoName)));
 
                 if (isPseudoElement) {
-                    rule.pseudoElement = pseudoName;
+                    const signature =
+                        pseudoElementsDefinitions[pseudoName] ??
+                        (pseudoElementsAcceptUnknown && defaultPseudoSignature);
 
-                    if (!whitespaceChars[chr] && !is(',') && !is(')') && !isEof()) {
-                        return fail('Pseudo-element should be the last component of a CSS selector rule.');
+                    const pseudoElement: AstPseudoElement = {
+                        type: 'PseudoElement',
+                        name: pseudoName
+                    };
+                    const argument = parsePseudoArgument(pseudoName, 'pseudo-element', signature);
+                    if (argument) {
+                        assert(
+                            argument.type !== 'Formula' && argument.type !== 'FormulaOfSelector',
+                            'Pseudo-elements cannot have formula argument.'
+                        );
+                        pseudoElement.argument = argument;
                     }
+                    rule.items.push(pseudoElement);
                 } else {
-                    assert(pseudoClassesEnabled, 'Pseudo classes are not enabled.');
-                    (rule.pseudoClasses = rule.pseudoClasses || []).push(parsePseudoClass(pseudoName));
+                    assert(pseudoClassesEnabled, 'Pseudo-classes are not enabled.');
+                    const signature =
+                        pseudoClassesDefinitions[pseudoName] ?? (pseudoClassesAcceptUnknown && defaultPseudoSignature);
+                    assert(signature, `Unknown pseudo-class: "${pseudoName}".`);
+
+                    const argument = parsePseudoArgument(pseudoName, 'pseudo-class', signature);
+                    const pseudoClass: AstPseudoClass = {
+                        type: 'PseudoClass',
+                        name: pseudoName
+                    };
+                    if (argument) {
+                        pseudoClass.argument = argument;
+                    }
+                    rule.items.push(pseudoClass);
                 }
             } else {
                 break;
             }
-            isRuleStart = false;
         }
-        if (isRuleStart) {
+        if (rule.items.length === 0) {
             if (isEof()) {
                 return fail('Expected rule but end of input reached.');
             } else {
                 return fail(`Expected rule but "${chr}" found.`);
             }
         }
-        rule.type = 'Rule';
         skipWhitespace();
         if (!isEof() && !is(',') && !is(')')) {
             const combinator = matchMulticharIndex(combinatorsIndex);

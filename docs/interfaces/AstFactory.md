@@ -9,28 +9,27 @@ AstSelector was specified.
 **`Example`**
 
 ```ts
-// Represents CSS selector: ns|div#user-34.user.user-active[role=button]:lang(en) > *
+// Represents CSS selector: ns|div#user-34.user.user-active[role="button"]:lang(en)::before > *
 const selector = ast.selector({
     rules: [
         ast.rule({
-            tag: ast.tagName({name: 'div', namespace: ast.namespaceName({name: 'ns'})}),
-            ids: ['user-34'],
-            classNames: ['user', 'user-active'],
-            attributes: [
+            items: [
+                ast.tagName({name: 'div', namespace: ast.namespaceName({name: 'ns'})}),
+                ast.id({name: 'user-34'}),
+                ast.className({name: 'user'}),
+                ast.className({name: 'user-active'}),
                 ast.attribute({
                     name: 'role',
                     operator: '=',
                     value: ast.string({value: 'button'})
-                })
-            ],
-            pseudoClasses: [
+                }),
                 ast.pseudoClass({
                     name: 'lang',
-                    argument: ast.string({value: 'eng'})
-                })
+                    argument: ast.string({value: 'en'})
+                }),
+                ast.pseudoElement({name: 'before'})
             ],
-            pseudoElement: 'before',
-            nestedRule: ast.rule({combinator: '>', tag: ast.wildcardTag()})
+            nestedRule: ast.rule({combinator: '>', items: [ast.wildcardTag()]})
         })
     ]
 });
@@ -43,14 +42,19 @@ console.log(ast.isRule(selector)); // prints false
 ### Properties
 
 - [attribute](AstFactory.md#attribute)
+- [className](AstFactory.md#classname)
 - [formula](AstFactory.md#formula)
 - [formulaOfSelector](AstFactory.md#formulaofselector)
+- [id](AstFactory.md#id)
 - [isAttribute](AstFactory.md#isattribute)
+- [isClassName](AstFactory.md#isclassname)
 - [isFormula](AstFactory.md#isformula)
 - [isFormulaOfSelector](AstFactory.md#isformulaofselector)
+- [isId](AstFactory.md#isid)
 - [isNamespaceName](AstFactory.md#isnamespacename)
 - [isNoNamespace](AstFactory.md#isnonamespace)
 - [isPseudoClass](AstFactory.md#ispseudoclass)
+- [isPseudoElement](AstFactory.md#ispseudoelement)
 - [isRule](AstFactory.md#isrule)
 - [isSelector](AstFactory.md#isselector)
 - [isString](AstFactory.md#isstring)
@@ -61,6 +65,7 @@ console.log(ast.isRule(selector)); // prints false
 - [namespaceName](AstFactory.md#namespacename)
 - [noNamespace](AstFactory.md#nonamespace)
 - [pseudoClass](AstFactory.md#pseudoclass)
+- [pseudoElement](AstFactory.md#pseudoelement)
 - [rule](AstFactory.md#rule)
 - [selector](AstFactory.md#selector)
 - [string](AstFactory.md#string)
@@ -93,6 +98,28 @@ console.log(ast.isRule(selector)); // prints false
 ##### Returns
 
 [`AstAttribute`](AstAttribute.md)
+
+
+___
+
+### className
+
+• **className**: (`props`: { `name`: `string`  }) => [`AstClassName`](AstClassName.md)
+
+#### Type declaration
+
+▸ (`props`): [`AstClassName`](AstClassName.md)
+
+##### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `props` | `Object` | - |
+| `props.name` | `string` | ID name. I.e. `.user` -> `"user"`. |
+
+##### Returns
+
+[`AstClassName`](AstClassName.md)
 
 
 ___
@@ -144,6 +171,28 @@ ___
 
 ___
 
+### id
+
+• **id**: (`props`: { `name`: `string`  }) => [`AstId`](AstId.md)
+
+#### Type declaration
+
+▸ (`props`): [`AstId`](AstId.md)
+
+##### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `props` | `Object` | - |
+| `props.name` | `string` | ID name. I.e. `#root` -> `"root"`. |
+
+##### Returns
+
+[`AstId`](AstId.md)
+
+
+___
+
 ### isAttribute
 
 • **isAttribute**: (`entity`: `unknown`) => entity is AstAttribute
@@ -161,6 +210,27 @@ ___
 ##### Returns
 
 entity is AstAttribute
+
+
+___
+
+### isClassName
+
+• **isClassName**: (`entity`: `unknown`) => entity is AstClassName
+
+#### Type declaration
+
+▸ (`entity`): entity is AstClassName
+
+##### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `entity` | `unknown` |
+
+##### Returns
+
+entity is AstClassName
 
 
 ___
@@ -203,6 +273,27 @@ ___
 ##### Returns
 
 entity is AstFormulaOfSelector
+
+
+___
+
+### isId
+
+• **isId**: (`entity`: `unknown`) => entity is AstId
+
+#### Type declaration
+
+▸ (`entity`): entity is AstId
+
+##### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `entity` | `unknown` |
+
+##### Returns
+
+entity is AstId
 
 
 ___
@@ -266,6 +357,27 @@ ___
 ##### Returns
 
 entity is AstPseudoClass
+
+
+___
+
+### isPseudoElement
+
+• **isPseudoElement**: (`entity`: `unknown`) => entity is AstPseudoElement
+
+#### Type declaration
+
+▸ (`entity`): entity is AstPseudoElement
+
+##### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `entity` | `unknown` |
+
+##### Returns
+
+entity is AstPseudoElement
 
 
 ___
@@ -483,27 +595,45 @@ ___
 
 ___
 
-### rule
+### pseudoElement
 
-• **rule**: (`props?`: { `attributes?`: [`AstAttribute`](AstAttribute.md)[] ; `classNames?`: `string`[] ; `combinator?`: `string` ; `ids?`: `string`[] ; `nestedRule?`: [`AstRule`](AstRule.md) ; `pseudoClasses?`: [`AstPseudoClass`](AstPseudoClass.md)[] ; `pseudoElement?`: `string` ; `tag?`: [`AstTagName`](AstTagName.md) \| [`AstWildcardTag`](AstWildcardTag.md)  }) => [`AstRule`](AstRule.md)
+• **pseudoElement**: (`props`: { `argument?`: [`AstSelector`](AstSelector.md) \| [`AstSubstitution`](AstSubstitution.md) \| [`AstString`](AstString.md) ; `name`: `string`  }) => [`AstPseudoElement`](AstPseudoElement.md)
 
 #### Type declaration
 
-▸ (`props?`): [`AstRule`](AstRule.md)
+▸ (`props`): [`AstPseudoElement`](AstPseudoElement.md)
 
 ##### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `props?` | `Object` | - |
-| `props.attributes?` | [`AstAttribute`](AstAttribute.md)[] | List of attributes (i.e. `"[href][role=button]"` -> `[{name: 'href'}, {name: 'role', operator: '=', value: {type: 'String', value: 'button'}}]`) |
-| `props.classNames?` | `string`[] | List of CSS classes (i.e. `".c1.c2"` -> `['c1', 'c2']`) |
+| `props` | `Object` | - |
+| `props.argument?` | [`AstSelector`](AstSelector.md) \| [`AstSubstitution`](AstSubstitution.md) \| [`AstString`](AstString.md) | Pseudo-element value (i.e. `"foo"` in case of `"::part(foo)"`). |
+| `props.name` | `string` | Pseudo-element name (i.e. `"before"` in case of `"::before"`). |
+
+##### Returns
+
+[`AstPseudoElement`](AstPseudoElement.md)
+
+
+___
+
+### rule
+
+• **rule**: (`props`: { `combinator?`: `string` ; `items`: ([`AstTagName`](AstTagName.md) \| [`AstWildcardTag`](AstWildcardTag.md) \| [`AstId`](AstId.md) \| [`AstClassName`](AstClassName.md) \| [`AstPseudoClass`](AstPseudoClass.md) \| [`AstAttribute`](AstAttribute.md) \| [`AstPseudoElement`](AstPseudoElement.md))[] ; `nestedRule?`: [`AstRule`](AstRule.md)  }) => [`AstRule`](AstRule.md)
+
+#### Type declaration
+
+▸ (`props`): [`AstRule`](AstRule.md)
+
+##### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `props` | `Object` | - |
 | `props.combinator?` | `string` | Rule combinator which was used to nest this rule (i.e. `">"` in case of `"div > span"` if the current rule is `"span"`). |
-| `props.ids?` | `string`[] | List of IDs (i.e. `"#root"` -> `['root']`). |
+| `props.items` | ([`AstTagName`](AstTagName.md) \| [`AstWildcardTag`](AstWildcardTag.md) \| [`AstId`](AstId.md) \| [`AstClassName`](AstClassName.md) \| [`AstPseudoClass`](AstPseudoClass.md) \| [`AstAttribute`](AstAttribute.md) \| [`AstPseudoElement`](AstPseudoElement.md))[] | Items of a CSS rule. Can be tag, ids, class names, pseudo-classes and pseudo-elements. |
 | `props.nestedRule?` | [`AstRule`](AstRule.md) | Nested rule if specified (i.e. `"div > span"`). |
-| `props.pseudoClasses?` | [`AstPseudoClass`](AstPseudoClass.md)[] | Pseudo-classes (i.e. `":link"` -> `[{name: 'link'}]`). |
-| `props.pseudoElement?` | `string` | Pseudo-element (i.e. `"::before"` -> `'before'`). |
-| `props.tag?` | [`AstTagName`](AstTagName.md) \| [`AstWildcardTag`](AstWildcardTag.md) | Tag definition. Can be either TagName (i.e. `"div"`) or WildcardTag (`"*"`) if defined. |
 
 ##### Returns
 

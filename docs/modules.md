@@ -161,13 +161,14 @@ const selector = ast.selector({
                 ast.tagName({name: 'a'}),
                 ast.id({name: 'user-23'}),
                 ast.className({name: 'user'}),
-                ast.pseudoClass({name: 'visited'})
+                ast.pseudoClass({name: 'visited'}),
+                ast.pseudoElement({name: 'before'})
             ]
         })
     ]
 });
 
-console.log(render(selector)); // a#user-23.user:visited
+console.log(render(selector)); // a#user-23.user:visited::before
 ```
 
 #### Parameters

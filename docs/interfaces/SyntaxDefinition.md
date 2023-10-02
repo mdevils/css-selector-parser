@@ -121,7 +121,7 @@ ___
 
 ### pseudoClasses
 
-• `Optional` **pseudoClasses**: ``false`` \| { `definitions?`: { `Formula`: `undefined` \| `string`[] ; `FormulaOfSelector`: `undefined` \| `string`[] ; `NoArgument`: `undefined` \| `string`[] ; `Selector`: `undefined` \| `string`[] ; `String`: `undefined` \| `string`[] ; `Substitution`: `undefined` \| `string`[]  } ; `unknown?`: ``"accept"`` \| ``"reject"``  }
+• `Optional` **pseudoClasses**: ``false`` \| { `definitions?`: { `Formula`: `undefined` \| `string`[] ; `FormulaOfSelector`: `undefined` \| `string`[] ; `NoArgument`: `undefined` \| `string`[] ; `Selector`: `undefined` \| `string`[] ; `String`: `undefined` \| `string`[]  } ; `unknown?`: ``"accept"`` \| ``"reject"``  }
 
 CSS Pseudo-classes.
 
@@ -139,7 +139,7 @@ ___
 
 ### pseudoElements
 
-• `Optional` **pseudoElements**: ``false`` \| { `definitions?`: `string`[] ; `notation?`: ``"both"`` \| ``"singleColon"`` \| ``"doubleColon"`` ; `unknown?`: ``"accept"`` \| ``"reject"``  }
+• `Optional` **pseudoElements**: ``false`` \| { `definitions?`: `string`[] \| { `NoArgument`: `undefined` \| `string`[] ; `Selector`: `undefined` \| `string`[] ; `String`: `undefined` \| `string`[]  } ; `notation?`: ``"both"`` \| ``"singleColon"`` \| ``"doubleColon"`` ; `unknown?`: ``"accept"`` \| ``"reject"``  }
 
 CSS Pseudo-elements.
 

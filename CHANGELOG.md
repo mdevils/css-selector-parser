@@ -189,15 +189,15 @@ After: `{type: 'Selector', rules: [ {<RULE 1 DATA>}, {<RULE 2 DATA>} ]}`.
 [New type info.](docs/interfaces/AstRule.md)
 
 1. Type changed: `rule` -> `Rule`.
-2. Prop changed: `id: string` -> `items: [{type: 'Id', name: '<ID>'}, ...]`. According to the CSS spec one rule may have more
-   than 1 `id`, so `#root#root` is a valid selector.
+2. Prop changed: `id: string` -> `items: [{type: 'Id', name: '<ID>'}, ...]`. According to the CSS spec one rule may have
+   more than 1 `id`, so `#root#root` is a valid selector.
 3. Prop renamed: `nestingOperator` -> `combinator`. A proper name according to CSS spec was chosen.
 4. Prop renamed: `rule` -> `nestedRule`. A proper name to indicate nesting was chosen.
 5. Prop changed: `tagName: string` -> `items: [TagName | WildcardTag, ...]`. Using explicit distinction between
    TagName (i.e. `div`) and WildcardTag (`*`), because tag name can also be `*` if escaped properly (`\*`).
-6. Prop changed: `attrs` -> `attributes`. Attribute type was changed, see below.
-7. Prop changed: `pseudos` -> `pseudoClasses`. There are pseudo-elements and pseudo-classes, now they are separated
-   properly (there is a separate `pseudoElement` type). Pseudo class type was changed, see below.
+6. Prop changed: `attrs` -> `items: [<ATTRIBUTE>, ...]`. Attribute type was changed, see below.
+7. Prop changed: `pseudos` -> `items: [<PSEUDO CLASS>, ...]`. There are pseudo-elements and pseudo-classes, now they are
+   separated properly (there is a separate `pseudoElement` type). Pseudo class type was changed, see below.
 
 Before:
 

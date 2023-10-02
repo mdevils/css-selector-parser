@@ -1,6 +1,6 @@
 {
   "name": "css-selector-parser",
-  "version": "2.3.2",
+  "version": "3.0.0",
   "description": "Powerful and compliant CSS selector parser.",
   "keywords": [
     "css",

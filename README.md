@@ -34,7 +34,7 @@ Usage
 import {createParser} from 'css-selector-parser';
 
 const parse = createParser();
-const selector = parse('a[href^="/"], .container:has(nav) > a[href]:nth-child(2)');
+const selector = parse('a[href^="/"], .container:has(nav) > a[href]:nth-child(2)::before');
 
 console.log(selector);
 ```
@@ -84,6 +84,10 @@ Produces:
                         type: 'PseudoClass',
                         name: 'nth-child',
                         argument: { type: 'Formula', a: 0, b: 2 }
+                    },
+                    {
+                        type: 'PseudoElement',
+                        name: 'before'
                     }
                 ],
                 combinator: '>'

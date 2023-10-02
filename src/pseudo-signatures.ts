@@ -1,6 +1,6 @@
 import {PseudoClassType} from './syntax-definitions.js';
 
-export type PseudoClassSignature = {optional: boolean} & (
+export type PseudoSignature = {optional: boolean} & (
     | {
           type: 'Formula';
           ofSelector?: boolean;
@@ -11,23 +11,29 @@ export type PseudoClassSignature = {optional: boolean} & (
     | {
           type: 'Selector';
       }
+    | {
+          type: 'NoArgument';
+      }
 );
 
-export type PseudoClassSignatures = Record<string, PseudoClassSignature>;
+export type PseudoSignatures = Record<string, PseudoSignature>;
 
-export const emptyPseudoClassSignatures = {} as PseudoClassSignatures;
-export const defaultPseudoClassSignature: PseudoClassSignature = {
+export const emptyPseudoSignatures = {} as PseudoSignatures;
+export const defaultPseudoSignature: PseudoSignature = {
     type: 'String',
     optional: true
 };
 
-function calculatePseudoClassSignature(types: PseudoClassType[]) {
-    const result: Partial<PseudoClassSignature> = {
+type PseudoArgumentType = PseudoClassType;
+
+function calculatePseudoSignature<T extends PseudoArgumentType>(types: T[]) {
+    const result: PseudoSignature = {
+        type: 'NoArgument',
         optional: false
     };
 
-    function setResultType(type: PseudoClassSignature['type']) {
-        if (result.type && result.type !== type) {
+    function setResultType(type: PseudoSignature['type']) {
+        if (result.type && result.type !== type && result.type !== 'NoArgument') {
             throw new Error(`Conflicting pseudo-class argument type: "${result.type}" vs "${type}".`);
         }
         result.type = type;
@@ -51,7 +57,7 @@ function calculatePseudoClassSignature(types: PseudoClassType[]) {
             setResultType('Selector');
         }
     }
-    return result as PseudoClassSignature;
+    return result as PseudoSignature;
 }
 
 export type CategoriesIndex<T1 extends string, T2 extends string> = {[K in T1]?: T2[]};
@@ -69,14 +75,14 @@ export function inverseCategories<T1 extends string, T2 extends string>(obj: Cat
     return result;
 }
 
-export function calculatePseudoClassSignatures(definitions: {[K in PseudoClassType]?: string[]}) {
+export function calculatePseudoSignatures<T extends PseudoArgumentType>(definitions: {[K in T]?: string[]}) {
     const pseudoClassesToArgumentTypes = inverseCategories(definitions);
-    const result: PseudoClassSignatures = {};
+    const result: PseudoSignatures = {};
 
     for (const pseudoClass of Object.keys(pseudoClassesToArgumentTypes)) {
         const argumentTypes = pseudoClassesToArgumentTypes[pseudoClass];
         if (argumentTypes) {
-            result[pseudoClass] = calculatePseudoClassSignature(argumentTypes);
+            result[pseudoClass] = calculatePseudoSignature(argumentTypes);
         }
     }
 

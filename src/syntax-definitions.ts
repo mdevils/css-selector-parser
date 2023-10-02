@@ -1,6 +1,7 @@
-import {AstPseudoClassArgument} from './ast.js';
+import {AstPseudoClassArgument, AstPseudoElementArgument} from './ast.js';
 
-export type PseudoClassType = 'NoArgument' | AstPseudoClassArgument['type'];
+export type PseudoClassType = Exclude<'NoArgument' | AstPseudoClassArgument['type'], 'Substitution'>;
+export type PseudoElementType = Exclude<'NoArgument' | AstPseudoElementArgument['type'], 'Substitution'>;
 export type CssLevel = 'css1' | 'css2' | 'css3' | 'selectors-3' | 'selectors-4' | 'latest' | 'progressive';
 
 /**
@@ -102,10 +103,12 @@ export interface SyntaxDefinition {
                */
               notation?: 'singleColon' | 'doubleColon' | 'both';
               /**
-               * List of predefined pseudo-elements.
+               * List of predefined pseudo-elements. If string array is specified, the pseudo-elements are assumed to be
+               * NoArgument.
                * @example ['before', 'after']
+               * @example {NoArgument: ['before', 'after'], String: ['highlight'], Selector: ['slotted']}
                */
-              definitions?: string[];
+              definitions?: string[] | {[K in PseudoElementType]?: string[]};
           }
         | false;
     /**
@@ -149,126 +152,128 @@ export function getXmlOptions(param: SyntaxDefinitionXmlOptions | boolean | unde
     }
 }
 
-export function extendSyntaxDefinition(base: SyntaxDefinition, extension: SyntaxDefinition): SyntaxDefinition {
+type MergeMethod<T> = (base: T, extension: T) => T;
+
+function withMigration<T extends MT, MT>(migration: (value: T) => MT, merge: MergeMethod<MT>): MergeMethod<T> {
+    return (base: T, extension: T): T => merge(migration(base), migration(extension)) as T;
+}
+
+function withNoNegative<T>(merge: MergeMethod<T | false | undefined>): MergeMethod<T> {
+    return (base: T | undefined | false, extension: T | undefined | false): T => {
+        const result = merge(base, extension);
+        if (!result) {
+            throw new Error(`Syntax definition cannot be null or undefined.`);
+        }
+        return result;
+    };
+}
+
+function withPositive<T>(positive: T, merge: MergeMethod<T>): MergeMethod<T | true> {
+    return (base: T | true, extension: T | true): T => {
+        if (extension === true) {
+            return positive;
+        }
+        return merge(base === true ? positive : base, extension);
+    };
+}
+
+function mergeSection<T>(values: {[K in keyof T]-?: MergeMethod<T[K]>}): MergeMethod<T | undefined | false> {
+    return (base: T | undefined | false, extension: T | undefined | false) => {
+        if (!extension || !base) {
+            return extension;
+        }
+        if (typeof extension !== 'object' || extension === null) {
+            throw new Error(`Unexpected syntax definition extension type: ${extension}.`);
+        }
+        const result = {...base};
+        for (const [key, value] of Object.entries(extension) as [keyof T, T[keyof T]][]) {
+            const mergeSchema = values[key];
+            result[key] = mergeSchema(base[key], value) as never;
+        }
+        return result;
+    };
+}
+
+function replaceValueIfSpecified<T>(base: T, extension: T): T {
+    if (extension !== undefined) {
+        return extension;
+    }
+    return base;
+}
+
+function concatArray<T>(base: T[] | undefined, extension: T[] | undefined): T[] | undefined {
+    if (!extension) {
+        return base;
+    }
+    if (!base) {
+        return extension;
+    }
+    return base.concat(extension);
+}
+
+function mergeDefinitions<T>(
+    base?: {[K in keyof T]?: string[]},
+    extension?: {[K in keyof T]?: string[]}
+): {[K in keyof T]?: string[]} | undefined {
+    if (!extension) {
+        return base;
+    }
+    if (!base) {
+        return extension;
+    }
     const result = {...base};
-    if ('tag' in extension) {
-        if (extension.tag) {
-            result.tag = {...getXmlOptions(base.tag)};
-            const extensionOptions = getXmlOptions(extension.tag);
-            if ('wildcard' in extensionOptions) {
-                result.tag.wildcard = extensionOptions.wildcard;
-            }
-        } else {
-            result.tag = undefined;
+    for (const [key, value] of Object.entries(extension) as [keyof T, string[]][]) {
+        if (!value) {
+            delete result[key];
+            continue;
         }
-    }
-    if ('ids' in extension) {
-        result.ids = extension.ids;
-    }
-    if ('classNames' in extension) {
-        result.classNames = extension.classNames;
-    }
-    if ('namespace' in extension) {
-        if (extension.namespace) {
-            result.namespace = {...getXmlOptions(base.namespace)};
-            const extensionOptions = getXmlOptions(extension.namespace);
-            if ('wildcard' in extensionOptions) {
-                result.namespace.wildcard = extensionOptions.wildcard;
-            }
-        } else {
-            result.namespace = undefined;
+        const baseValue = base[key];
+        if (!baseValue) {
+            result[key] = value;
+            continue;
         }
-    }
-    if ('combinators' in extension) {
-        if (extension.combinators) {
-            result.combinators = result.combinators
-                ? result.combinators.concat(extension.combinators)
-                : extension.combinators;
-        } else {
-            result.combinators = undefined;
-        }
-    }
-    if ('attributes' in extension) {
-        if (extension.attributes) {
-            result.attributes = {...base.attributes};
-            if ('unknownCaseSensitivityModifiers' in extension.attributes) {
-                result.attributes.unknownCaseSensitivityModifiers =
-                    extension.attributes.unknownCaseSensitivityModifiers;
-            }
-            if ('operators' in extension.attributes) {
-                result.attributes.operators = extension.attributes.operators
-                    ? result.attributes.operators
-                        ? result.attributes.operators.concat(extension.attributes.operators)
-                        : extension.attributes.operators
-                    : undefined;
-            }
-            if ('caseSensitivityModifiers' in extension.attributes) {
-                result.attributes.caseSensitivityModifiers = extension.attributes.caseSensitivityModifiers
-                    ? result.attributes.caseSensitivityModifiers
-                        ? result.attributes.caseSensitivityModifiers.concat(
-                              extension.attributes.caseSensitivityModifiers
-                          )
-                        : extension.attributes.caseSensitivityModifiers
-                    : undefined;
-            }
-        } else {
-            result.attributes = undefined;
-        }
-    }
-    if ('pseudoElements' in extension) {
-        if (extension.pseudoElements) {
-            result.pseudoElements = {...base.pseudoElements};
-            if ('unknown' in extension.pseudoElements) {
-                result.pseudoElements.unknown = extension.pseudoElements.unknown;
-            }
-            if ('notation' in extension.pseudoElements) {
-                result.pseudoElements.notation = extension.pseudoElements.notation;
-            }
-            if ('definitions' in extension.pseudoElements) {
-                result.pseudoElements.definitions = extension.pseudoElements.definitions
-                    ? result.pseudoElements.definitions
-                        ? result.pseudoElements.definitions.concat(extension.pseudoElements.definitions)
-                        : extension.pseudoElements.definitions
-                    : undefined;
-            }
-        } else {
-            result.pseudoElements = undefined;
-        }
-    }
-    if ('pseudoClasses' in extension) {
-        if (extension.pseudoClasses) {
-            result.pseudoClasses = {...base.pseudoClasses};
-            if ('unknown' in extension.pseudoClasses) {
-                result.pseudoClasses.unknown = extension.pseudoClasses.unknown;
-            }
-            if ('definitions' in extension.pseudoClasses) {
-                const newDefinitions = extension.pseudoClasses.definitions;
-                if (newDefinitions) {
-                    result.pseudoClasses.definitions = {
-                        ...result.pseudoClasses.definitions
-                    };
-                    const existingDefinitions = result.pseudoClasses.definitions;
-                    for (const key of Object.keys(newDefinitions) as PseudoClassType[]) {
-                        const newDefinitionForNotation = newDefinitions[key];
-                        const existingDefinitionForNotation = existingDefinitions[key];
-                        if (newDefinitionForNotation) {
-                            existingDefinitions[key] = existingDefinitionForNotation
-                                ? existingDefinitionForNotation.concat(newDefinitionForNotation)
-                                : newDefinitionForNotation;
-                        } else {
-                            existingDefinitions[key] = undefined;
-                        }
-                    }
-                } else {
-                    result.pseudoClasses.definitions = undefined;
-                }
-            }
-        } else {
-            result.pseudoClasses = undefined;
-        }
+        result[key] = baseValue.concat(value);
     }
     return result;
 }
+
+export const extendSyntaxDefinition: MergeMethod<SyntaxDefinition> = withNoNegative(
+    mergeSection<SyntaxDefinition>({
+        baseSyntax: replaceValueIfSpecified,
+        tag: withPositive(
+            defaultXmlOptions,
+            mergeSection({
+                wildcard: replaceValueIfSpecified
+            })
+        ),
+        ids: replaceValueIfSpecified,
+        classNames: replaceValueIfSpecified,
+        namespace: withPositive(
+            defaultXmlOptions,
+            mergeSection({
+                wildcard: replaceValueIfSpecified
+            })
+        ),
+        combinators: concatArray,
+        attributes: mergeSection({
+            operators: concatArray,
+            caseSensitivityModifiers: concatArray,
+            unknownCaseSensitivityModifiers: replaceValueIfSpecified
+        }),
+        pseudoClasses: mergeSection({
+            unknown: replaceValueIfSpecified,
+            definitions: mergeDefinitions
+        }),
+        pseudoElements: mergeSection({
+            unknown: replaceValueIfSpecified,
+            notation: replaceValueIfSpecified,
+            definitions: withMigration(
+                (definitions) => (Array.isArray(definitions) ? {NoArgument: definitions} : definitions),
+                mergeDefinitions
+            )
+        })
+    })
+);
 
 const css1SyntaxDefinition: SyntaxDefinition = {
     tag: {},

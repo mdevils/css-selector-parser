@@ -1,5 +1,5 @@
 export function isIdentStart(c: string) {
-    return (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || c === '-' || c === '_';
+    return (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || c === '-' || c === '_' || c === '\\';
 }
 
 export function isIdent(c: string) {
@@ -139,5 +139,3 @@ export function escapeStr(s: string) {
     }
     return `"${result}"`;
 }
-
-export const escapePseudoClassString = (s: string) => s.replace(/([\\)])/g, '\\$1');

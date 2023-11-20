@@ -3,7 +3,6 @@
   "compilerOptions": {
     "outDir": "dist/mjs",
     "module": "esnext",
-    "target": "esnext",
     "skipLibCheck": true
   }
 }

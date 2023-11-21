@@ -275,6 +275,7 @@ describe('parse()', () => {
         });
         it('should fail on empty class name', () => {
             expect(() => parse('.')).toThrow('Expected class name.');
+            expect(() => parse('.1')).toThrow('Expected class name.');
         });
         it('should fail if not enabled', () => {
             expect(() => createParser({syntax: {}})('.class')).toThrow('Class names are not enabled.');
@@ -387,6 +388,7 @@ describe('parse()', () => {
         });
         it('should fail on empty ID name', () => {
             expect(() => parse('#')).toThrow('Expected ID name.');
+            expect(() => parse('#1')).toThrow('Expected ID name.');
         });
         it('should fail if not enabled', () => {
             expect(() => createParser({syntax: {}})('#id')).toThrow('IDs are not enabled.');
@@ -548,7 +550,12 @@ describe('parse()', () => {
             );
         });
         it('should fail if attribute name is empty', () => {
-            expect(() => parse('[=1]')).toThrow('Expected attribute name.');
+            expect(() => parse('[=a1]')).toThrow('Expected attribute name.');
+            expect(() => parse('[1=a1]')).toThrow('Expected attribute name.');
+        });
+        it('should fail if attribute value is empty', () => {
+            expect(() => parse('[a=]')).toThrow('Expected attribute value.');
+            expect(() => parse('[a=1]')).toThrow('Expected attribute value.');
         });
         it('should fail if substitutions are not enabled', () => {
             expect(() => parse('[attr=$value]')).toThrow('Expected attribute value.');
@@ -834,7 +841,7 @@ describe('parse()', () => {
                             operators: ['=']
                         }
                     }
-                })('[attr=1 i]')
+                })('[attr=a1 i]')
             ).toThrow('Attribute case sensitivity modifiers are not enabled.');
         });
         it('should fail if case sensitivity modifiers is specified without a comparison operator', () => {
@@ -857,7 +864,7 @@ describe('parse()', () => {
                             unknownCaseSensitivityModifiers: 'accept'
                         }
                     }
-                })('[attr=1 i]')
+                })('[attr=a1 i]')
             ).toEqual(
                 ast.selector({
                     rules: [
@@ -866,7 +873,7 @@ describe('parse()', () => {
                                 ast.attribute({
                                     name: 'attr',
                                     operator: '=',
-                                    value: ast.string({value: '1'}),
+                                    value: ast.string({value: 'a1'}),
                                     caseSensitivityModifier: 'i'
                                 })
                             ]
@@ -1205,6 +1212,7 @@ describe('parse()', () => {
         });
         it('should fail if name is empty', () => {
             expect(() => parse(':')).toThrow('Expected pseudo-class name.');
+            expect(() => parse(':1')).toThrow('Expected pseudo-class name.');
         });
         it('should fail if argument was not specified', () => {
             expect(() => parse(':lang')).toThrow('Argument is required for pseudo-class "lang".');
@@ -1388,6 +1396,7 @@ describe('parse()', () => {
         });
         it('should fail on empty pseudo-element name', () => {
             expect(() => parse('::')).toThrow('Expected pseudo-element name.');
+            expect(() => parse('::1')).toThrow('Expected pseudo-element name.');
         });
         it('should fail on unknown pseudo elements', () => {
             expect(() => createParser({syntax: {pseudoElements: {}}})('::before')).toThrow(

@@ -264,7 +264,10 @@ export function createParser(
         return result;
     }
 
-    function parseIdentifier(): string {
+    function parseIdentifier(): string | null {
+        if (!isIdentStart(chr)) {
+            return null;
+        }
         let result = '';
         while (pos < l) {
             if (isIdent(chr)) {
@@ -334,9 +337,11 @@ export function createParser(
         if (is('|')) {
             assert(namespaceEnabled, 'Namespaces are not enabled.');
             next();
+            const name = parseIdentifier();
+            assert(name, 'Expected attribute name.');
             attr = {
                 type: 'Attribute',
-                name: parseIdentifier(),
+                name: name,
                 namespace: {type: 'NoNamespace'}
             };
         } else if (is('*')) {
@@ -344,13 +349,16 @@ export function createParser(
             assert(namespaceWildcardEnabled, 'Wildcard namespace is not enabled.');
             next();
             pass('|');
+            const name = parseIdentifier();
+            assert(name, 'Expected attribute name.');
             attr = {
                 type: 'Attribute',
-                name: parseIdentifier(),
+                name,
                 namespace: {type: 'WildcardNamespace'}
             };
         } else {
             const identifier = parseIdentifier();
+            assert(identifier, 'Expected attribute name.');
             attr = {
                 type: 'Attribute',
                 name: identifier
@@ -360,9 +368,11 @@ export function createParser(
                 next();
                 if (isIdentStart(chr)) {
                     assert(namespaceEnabled, 'Namespaces are not enabled.');
+                    const name = parseIdentifier();
+                    assert(name, 'Expected attribute name.');
                     attr = {
                         type: 'Attribute',
-                        name: parseIdentifier(),
+                        name,
                         namespace: {type: 'NamespaceName', name: identifier}
                     };
                 } else {
@@ -389,25 +399,28 @@ export function createParser(
                 };
             } else if (substitutesEnabled && is('$')) {
                 next();
+                const name = parseIdentifier();
+                assert(name, 'Expected substitute name.');
                 attr.value = {
                     type: 'Substitution',
-                    name: parseIdentifier()
+                    name
                 };
-                assert(attr.value.name, 'Expected substitute name.');
             } else {
+                const value = parseIdentifier();
+                assert(value, 'Expected attribute value.');
                 attr.value = {
                     type: 'String',
-                    value: parseIdentifier()
+                    value
                 };
-                assert(attr.value.value, 'Expected attribute value.');
             }
             skipWhitespace();
             if (isEof() && !strict) {
                 return attr;
             }
             if (!is(']')) {
-                attr.caseSensitivityModifier = parseIdentifier();
-                assert(attr.caseSensitivityModifier, 'Expected end of attribute selector.');
+                const caseSensitivityModifier = parseIdentifier();
+                assert(caseSensitivityModifier, 'Expected end of attribute selector.');
+                attr.caseSensitivityModifier = caseSensitivityModifier;
                 assert(
                     attributesCaseSensitivityModifiersEnabled,
                     'Attribute case sensitivity modifiers are not enabled.'
@@ -505,11 +518,12 @@ export function createParser(
             skipWhitespace();
             if (substitutesEnabled && is('$')) {
                 next();
+                const name = parseIdentifier();
+                assert(name, 'Expected substitute name.');
                 argument = {
                     type: 'Substitution',
-                    name: parseIdentifier()
+                    name
                 };
-                assert(argument.name, 'Expected substitute name.');
             } else if (signature.type === 'String') {
                 argument = {
                     type: 'String',
@@ -560,9 +574,11 @@ export function createParser(
             return {type: 'WildcardTag'};
         } else if (isIdentStart(chr)) {
             assert(tagNameEnabled, 'Tag names are not enabled.');
+            const name = parseIdentifier();
+            assert(name, 'Expected tag name.');
             return {
                 type: 'TagName',
-                name: parseIdentifier()
+                name
             };
         } else {
             return fail('Expected tag name.');
@@ -595,6 +611,7 @@ export function createParser(
             return tagName;
         } else if (isIdentStart(chr)) {
             const identifier = parseIdentifier();
+            assert(identifier, 'Expected tag name.');
             if (!is('|')) {
                 assert(tagNameEnabled, 'Tag names are not enabled.');
                 return {
@@ -677,6 +694,7 @@ export function createParser(
 
                 assert(isDoubleColon || pseudoName, 'Expected pseudo-class name.');
                 assert(!isDoubleColon || pseudoName, 'Expected pseudo-element name.');
+                assert(pseudoName, 'Expected pseudo-class name.');
                 assert(
                     !isDoubleColon ||
                         pseudoElementsAcceptUnknown ||

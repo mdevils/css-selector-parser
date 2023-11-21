@@ -83,7 +83,7 @@ const testCases = {
     '.\\20wow': '.\\20 wow',
     'tag\\n\\\\name\\.\\[': 'tagn\\\\name\\.\\[',
     '.cls\\n\\\\name\\.\\[': '.clsn\\\\name\\.\\[',
-    '[attr\\n\\\\name\\.\\[=1]': '[attrn\\\\name\\.\\[="1"]',
+    '[attr\\n\\\\name\\.\\[=a1]': '[attrn\\\\name\\.\\[="a1"]',
     ':pseudo\\n\\\\name\\.\\[\\((123)': ':pseudon\\\\name\\.\\[\\((\\31 23)',
     '[attr="val\nval"]': '[attr="val\\nval"]',
     '[attr="val\\"val"]': '[attr="val\\"val"]',

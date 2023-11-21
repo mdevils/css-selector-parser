@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [3.0.2](https://github.com/mdevils/css-selector-parser/compare/v3.0.1...v3.0.2) (2023-11-21)
+
+
+### Bug Fixes
+
+* identifier parsing for ids, classes, pseudo-classes and pseudo-elements ([d222dfd](https://github.com/mdevils/css-selector-parser/commit/d222dfdf8b37502edef6d9c5a73a15c93452f7f3))
+
 ### [3.0.1](https://github.com/mdevils/css-selector-parser/compare/v3.0.0...v3.0.1) (2023-11-20)
 
 

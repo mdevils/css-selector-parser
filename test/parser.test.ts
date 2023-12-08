@@ -5,6 +5,61 @@ describe('parse()', () => {
         syntax: 'progressive'
     });
 
+    describe('Identifiers', () => {
+        it('should parse a regular valid identifier', () => {
+            expect(parse('#id')).toEqual(
+                ast.selector({
+                    rules: [
+                        ast.rule({
+                            items: [ast.id({name: 'id'})]
+                        })
+                    ]
+                })
+            );
+        });
+        it('should parse an identifier starting with a hyphen', () => {
+            expect(parse('#-id')).toEqual(
+                ast.selector({
+                    rules: [
+                        ast.rule({
+                            items: [ast.id({name: '-id'})]
+                        })
+                    ]
+                })
+            );
+        });
+        it('should fail on an identifier starting with multiple hyphens', () => {
+            expect(() => parse('#--id')).toThrow('Identifiers cannot start with two hyphens with strict mode on.');
+        });
+        it('should parse an identifier starting with multiple hyphens in case of strict: false', () => {
+            expect(createParser({strict: false})('#--id')).toEqual(
+                ast.selector({
+                    rules: [
+                        ast.rule({
+                            items: [ast.id({name: '--id'})]
+                        })
+                    ]
+                })
+            );
+        });
+        it('should fail on an identifier starting with a hyphen and followed with a digit', () => {
+            expect(() => parse('#-1')).toThrow('Identifiers cannot start with hyphens followed by digits.');
+            expect(() => createParser({strict: false})('#--1')).toThrow(
+                'Identifiers cannot start with hyphens followed by digits.'
+            );
+        });
+        it('should parse an identifier consisting unicode characters', () => {
+            expect(parse('#ÈÈ')).toEqual(
+                ast.selector({
+                    rules: [
+                        ast.rule({
+                            items: [ast.id({name: 'ÈÈ'})]
+                        })
+                    ]
+                })
+            );
+        });
+    });
     describe('Tag Names', () => {
         it('should parse a tag name', () => {
             expect(parse('div')).toEqual(

@@ -269,6 +269,17 @@ export function createParser(
             return null;
         }
         let result = '';
+        while (is('-')) {
+            result += chr;
+            next();
+        }
+        if (strict && result.length >= 2) {
+            // Checking this only for strict mode since browsers work fine with these identifiers.
+            fail('Identifiers cannot start with two hyphens with strict mode on.');
+        }
+        if (digitsChars[chr]) {
+            fail('Identifiers cannot start with hyphens followed by digits.');
+        }
         while (pos < l) {
             if (isIdent(chr)) {
                 result += readAndNext();
@@ -281,7 +292,7 @@ export function createParser(
                     result += readAndNext();
                 }
             } else {
-                return result;
+                break;
             }
         }
         return result;

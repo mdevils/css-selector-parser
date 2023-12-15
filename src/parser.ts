@@ -29,7 +29,7 @@ import {
     getXmlOptions,
     SyntaxDefinition
 } from './syntax-definitions.js';
-import {digitsChars, isHex, isIdent, isIdentStart, quoteChars, stringEscapeChars, whitespaceChars} from './utils.js';
+import {digitsChars, isHex, isIdent, isIdentStart, maxHexLength, quoteChars, whitespaceChars} from './utils.js';
 
 /**
  * This error is thrown when parser encounters problems in CSS string.
@@ -225,17 +225,23 @@ export function createParser(
         }
     }
 
+    /**
+     * @see https://www.w3.org/TR/css-syntax/#hex-digit-diagram
+     */
     function parseHex() {
         let hex = readAndNext();
-        while (isHex(chr)) {
+        let count = 1;
+        while (isHex(chr) && count < maxHexLength) {
             hex += readAndNext();
+            count++;
         }
-        if (is(' ')) {
-            next();
-        }
+        skipSingleWhitespace();
         return String.fromCharCode(parseInt(hex, 16));
     }
 
+    /**
+     * @see https://www.w3.org/TR/css-syntax/#string-token-diagram
+     */
     function parseString(quote: string): string {
         let result = '';
         pass(quote);
@@ -245,25 +251,33 @@ export function createParser(
                 return result;
             } else if (is('\\')) {
                 next();
-                let esc;
                 if (is(quote)) {
                     result += quote;
-                } else if ((esc = stringEscapeChars[chr]) !== undefined) {
-                    result += esc;
+                    next();
+                } else if (chr === '\n' || chr === '\f') {
+                    next();
+                } else if (chr === '\r') {
+                    next();
+                    if (is('\n')) {
+                        next();
+                    }
                 } else if (isHex(chr)) {
                     result += parseHex();
-                    continue;
                 } else {
                     result += chr;
+                    next();
                 }
             } else {
                 result += chr;
+                next();
             }
-            next();
         }
         return result;
     }
 
+    /**
+     * @see https://www.w3.org/TR/css-syntax/#ident-token-diagram
+     */
     function parseIdentifier(): string | null {
         if (!isIdentStart(chr)) {
             return null;
@@ -319,6 +333,19 @@ export function createParser(
             }
         }
         return result.trim();
+    }
+
+    function skipSingleWhitespace() {
+        if (chr === ' ' || chr === '\t' || chr === '\f' || chr === '\n') {
+            next();
+            return;
+        }
+        if (chr === '\r') {
+            next();
+        }
+        if (chr === '\n') {
+            next();
+        }
     }
 
     function skipWhitespace() {

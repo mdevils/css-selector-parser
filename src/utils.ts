@@ -17,7 +17,7 @@ export function isHex(c: string) {
     return (c >= 'a' && c <= 'f') || (c >= 'A' && c <= 'F') || (c >= '0' && c <= '9');
 }
 
-export const identSpecialChars: Record<string, boolean> = {
+export const identEscapeChars: Record<string, boolean> = {
     '!': true,
     '"': true,
     '#': true,
@@ -49,20 +49,12 @@ export const identSpecialChars: Record<string, boolean> = {
     '~': true
 };
 
-export const strReplacementsRev: Record<string, string> = {
-    '\n': '\\n',
-    '\r': '\\r',
-    '\t': '\\t',
-    '\f': '\\f',
-    '\v': '\\v'
-};
-
-export const stringEscapeChars: Record<string, string> = {
-    n: '\n',
-    r: '\r',
-    t: '\t',
-    f: '\f',
-    '\\': '\\'
+export const stringRenderEscapeChars: Record<string, boolean> = {
+    '\n': true,
+    '\r': true,
+    '\t': true,
+    '\f': true,
+    '\v': true
 };
 
 export const whitespaceChars: Record<string, boolean> = {
@@ -91,24 +83,26 @@ export const digitsChars: Record<string, boolean> = {
     9: true
 };
 
+export const maxHexLength = 6;
+
 export function escapeIdentifier(s: string) {
     const len = s.length;
     let result = '';
     let i = 0;
     while (i < len) {
         const chr = s.charAt(i);
-        if (identSpecialChars[chr]) {
+        if (identEscapeChars[chr] || (chr === '-' && i === 1 && s.charAt(0) === '-')) {
             result += '\\' + chr;
         } else {
             if (
-                !(
-                    chr === '_' ||
-                    chr === '-' ||
-                    (chr >= 'A' && chr <= 'Z') ||
-                    (chr >= 'a' && chr <= 'z') ||
-                    (i !== 0 && chr >= '0' && chr <= '9')
-                )
+                chr === '-' ||
+                chr === '_' ||
+                (chr >= 'A' && chr <= 'Z') ||
+                (chr >= 'a' && chr <= 'z') ||
+                (chr >= '0' && chr <= '9' && i !== 0 && !(i === 1 && s.charAt(0) === '-'))
             ) {
+                result += chr;
+            } else {
                 let charCode = chr.charCodeAt(0);
                 if ((charCode & 0xf800) === 0xd800) {
                     const extraCharCode = s.charCodeAt(i++);
@@ -118,8 +112,6 @@ export function escapeIdentifier(s: string) {
                     charCode = ((charCode & 0x3ff) << 10) + (extraCharCode & 0x3ff) + 0x10000;
                 }
                 result += '\\' + charCode.toString(16) + ' ';
-            } else {
-                result += chr;
             }
         }
         i++;
@@ -127,19 +119,18 @@ export function escapeIdentifier(s: string) {
     return result.trim();
 }
 
-export function escapeStr(s: string) {
+export function escapeString(s: string) {
     const len = s.length;
     let result = '';
     let i = 0;
-    let replacement: string;
     while (i < len) {
         let chr = s.charAt(i);
         if (chr === '"') {
             chr = '\\"';
         } else if (chr === '\\') {
             chr = '\\\\';
-        } else if ((replacement = strReplacementsRev[chr]) !== undefined) {
-            chr = replacement;
+        } else if (stringRenderEscapeChars[chr]) {
+            chr = '\\' + chr.charCodeAt(0).toString(16) + (i === len - 1 ? '' : ' ');
         }
         result += chr;
         i++;

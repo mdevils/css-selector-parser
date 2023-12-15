@@ -1,5 +1,5 @@
 import {AstEntity, AstNamespaceName, AstNoNamespace, AstSubstitution, AstWildcardNamespace} from './ast.js';
-import {escapeIdentifier, escapeStr} from './utils.js';
+import {escapeIdentifier, escapeString} from './utils.js';
 
 const errorPrefix = `css-selector-parser render error: `;
 
@@ -96,7 +96,7 @@ export function render(entity: AstEntity): string {
         if (operator && value) {
             result += operator;
             if (value.type === 'String') {
-                result += escapeStr(value.value);
+                result += escapeString(value.value);
             } else if (value.type === 'Substitution') {
                 result += renderSubstitution(value);
             } else {

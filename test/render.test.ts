@@ -28,6 +28,8 @@ const testCases = {
     'tagname[x="y \\""]': 'tagname[x="y \\""]',
     'tagname[x="y\'"]': 'tagname[x="y\'"]',
     "tagname[x='y \\'']": 'tagname[x="y \'"]',
+    "div[role='a\\00000ab']": 'div[role="a\\a b"]',
+    "div[role='\\a']": 'div[role="\\a"]',
     'tag1     tag2': 'tag1 tag2',
     'ns1|tag1': 'ns1|tag1',
     '|tag1': '|tag1',
@@ -85,7 +87,7 @@ const testCases = {
     '.cls\\n\\\\name\\.\\[': '.clsn\\\\name\\.\\[',
     '[attr\\n\\\\name\\.\\[=a1]': '[attrn\\\\name\\.\\[="a1"]',
     ':pseudo\\n\\\\name\\.\\[\\((123)': ':pseudon\\\\name\\.\\[\\((\\31 23)',
-    '[attr="val\nval"]': '[attr="val\\nval"]',
+    '[attr="val\nval"]': '[attr="val\\a val"]',
     '[attr="val\\"val"]': '[attr="val\\"val"]',
     '[attr="val\\00a0val"]': '[attr="val val"]',
     'tag\\00a0 tag': 'tag\\a0 tag',
@@ -97,9 +99,15 @@ const testCases = {
     '#\\3123': '#\\3123',
     '#\\31 23': '#\\31 23',
     '#\\00031 23': '#\\31 23',
-    '#\\0003123': '#\\3123',
-    '#\\0004123': '#\\4123',
-    '#\\0o': '#\\0 o'
+    '#\\003123': '#\\3123',
+    '#\\0003123': '#\\312 3',
+    '#\\004123': '#\\4123',
+    '#\\0004123': '#\\412 3',
+    '#\\0o': '#\\0 o',
+    '#--a': '#-\\-a',
+    '#--\\30': '#-\\-0',
+    '#-\\30': '#-\\30',
+    '#\\30': '#\\30'
 };
 
 describe('render()', () => {

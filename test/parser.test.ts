@@ -28,6 +28,24 @@ describe('parse()', () => {
                 })
             );
         });
+        it('should parse an identifier with hex-encoded characters', () => {
+            const astSelector = ast.selector({
+                rules: [
+                    ast.rule({
+                        items: [ast.id({name: 'hello\nworld'})]
+                    })
+                ]
+            });
+            expect(parse('#hello\\aworld')).toEqual(astSelector);
+            expect(parse('#hello\\a world')).toEqual(astSelector);
+            expect(parse('#hello\\a\tworld')).toEqual(astSelector);
+            expect(parse('#hello\\a\fworld')).toEqual(astSelector);
+            expect(parse('#hello\\a\nworld')).toEqual(astSelector);
+            expect(parse('#hello\\a\nworld')).toEqual(astSelector);
+            expect(parse('#hello\\a\rworld')).toEqual(astSelector);
+            expect(parse('#hello\\a\r\nworld')).toEqual(astSelector);
+            expect(parse('#hello\\00000aworld')).toEqual(astSelector);
+        });
         it('should fail on an identifier starting with multiple hyphens', () => {
             expect(() => parse('#--id')).toThrow('Identifiers cannot start with two hyphens with strict mode on.');
         });
@@ -583,6 +601,34 @@ describe('parse()', () => {
                     ]
                 })
             );
+        });
+        it('should properly parse escapes', () => {
+            const astSelector = ast.selector({
+                rules: [
+                    ast.rule({
+                        items: [
+                            ast.attribute({
+                                name: 'attr',
+                                operator: '=',
+                                value: ast.string({
+                                    value: 'hello\nworld'
+                                })
+                            })
+                        ]
+                    })
+                ]
+            });
+            expect(parse('[attr="hello\\aworld"]')).toEqual(astSelector);
+            expect(parse('[attr="hell\\o\\aworld"]')).toEqual(astSelector);
+            expect(parse('[attr="hell\\\no\\aworld"]')).toEqual(astSelector);
+            expect(parse('[attr="hello\\a world"]')).toEqual(astSelector);
+            expect(parse('[attr="hello\\a\tworld"]')).toEqual(astSelector);
+            expect(parse('[attr="hello\\a\fworld"]')).toEqual(astSelector);
+            expect(parse('[attr="hello\\a\nworld"]')).toEqual(astSelector);
+            expect(parse('[attr="hello\\a\nworld"]')).toEqual(astSelector);
+            expect(parse('[attr="hello\\a\rworld"]')).toEqual(astSelector);
+            expect(parse('[attr="hello\\a\r\nworld"]')).toEqual(astSelector);
+            expect(parse('[attr="hello\\00000aworld"]')).toEqual(astSelector);
         });
         it('should properly parse single quotes', () => {
             expect(parse("[ attr = 'val\\'\\ue\\20' i ]")).toEqual(

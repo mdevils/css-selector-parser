@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [3.0.5](https://github.com/mdevils/css-selector-parser/compare/v3.0.4...v3.0.5) (2024-03-02)
+
+
+### Bug Fixes
+
+* single hyphen is not a valid identifier, throwing an exception, closes [#38](https://github.com/mdevils/css-selector-parser/issues/38) ([2520a49](https://github.com/mdevils/css-selector-parser/commit/2520a494ec81f02c42b28b9ba92c4a2ab33b6fbc))
+
 ### [3.0.4](https://github.com/mdevils/css-selector-parser/compare/v3.0.3...v3.0.4) (2023-12-15)
 
 

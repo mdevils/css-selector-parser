@@ -239,10 +239,9 @@ function astMethods<EN extends AstEntity>(type: EN['type']) {
             }),
             [checkerName]: (entity: unknown): entity is EN =>
                 typeof entity === 'object' && entity !== null && (entity as AstEntity).type === type
-        } as {[K in GN]: {} extends GenInput ? (props?: GenInput) => EN : (props: GenInput) => EN} &
-            {
-                [K in CN]: (entity: unknown) => entity is EN;
-            });
+        }) as {[K in GN]: {} extends GenInput ? (props?: GenInput) => EN : (props: GenInput) => EN} & {
+            [K in CN]: (entity: unknown) => entity is EN;
+        };
 }
 
 type UnionToIntersection<T> = (T extends any ? (x: T) => any : never) extends (x: infer R) => any ? R : never;
@@ -254,10 +253,9 @@ type ToAstFactory<T> = UnionToIntersection<
                   [K in Uncapitalize<Type>]: {} extends Omit<T, 'type'>
                       ? (props?: {[PK in keyof Omit<T, 'type'>]: Omit<T, 'type'>[PK]}) => T
                       : (props: {[PK in keyof Omit<T, 'type'>]: Omit<T, 'type'>[PK]}) => T;
-              } &
-                  {
-                      [K in `is${Type}`]: (entity: unknown) => entity is T;
-                  }
+              } & {
+                  [K in `is${Type}`]: (entity: unknown) => entity is T;
+              }
             : never
         : never
 >;

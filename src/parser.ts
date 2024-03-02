@@ -287,6 +287,9 @@ export function createParser(
             result += chr;
             next();
         }
+        if (result === '-' && !isIdent(chr) && !is('\\')) {
+            fail('Identifiers cannot consist of a single hyphen.');
+        }
         if (strict && result.length >= 2) {
             // Checking this only for strict mode since browsers work fine with these identifiers.
             fail('Identifiers cannot start with two hyphens with strict mode on.');

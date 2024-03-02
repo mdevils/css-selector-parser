@@ -49,6 +49,9 @@ describe('parse()', () => {
         it('should fail on an identifier starting with multiple hyphens', () => {
             expect(() => parse('#--id')).toThrow('Identifiers cannot start with two hyphens with strict mode on.');
         });
+        it('should fail on an identifier consisting of a single hyphen', () => {
+            expect(() => parse('#-')).toThrow('Identifiers cannot consist of a single hyphen.');
+        });
         it('should parse an identifier starting with multiple hyphens in case of strict: false', () => {
             expect(createParser({strict: false})('#--id')).toEqual(
                 ast.selector({
@@ -233,6 +236,9 @@ describe('parse()', () => {
             expect(() => parse('[href="#"]a|b')).toThrow('Unexpected tag/namespace start.');
             expect(() => parse('[href="#"]|b')).toThrow('Unexpected tag/namespace start.');
         });
+        it('should not accept a single hyphen', () => {
+            expect(() => parse('a - b')).toThrow('Identifiers cannot consist of a single hyphen.');
+        });
         it('should not be parsed after a pseudo-class', () => {
             expect(() => parse(':nth-child(2n)a|b')).toThrow('Unexpected tag/namespace start.');
             expect(() => parse(':nth-child(2n)|b')).toThrow('Unexpected tag/namespace start.');
@@ -349,6 +355,9 @@ describe('parse()', () => {
         it('should fail on empty class name', () => {
             expect(() => parse('.')).toThrow('Expected class name.');
             expect(() => parse('.1')).toThrow('Expected class name.');
+        });
+        it('should fail on a single hyphen', () => {
+            expect(() => parse('.-')).toThrow('Identifiers cannot consist of a single hyphen.');
         });
         it('should fail if not enabled', () => {
             expect(() => createParser({syntax: {}})('.class')).toThrow('Class names are not enabled.');

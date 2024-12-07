@@ -53,6 +53,7 @@
   },
   "main": "./dist/cjs/index.js",
   "module": "./dist/mjs/index.js",
+  "sideEffects": false,
   "exports": {
     ".": {
       "import": "./dist/mjs/index.js",

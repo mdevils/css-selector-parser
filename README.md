@@ -153,7 +153,7 @@ import {createParser} from 'css-selector-parser';
 
 // Create a parser with specific CSS modules enabled
 const parse = createParser({
-    syntax: 'latest',
+    syntax: 'selectors-4',
     modules: ['css-position-3', 'css-scoping-1']
 });
 ```

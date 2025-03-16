@@ -142,6 +142,31 @@ const selector = ast.selector({
 console.log(render(selector)); // a[href^="/"], .container:has(nav) > a[href]:nth-child(2)::before
 ```
 
+CSS Modules
+-----------
+
+CSS Modules are specific CSS specifications that add new selectors or modify existing ones.
+The parser supports various CSS modules that can be included in your syntax definition:
+
+```javascript
+import {createParser} from 'css-selector-parser';
+
+// Create a parser with specific CSS modules enabled
+const parse = createParser({
+    syntax: 'latest',
+    modules: ['css-position-3', 'css-scoping-1']
+});
+```
+
+Supported CSS modules:
+
+* `css-position-1`, `css-position-2`, `css-position-3`, `css-position-4`: Adds position-related pseudo-classes
+* `css-scoping-1`: Adds Shadow DOM selectors like `:host`, `:host-context()`, and `::slotted()`
+* `css-pseudo-4`: Adds modern pseudo-elements like `::selection`, `::backdrop`, etc.
+* `css-shadow-parts-1`: Adds `::part()` for styling shadow DOM components
+
+The `latest` syntax automatically includes all modules marked as current specifications.
+
 API
 ---
 

@@ -21,4 +21,4 @@ export {
     AstWildcardNamespace,
     AstWildcardTag
 } from './ast.js';
-export {CssLevel, SyntaxDefinition} from './syntax-definitions.js';
+export {CssLevel, CssFeature, SyntaxDefinition} from './syntax-definitions.js';

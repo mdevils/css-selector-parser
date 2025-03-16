@@ -29,7 +29,8 @@ import {
     getXmlOptions,
     SyntaxDefinition,
     CssModule,
-    cssModules
+    cssModules,
+    pseudoLocationIndex
 } from './syntax-definitions.js';
 import {digitsChars, isHex, isIdent, isIdentStart, maxHexLength, quoteChars, whitespaceChars} from './utils.js';
 
@@ -764,12 +765,23 @@ export function createParser(
                 assert(isDoubleColon || pseudoName, 'Expected pseudo-class name.');
                 assert(!isDoubleColon || pseudoName, 'Expected pseudo-element name.');
                 assert(pseudoName, 'Expected pseudo-class name.');
-                assert(
+                if (
                     !isDoubleColon ||
-                        pseudoElementsAcceptUnknown ||
-                        Object.prototype.hasOwnProperty.call(pseudoElementsDefinitions, pseudoName),
-                    `Unknown pseudo-element "${pseudoName}".`
-                );
+                    pseudoElementsAcceptUnknown ||
+                    Object.prototype.hasOwnProperty.call(pseudoElementsDefinitions, pseudoName)
+                ) {
+                    // All good
+                } else {
+                    // Generate a helpful error message with location information
+                    const locations = pseudoLocationIndex.pseudoElements[pseudoName];
+                    let errorMessage = `Unknown pseudo-element "${pseudoName}"`;
+                    
+                    if (locations && locations.length > 0) {
+                        errorMessage += `. It is defined in: ${locations.join(', ')}`;
+                    }
+                    
+                    fail(errorMessage + '.');
+                }
 
                 isPseudoElement =
                     pseudoElementsEnabled &&
@@ -800,7 +812,19 @@ export function createParser(
                     assert(pseudoClassesEnabled, 'Pseudo-classes are not enabled.');
                     const signature =
                         pseudoClassesDefinitions[pseudoName] ?? (pseudoClassesAcceptUnknown && defaultPseudoSignature);
-                    assert(signature, `Unknown pseudo-class: "${pseudoName}".`);
+                    if (signature) {
+                        // All good
+                    } else {
+                        // Generate a helpful error message with location information
+                        const locations = pseudoLocationIndex.pseudoClasses[pseudoName];
+                        let errorMessage = `Unknown pseudo-class: "${pseudoName}"`;
+                        
+                        if (locations && locations.length > 0) {
+                            errorMessage += `. It is defined in: ${locations.join(', ')}`;
+                        }
+                        
+                        fail(errorMessage + '.');
+                    }
 
                     const argument = parsePseudoArgument(pseudoName, 'pseudo-class', signature);
                     const pseudoClass: AstPseudoClass = {

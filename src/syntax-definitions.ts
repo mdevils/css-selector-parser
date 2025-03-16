@@ -502,6 +502,130 @@ export const cssModules = {
  */
 export type CssModule = keyof typeof cssModules;
 
+/**
+ * Maps pseudo-classes and pseudo-elements to their CSS Level or CSS Module
+ */
+export interface PseudoLocationIndex {
+    pseudoClasses: Record<string, string[]>;
+    pseudoElements: Record<string, string[]>;
+}
+
+/**
+ * Builds an index of where each pseudo-class and pseudo-element is defined
+ * (in which CSS Level or CSS Module)
+ */
+export function buildPseudoLocationIndex(): PseudoLocationIndex {
+    const index: PseudoLocationIndex = {
+        pseudoClasses: {},
+        pseudoElements: {}
+    };
+    
+    // Add CSS Levels (excluding 'latest' and 'progressive')
+    const cssLevels: CssLevel[] = ['css1', 'css2', 'css3', 'selectors-3', 'selectors-4'];
+    
+    for (const level of cssLevels) {
+        const syntax = cssSyntaxDefinitions[level];
+        
+        // Process pseudo-classes
+        if (syntax.pseudoClasses && typeof syntax.pseudoClasses === 'object') {
+            const { definitions } = syntax.pseudoClasses;
+            if (definitions) {
+                for (const [type, names] of Object.entries(definitions)) {
+                    for (const name of names) {
+                        if (!index.pseudoClasses[name]) {
+                            index.pseudoClasses[name] = [];
+                        }
+                        if (!index.pseudoClasses[name].includes(level)) {
+                            index.pseudoClasses[name].push(level);
+                        }
+                    }
+                }
+            }
+        }
+        
+        // Process pseudo-elements
+        if (syntax.pseudoElements && typeof syntax.pseudoElements === 'object') {
+            const { definitions } = syntax.pseudoElements;
+            if (definitions) {
+                if (Array.isArray(definitions)) {
+                    for (const name of definitions) {
+                        if (!index.pseudoElements[name]) {
+                            index.pseudoElements[name] = [];
+                        }
+                        if (!index.pseudoElements[name].includes(level)) {
+                            index.pseudoElements[name].push(level);
+                        }
+                    }
+                } else {
+                    for (const [type, names] of Object.entries(definitions)) {
+                        for (const name of names) {
+                            if (!index.pseudoElements[name]) {
+                                index.pseudoElements[name] = [];
+                            }
+                            if (!index.pseudoElements[name].includes(level)) {
+                                index.pseudoElements[name].push(level);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+    // Add CSS Modules
+    for (const [moduleName, moduleSyntax] of Object.entries(cssModules)) {
+        // Process pseudo-classes
+        if (moduleSyntax.pseudoClasses && typeof moduleSyntax.pseudoClasses === 'object') {
+            const { definitions } = moduleSyntax.pseudoClasses;
+            if (definitions) {
+                for (const [type, names] of Object.entries(definitions)) {
+                    for (const name of names) {
+                        if (!index.pseudoClasses[name]) {
+                            index.pseudoClasses[name] = [];
+                        }
+                        if (!index.pseudoClasses[name].includes(moduleName)) {
+                            index.pseudoClasses[name].push(moduleName);
+                        }
+                    }
+                }
+            }
+        }
+        
+        // Process pseudo-elements
+        if (moduleSyntax.pseudoElements && typeof moduleSyntax.pseudoElements === 'object') {
+            const { definitions } = moduleSyntax.pseudoElements;
+            if (definitions) {
+                if (Array.isArray(definitions)) {
+                    for (const name of definitions) {
+                        if (!index.pseudoElements[name]) {
+                            index.pseudoElements[name] = [];
+                        }
+                        if (!index.pseudoElements[name].includes(moduleName)) {
+                            index.pseudoElements[name].push(moduleName);
+                        }
+                    }
+                } else {
+                    for (const [type, names] of Object.entries(definitions)) {
+                        for (const name of names) {
+                            if (!index.pseudoElements[name]) {
+                                index.pseudoElements[name] = [];
+                            }
+                            if (!index.pseudoElements[name].includes(moduleName)) {
+                                index.pseudoElements[name].push(moduleName);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+    return index;
+}
+
+// Pre-build the index for faster lookup
+export const pseudoLocationIndex = buildPseudoLocationIndex();
+
 const latestSyntaxDefinition = {
     ...selectors4SyntaxDefinition,
     modules: (Object.entries(cssModules) as [CssModule, SyntaxDefinition & {latest?: boolean}][])

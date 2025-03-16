@@ -713,5 +713,45 @@ describe('CSS Modules', () => {
                 })
             );
         });
+        
+        it('should provide helpful error messages with location information', () => {
+            const parse = createParser({
+                syntax: {
+                    pseudoClasses: {
+                        unknown: 'reject'
+                    },
+                    pseudoElements: {
+                        unknown: 'reject'
+                    }
+                }
+            });
+            
+            // Test for pseudo-class defined in a CSS module
+            try {
+                parse(':sticky');
+                fail('Should have thrown an error');
+            } catch (e) {
+                expect(e.message).toContain('Unknown pseudo-class: "sticky"');
+                expect(e.message).toContain('css-position-3');
+            }
+            
+            // Test for pseudo-element defined in a CSS module
+            try {
+                parse('::part(button)');
+                fail('Should have thrown an error');
+            } catch (e) {
+                expect(e.message).toContain('Unknown pseudo-element "part"');
+                expect(e.message).toContain('css-shadow-parts-1');
+            }
+            
+            // Test for pseudo-class defined in a CSS level
+            try {
+                parse(':focus-visible');
+                fail('Should have thrown an error');
+            } catch (e) {
+                expect(e.message).toContain('Unknown pseudo-class: "focus-visible"');
+                expect(e.message).toContain('selectors-4');
+            }
+        });
     });
 });

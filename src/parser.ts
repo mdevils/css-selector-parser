@@ -775,11 +775,11 @@ export function createParser(
                     // Generate a helpful error message with location information
                     const locations = pseudoLocationIndex.pseudoElements[pseudoName];
                     let errorMessage = `Unknown pseudo-element "${pseudoName}"`;
-                    
+
                     if (locations && locations.length > 0) {
                         errorMessage += `. It is defined in: ${locations.join(', ')}`;
                     }
-                    
+
                     fail(errorMessage + '.');
                 }
 
@@ -818,11 +818,11 @@ export function createParser(
                         // Generate a helpful error message with location information
                         const locations = pseudoLocationIndex.pseudoClasses[pseudoName];
                         let errorMessage = `Unknown pseudo-class: "${pseudoName}"`;
-                        
+
                         if (locations && locations.length > 0) {
                             errorMessage += `. It is defined in: ${locations.join(', ')}`;
                         }
-                        
+
                         fail(errorMessage + '.');
                     }
 

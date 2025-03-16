@@ -1,10 +1,10 @@
 import {createParser, ast} from './import.js';
 
-describe('CSS Features', () => {
+describe('CSS Modules', () => {
     describe('css-position-3', () => {
-        it('should parse position pseudo-classes when feature is enabled', () => {
+        it('should parse position pseudo-classes when module is enabled', () => {
             const parse = createParser({
-                features: ['css-position-3']
+                modules: ['css-position-3']
             });
             
             expect(parse(':sticky')).toEqual(
@@ -38,7 +38,7 @@ describe('CSS Features', () => {
             );
         });
         
-        it('should reject position pseudo-classes when feature is not enabled', () => {
+        it('should reject position pseudo-classes when module is not enabled', () => {
             const parse = createParser({
                 syntax: {
                     pseudoClasses: {
@@ -178,10 +178,10 @@ describe('CSS Features', () => {
         });
     });
     
-    describe('Multiple features', () => {
-        it('should support multiple features at once', () => {
+    describe('Multiple modules', () => {
+        it('should support multiple modules at once', () => {
             const parse = createParser({
-                features: ['css-position-3', 'css-scoping-1']
+                modules: ['css-position-3', 'css-scoping-1']
             });
             
             // Position pseudo-class

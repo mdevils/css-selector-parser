@@ -406,14 +406,14 @@ export const cssSyntaxDefinitions: Record<CssLevel, SyntaxDefinition> = {
 };
 
 /**
- * CSS Feature modules with their syntax definitions.
- * These can be used to extend the parser with specific CSS features.
+ * CSS Modules with their syntax definitions.
+ * These can be used to extend the parser with specific CSS modules.
  *
  * @example
- * // Using the css-position-3 feature
- * createParser({ features: ['css-position-3'] })
+ * // Using the css-position-3 module
+ * createParser({ modules: ['css-position-3'] })
  */
-export const cssFeatures = {
+export const cssModules = {
     'css-position-3': {
         pseudoClasses: {
             definitions: {
@@ -442,8 +442,8 @@ export const cssFeatures = {
 } satisfies Record<string, SyntaxDefinition>;
 
 /**
- * CSS Feature module name.
+ * CSS Module name.
  * @example 'css-position-3'
  * @example 'css-scoping-1'
  */
-export type CssFeature = keyof typeof cssFeatures;
+export type CssModule = keyof typeof cssModules;

@@ -77,26 +77,26 @@ export function createParser(
          */
         strict?: boolean;
         /**
-         * Additional CSS features to include in the syntax definition.
+         * Additional CSS modules to include in the syntax definition.
          * These are specific CSS modules that add new selectors or modify existing ones.
          * @example ['css-position-3', 'css-scoping-1']
          */
-        features?: CssFeature[];
+        modules?: CssModule[];
     } = {}
 ): Parser {
-    const {syntax = 'latest', substitutes, strict = true, features} = options;
+    const {syntax = 'latest', substitutes, strict = true, modules} = options;
     let syntaxDefinition: SyntaxDefinition = typeof syntax === 'object' ? syntax : cssSyntaxDefinitions[syntax];
 
     if (syntaxDefinition.baseSyntax) {
         syntaxDefinition = extendSyntaxDefinition(cssSyntaxDefinitions[syntaxDefinition.baseSyntax], syntaxDefinition);
     }
 
-    // Apply additional features if specified
-    if (features && features.length > 0) {
-        for (const feature of features) {
-            const featureSyntax = cssFeatures[feature];
-            if (featureSyntax) {
-                syntaxDefinition = extendSyntaxDefinition(syntaxDefinition, featureSyntax);
+    // Apply additional modules if specified
+    if (modules && modules.length > 0) {
+        for (const module of modules) {
+            const moduleSyntax = cssModules[module];
+            if (moduleSyntax) {
+                syntaxDefinition = extendSyntaxDefinition(syntaxDefinition, moduleSyntax);
             }
         }
     }

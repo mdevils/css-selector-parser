@@ -5,13 +5,6 @@ export type PseudoElementType = Exclude<'NoArgument' | AstPseudoElementArgument[
 export type CssLevel = 'css1' | 'css2' | 'css3' | 'selectors-3' | 'selectors-4' | 'latest' | 'progressive';
 
 /**
- * CSS Feature module name.
- * @example 'css-position-3'
- * @example 'css-scoping-1'
- */
-export type CssFeature = string;
-
-/**
  * CSS Selector Syntax Definition can be used to define custom CSS selector parsing rules.
  */
 export interface SyntaxDefinition {
@@ -415,12 +408,12 @@ export const cssSyntaxDefinitions: Record<CssLevel, SyntaxDefinition> = {
 /**
  * CSS Feature modules with their syntax definitions.
  * These can be used to extend the parser with specific CSS features.
- * 
+ *
  * @example
  * // Using the css-position-3 feature
  * createParser({ features: ['css-position-3'] })
  */
-export const cssFeatures: Record<string, SyntaxDefinition> = {
+export const cssFeatures = {
     'css-position-3': {
         pseudoClasses: {
             definitions: {
@@ -446,4 +439,11 @@ export const cssFeatures: Record<string, SyntaxDefinition> = {
             definitions: ['slotted']
         }
     }
-};
+} satisfies Record<string, SyntaxDefinition>;
+
+/**
+ * CSS Feature module name.
+ * @example 'css-position-3'
+ * @example 'css-scoping-1'
+ */
+export type CssFeature = keyof typeof cssFeatures;

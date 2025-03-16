@@ -90,7 +90,7 @@ export function createParser(
     if (syntaxDefinition.baseSyntax) {
         syntaxDefinition = extendSyntaxDefinition(cssSyntaxDefinitions[syntaxDefinition.baseSyntax], syntaxDefinition);
     }
-    
+
     // Apply additional features if specified
     if (features && features.length > 0) {
         for (const feature of features) {

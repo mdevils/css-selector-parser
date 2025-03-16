@@ -23,13 +23,13 @@ import {
     PseudoSignature
 } from './pseudo-signatures.js';
 import {
-    CssFeature,
     CssLevel,
-    cssFeatures,
     cssSyntaxDefinitions,
     extendSyntaxDefinition,
     getXmlOptions,
-    SyntaxDefinition
+    SyntaxDefinition,
+    CssModule,
+    cssModules
 } from './syntax-definitions.js';
 import {digitsChars, isHex, isIdent, isIdentStart, maxHexLength, quoteChars, whitespaceChars} from './utils.js';
 

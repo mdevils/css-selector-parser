@@ -19,3 +19,5 @@ All the imports include ".js" file extension because of the new ES module resolu
 We write code for better performance, but not at the cost of readability.
 
 We write self-explanatory variable names and comments in English.
+
+We don't keep trailing spaces.

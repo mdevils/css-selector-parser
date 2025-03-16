@@ -14,6 +14,12 @@ export interface SyntaxDefinition {
      */
     baseSyntax?: CssLevel;
     /**
+     * Additional CSS modules to include in the syntax definition.
+     * These are specific CSS modules that add new selectors or modify existing ones.
+     * @example ['css-position-4', 'css-scoping-1']
+     */
+    modules?: CssModule[];
+    /**
      * CSS Tag (type).
      * @example div
      * @see https://developer.mozilla.org/en-US/docs/Learn/CSS/Building_blocks/Selectors/Type_Class_and_ID_Selectors
@@ -243,6 +249,7 @@ function mergeDefinitions<T>(
 export const extendSyntaxDefinition: MergeMethod<SyntaxDefinition> = withNoNegative(
     mergeSection<SyntaxDefinition>({
         baseSyntax: replaceValueIfSpecified,
+        modules: concatArray,
         tag: withPositive(
             defaultXmlOptions,
             mergeSection({
@@ -398,7 +405,14 @@ const selectors4SyntaxDefinition = extendSyntaxDefinition(selectors3SyntaxDefini
             NoArgument: ['marker'],
             Selector: ['part']
         }
-    }
+    },
+    // Include all the latest modules
+    modules: [
+        'css-position-4',
+        'css-scoping-1',
+        'css-pseudo-4',
+        'css-shadow-parts-1'
+    ]
 });
 
 const progressiveSyntaxDefinition = extendSyntaxDefinition(selectors4SyntaxDefinition, {

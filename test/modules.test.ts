@@ -600,4 +600,117 @@ describe('CSS Modules', () => {
             );
         });
     });
+    
+    describe('Syntax definition with modules', () => {
+        it('should support modules defined in syntax definition', () => {
+            const parse = createParser({
+                syntax: {
+                    pseudoClasses: {
+                        unknown: 'reject'
+                    },
+                    pseudoElements: {
+                        unknown: 'reject'
+                    },
+                    modules: ['css-position-4', 'css-shadow-parts-1']
+                }
+            });
+            
+            // Should parse position-4 pseudo-classes
+            expect(parse(':initial')).toEqual(
+                ast.selector({
+                    rules: [
+                        ast.rule({
+                            items: [ast.pseudoClass({name: 'initial'})]
+                        })
+                    ]
+                })
+            );
+            
+            // Should parse shadow-parts-1 pseudo-elements
+            expect(parse('::part(button)')).toEqual(
+                ast.selector({
+                    rules: [
+                        ast.rule({
+                            items: [
+                                ast.pseudoElement({
+                                    name: 'part',
+                                    argument: ast.selector({
+                                        rules: [
+                                            ast.rule({
+                                                items: [ast.tagName({name: 'button'})]
+                                            })
+                                        ]
+                                    })
+                                })
+                            ]
+                        })
+                    ]
+                })
+            );
+            
+            // Should reject pseudo-classes not in the modules
+            expect(() => parse(':focus-visible')).toThrow('Unknown pseudo-class: "focus-visible".');
+        });
+        
+        it('should support latest syntax with all latest modules', () => {
+            const parse = createParser({
+                syntax: 'latest'
+            });
+            
+            // Should parse position-4 pseudo-classes
+            expect(parse(':initial')).toEqual(
+                ast.selector({
+                    rules: [
+                        ast.rule({
+                            items: [ast.pseudoClass({name: 'initial'})]
+                        })
+                    ]
+                })
+            );
+            
+            // Should parse shadow-parts-1 pseudo-elements
+            expect(parse('::part(button)')).toEqual(
+                ast.selector({
+                    rules: [
+                        ast.rule({
+                            items: [
+                                ast.pseudoElement({
+                                    name: 'part',
+                                    argument: ast.selector({
+                                        rules: [
+                                            ast.rule({
+                                                items: [ast.tagName({name: 'button'})]
+                                            })
+                                        ]
+                                    })
+                                })
+                            ]
+                        })
+                    ]
+                })
+            );
+            
+            // Should parse pseudo-4 pseudo-elements
+            expect(parse('::marker')).toEqual(
+                ast.selector({
+                    rules: [
+                        ast.rule({
+                            items: [ast.pseudoElement({name: 'marker'})]
+                        })
+                    ]
+                })
+            );
+            
+            // Should parse scoping-1 pseudo-classes
+            expect(parse(':host')).toEqual(
+                ast.selector({
+                    rules: [
+                        ast.rule({
+                            items: [ast.pseudoClass({name: 'host'})]
+                        })
+                    ]
+                })
+            );
+        });
+    });
 });

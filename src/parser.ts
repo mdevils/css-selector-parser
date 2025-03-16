@@ -91,9 +91,19 @@ export function createParser(
         syntaxDefinition = extendSyntaxDefinition(cssSyntaxDefinitions[syntaxDefinition.baseSyntax], syntaxDefinition);
     }
 
-    // Apply additional modules if specified
+    // Apply additional modules if specified from options
     if (modules && modules.length > 0) {
         for (const module of modules) {
+            const moduleSyntax = cssModules[module];
+            if (moduleSyntax) {
+                syntaxDefinition = extendSyntaxDefinition(syntaxDefinition, moduleSyntax);
+            }
+        }
+    }
+    
+    // Apply modules from syntax definition
+    if (syntaxDefinition.modules && syntaxDefinition.modules.length > 0) {
+        for (const module of syntaxDefinition.modules) {
             const moduleSyntax = cssModules[module];
             if (moduleSyntax) {
                 syntaxDefinition = extendSyntaxDefinition(syntaxDefinition, moduleSyntax);

@@ -2,6 +2,28 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.1.0](https://github.com/mdevils/css-selector-parser/compare/v3.0.5...v3.1.0) (2025-03-16)
+
+
+### Features
+
+* Add "css-pseudo-4" CSS Module with new pseudo-classes and pseudo-elements ([16c1bb1](https://github.com/mdevils/css-selector-parser/commit/16c1bb1b54a2ae5f31e44b7acbb109739efae2ac))
+* Add "modules" property to SyntaxDefinition and include latest CSS modules ([cd56683](https://github.com/mdevils/css-selector-parser/commit/cd566833006c50cb506249e1ac3ebea8b6783a97))
+* Add comprehensive tests for CSS features option ([74137f0](https://github.com/mdevils/css-selector-parser/commit/74137f0900111a973c696772d3aee91f93b164a2))
+* Add CSS modules tests for position, scoping, and multiple module support ([4cd3ecd](https://github.com/mdevils/css-selector-parser/commit/4cd3ecd34e85942bcebddff47987933bf952fe11))
+* Add css-position-1 and css-position-2 modules with tests ([59b1161](https://github.com/mdevils/css-selector-parser/commit/59b11612a92a3c926b8e48a2df0afea42aaa2d77))
+* Add location information to pseudo-class and pseudo-element error messages ([bafafe9](https://github.com/mdevils/css-selector-parser/commit/bafafe916a19371afe8ddd061fd3d6d24eac7c5e))
+* Add Selectors Level 4 experimental features and syntax definitions ([9cda2ca](https://github.com/mdevils/css-selector-parser/commit/9cda2ca7cc188a27eea99391b34cfde91badeca8))
+* Add support for CSS feature modules in parser configuration ([42ba90e](https://github.com/mdevils/css-selector-parser/commit/42ba90e8f13067ff776349137070562f41cbbcfd))
+* Add support for CSS Shadow Parts module with ::part() pseudo-element ([6dbe132](https://github.com/mdevils/css-selector-parser/commit/6dbe1320cc4c06e038188b7a18497bac6ecc48a7))
+* in case of undefined pseudos, show in which css level / module it is defined ([894053a](https://github.com/mdevils/css-selector-parser/commit/894053aedd40b7feea67778956f261572b0544c5))
+* latest should include all latest modules ([6d7a116](https://github.com/mdevils/css-selector-parser/commit/6d7a116d8153796b6426cf6e948581aaed03e86a))
+
+
+### Bug Fixes
+
+* imports ([1422594](https://github.com/mdevils/css-selector-parser/commit/14225949d3aff66f8ba872de662d2da34265fb90))
+
 ### [3.0.5](https://github.com/mdevils/css-selector-parser/compare/v3.0.4...v3.0.5) (2024-03-02)
 
 

@@ -187,6 +187,9 @@ function mergeSection<T>(values: {[K in keyof T]-?: MergeMethod<T[K]>}): MergeMe
         }
         const result = {...base};
         for (const [key, value] of Object.entries(extension) as [keyof T, T[keyof T]][]) {
+            if (key === 'latest') {
+                continue;
+            }
             const mergeSchema = values[key];
             result[key] = mergeSchema(base[key], value) as never;
         }
@@ -393,7 +396,6 @@ const selectors4SyntaxDefinition = extendSyntaxDefinition(selectors3SyntaxDefini
     pseudoElements: {
         definitions: {
             NoArgument: ['marker'],
-            String: ['highlight', 'cue'],
             Selector: ['part']
         }
     }
@@ -452,6 +454,7 @@ export const cssModules = {
         }
     },
     'css-position-4': {
+        latest: true,
         pseudoClasses: {
             definitions: {
                 NoArgument: ['sticky', 'fixed', 'absolute', 'relative', 'static', 'initial']
@@ -459,6 +462,7 @@ export const cssModules = {
         }
     },
     'css-scoping-1': {
+        latest: true,
         pseudoClasses: {
             definitions: {
                 NoArgument: ['host', 'host-context'],
@@ -472,35 +476,28 @@ export const cssModules = {
         }
     },
     'css-pseudo-4': {
-        pseudoClasses: {
-            definitions: {
-                NoArgument: [
-                    'focus-visible',
-                    'focus-within',
-                    'target-within',
-                    'blank',
-                    'user-invalid',
-                    'user-valid'
-                ],
-                Selector: ['has', 'is', 'where', 'not']
-            }
-        },
+        latest: true,
         pseudoElements: {
             definitions: {
                 NoArgument: [
                     'marker',
                     'selection',
                     'target-text',
+                    'search-text',
                     'spelling-error',
                     'grammar-error',
-                    'backdrop'
+                    'backdrop',
+                    'file-selector-button',
+                    'prefix',
+                    'postfix',
+                    'placeholder',
+                    'details-content'
                 ],
-                String: ['highlight', 'cue'],
-                Selector: ['part']
+                String: ['highlight']
             }
         }
     }
-} satisfies Record<string, SyntaxDefinition>;
+} satisfies Record<string, SyntaxDefinition & {latest?: true}>;
 
 /**
  * CSS Module name.

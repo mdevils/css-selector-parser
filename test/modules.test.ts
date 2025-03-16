@@ -264,7 +264,7 @@ describe('CSS Modules', () => {
             const parse = createParser({
                 modules: ['css-pseudo-4']
             });
-            
+
             // Simple pseudo-classes
             expect(parse(':focus-visible')).toEqual(
                 ast.selector({
@@ -275,7 +275,7 @@ describe('CSS Modules', () => {
                     ]
                 })
             );
-            
+
             expect(parse(':blank')).toEqual(
                 ast.selector({
                     rules: [
@@ -285,7 +285,7 @@ describe('CSS Modules', () => {
                     ]
                 })
             );
-            
+
             // Functional pseudo-classes
             expect(parse(':has(> img)')).toEqual(
                 ast.selector({
@@ -308,7 +308,7 @@ describe('CSS Modules', () => {
                     ]
                 })
             );
-            
+
             expect(parse(':is(h1, h2, h3)')).toEqual(
                 ast.selector({
                     rules: [
@@ -336,12 +336,12 @@ describe('CSS Modules', () => {
                 })
             );
         });
-        
+
         it('should parse pseudo-4 pseudo-elements', () => {
             const parse = createParser({
                 modules: ['css-pseudo-4']
             });
-            
+
             // Simple pseudo-elements
             expect(parse('::marker')).toEqual(
                 ast.selector({
@@ -352,7 +352,7 @@ describe('CSS Modules', () => {
                     ]
                 })
             );
-            
+
             expect(parse('::selection')).toEqual(
                 ast.selector({
                     rules: [
@@ -362,7 +362,7 @@ describe('CSS Modules', () => {
                     ]
                 })
             );
-            
+
             expect(parse('::target-text')).toEqual(
                 ast.selector({
                     rules: [
@@ -372,7 +372,7 @@ describe('CSS Modules', () => {
                     ]
                 })
             );
-            
+
             // String argument pseudo-elements
             expect(parse('::highlight(example)')).toEqual(
                 ast.selector({
@@ -388,7 +388,7 @@ describe('CSS Modules', () => {
                     ]
                 })
             );
-            
+
             // Selector argument pseudo-elements
             expect(parse('::part(button)')).toEqual(
                 ast.selector({
@@ -411,7 +411,7 @@ describe('CSS Modules', () => {
                 })
             );
         });
-        
+
         it('should reject pseudo-4 selectors when module is not enabled', () => {
             const parse = createParser({
                 syntax: {
@@ -423,7 +423,7 @@ describe('CSS Modules', () => {
                     }
                 }
             });
-            
+
             expect(() => parse(':focus-visible')).toThrow('Unknown pseudo-class: "focus-visible".');
             expect(() => parse(':has(> img)')).toThrow('Unknown pseudo-class: "has".');
             expect(() => parse('::marker')).toThrow('Unknown pseudo-element "marker".');
@@ -481,12 +481,12 @@ describe('CSS Modules', () => {
                 })
             );
         });
-        
+
         it('should support combining css-position and css-pseudo modules', () => {
             const parse = createParser({
                 modules: ['css-position-3', 'css-pseudo-4']
             });
-            
+
             // Position pseudo-class
             expect(parse(':sticky')).toEqual(
                 ast.selector({
@@ -497,18 +497,7 @@ describe('CSS Modules', () => {
                     ]
                 })
             );
-            
-            // Pseudo-4 pseudo-class
-            expect(parse(':focus-visible')).toEqual(
-                ast.selector({
-                    rules: [
-                        ast.rule({
-                            items: [ast.pseudoClass({name: 'focus-visible'})]
-                        })
-                    ]
-                })
-            );
-            
+
             // Pseudo-4 pseudo-element
             expect(parse('::marker')).toEqual(
                 ast.selector({
@@ -519,7 +508,7 @@ describe('CSS Modules', () => {
                     ]
                 })
             );
-            
+
             // Complex selector using both modules
             expect(parse('div:sticky:has(> img::marker)')).toEqual(
                 ast.selector({

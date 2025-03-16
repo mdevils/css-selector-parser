@@ -470,6 +470,35 @@ export const cssModules = {
                 Selector: ['slotted']
             }
         }
+    },
+    'css-pseudo-4': {
+        pseudoClasses: {
+            definitions: {
+                NoArgument: [
+                    'focus-visible',
+                    'focus-within',
+                    'target-within',
+                    'blank',
+                    'user-invalid',
+                    'user-valid'
+                ],
+                Selector: ['has', 'is', 'where', 'not']
+            }
+        },
+        pseudoElements: {
+            definitions: {
+                NoArgument: [
+                    'marker',
+                    'selection',
+                    'target-text',
+                    'spelling-error',
+                    'grammar-error',
+                    'backdrop'
+                ],
+                String: ['highlight', 'cue'],
+                Selector: ['part']
+            }
+        }
     }
 } satisfies Record<string, SyntaxDefinition>;
 

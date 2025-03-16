@@ -259,6 +259,178 @@ describe('CSS Modules', () => {
         });
     });
 
+    describe('css-pseudo-4', () => {
+        it('should parse pseudo-4 pseudo-classes', () => {
+            const parse = createParser({
+                modules: ['css-pseudo-4']
+            });
+            
+            // Simple pseudo-classes
+            expect(parse(':focus-visible')).toEqual(
+                ast.selector({
+                    rules: [
+                        ast.rule({
+                            items: [ast.pseudoClass({name: 'focus-visible'})]
+                        })
+                    ]
+                })
+            );
+            
+            expect(parse(':blank')).toEqual(
+                ast.selector({
+                    rules: [
+                        ast.rule({
+                            items: [ast.pseudoClass({name: 'blank'})]
+                        })
+                    ]
+                })
+            );
+            
+            // Functional pseudo-classes
+            expect(parse(':has(> img)')).toEqual(
+                ast.selector({
+                    rules: [
+                        ast.rule({
+                            items: [
+                                ast.pseudoClass({
+                                    name: 'has',
+                                    argument: ast.selector({
+                                        rules: [
+                                            ast.rule({
+                                                items: [ast.tagName({name: 'img'})],
+                                                combinator: '>'
+                                            })
+                                        ]
+                                    })
+                                })
+                            ]
+                        })
+                    ]
+                })
+            );
+            
+            expect(parse(':is(h1, h2, h3)')).toEqual(
+                ast.selector({
+                    rules: [
+                        ast.rule({
+                            items: [
+                                ast.pseudoClass({
+                                    name: 'is',
+                                    argument: ast.selector({
+                                        rules: [
+                                            ast.rule({
+                                                items: [ast.tagName({name: 'h1'})]
+                                            }),
+                                            ast.rule({
+                                                items: [ast.tagName({name: 'h2'})]
+                                            }),
+                                            ast.rule({
+                                                items: [ast.tagName({name: 'h3'})]
+                                            })
+                                        ]
+                                    })
+                                })
+                            ]
+                        })
+                    ]
+                })
+            );
+        });
+        
+        it('should parse pseudo-4 pseudo-elements', () => {
+            const parse = createParser({
+                modules: ['css-pseudo-4']
+            });
+            
+            // Simple pseudo-elements
+            expect(parse('::marker')).toEqual(
+                ast.selector({
+                    rules: [
+                        ast.rule({
+                            items: [ast.pseudoElement({name: 'marker'})]
+                        })
+                    ]
+                })
+            );
+            
+            expect(parse('::selection')).toEqual(
+                ast.selector({
+                    rules: [
+                        ast.rule({
+                            items: [ast.pseudoElement({name: 'selection'})]
+                        })
+                    ]
+                })
+            );
+            
+            expect(parse('::target-text')).toEqual(
+                ast.selector({
+                    rules: [
+                        ast.rule({
+                            items: [ast.pseudoElement({name: 'target-text'})]
+                        })
+                    ]
+                })
+            );
+            
+            // String argument pseudo-elements
+            expect(parse('::highlight(example)')).toEqual(
+                ast.selector({
+                    rules: [
+                        ast.rule({
+                            items: [
+                                ast.pseudoElement({
+                                    name: 'highlight',
+                                    argument: ast.string({value: 'example'})
+                                })
+                            ]
+                        })
+                    ]
+                })
+            );
+            
+            // Selector argument pseudo-elements
+            expect(parse('::part(button)')).toEqual(
+                ast.selector({
+                    rules: [
+                        ast.rule({
+                            items: [
+                                ast.pseudoElement({
+                                    name: 'part',
+                                    argument: ast.selector({
+                                        rules: [
+                                            ast.rule({
+                                                items: [ast.tagName({name: 'button'})]
+                                            })
+                                        ]
+                                    })
+                                })
+                            ]
+                        })
+                    ]
+                })
+            );
+        });
+        
+        it('should reject pseudo-4 selectors when module is not enabled', () => {
+            const parse = createParser({
+                syntax: {
+                    pseudoClasses: {
+                        unknown: 'reject'
+                    },
+                    pseudoElements: {
+                        unknown: 'reject'
+                    }
+                }
+            });
+            
+            expect(() => parse(':focus-visible')).toThrow('Unknown pseudo-class: "focus-visible".');
+            expect(() => parse(':has(> img)')).toThrow('Unknown pseudo-class: "has".');
+            expect(() => parse('::marker')).toThrow('Unknown pseudo-element "marker".');
+            expect(() => parse('::highlight(example)')).toThrow('Unknown pseudo-element "highlight".');
+        });
+    });
+
     describe('Multiple modules', () => {
         it('should support multiple modules at once', () => {
             const parse = createParser({
@@ -299,6 +471,73 @@ describe('CSS Modules', () => {
                                         rules: [
                                             ast.rule({
                                                 items: [ast.tagName({name: 'span'})]
+                                            })
+                                        ]
+                                    })
+                                })
+                            ]
+                        })
+                    ]
+                })
+            );
+        });
+        
+        it('should support combining css-position and css-pseudo modules', () => {
+            const parse = createParser({
+                modules: ['css-position-3', 'css-pseudo-4']
+            });
+            
+            // Position pseudo-class
+            expect(parse(':sticky')).toEqual(
+                ast.selector({
+                    rules: [
+                        ast.rule({
+                            items: [ast.pseudoClass({name: 'sticky'})]
+                        })
+                    ]
+                })
+            );
+            
+            // Pseudo-4 pseudo-class
+            expect(parse(':focus-visible')).toEqual(
+                ast.selector({
+                    rules: [
+                        ast.rule({
+                            items: [ast.pseudoClass({name: 'focus-visible'})]
+                        })
+                    ]
+                })
+            );
+            
+            // Pseudo-4 pseudo-element
+            expect(parse('::marker')).toEqual(
+                ast.selector({
+                    rules: [
+                        ast.rule({
+                            items: [ast.pseudoElement({name: 'marker'})]
+                        })
+                    ]
+                })
+            );
+            
+            // Complex selector using both modules
+            expect(parse('div:sticky:has(> img::marker)')).toEqual(
+                ast.selector({
+                    rules: [
+                        ast.rule({
+                            items: [
+                                ast.tagName({name: 'div'}),
+                                ast.pseudoClass({name: 'sticky'}),
+                                ast.pseudoClass({
+                                    name: 'has',
+                                    argument: ast.selector({
+                                        rules: [
+                                            ast.rule({
+                                                items: [
+                                                    ast.tagName({name: 'img'}),
+                                                    ast.pseudoElement({name: 'marker'})
+                                                ],
+                                                combinator: '>'
                                             })
                                         ]
                                     })

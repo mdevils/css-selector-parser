@@ -373,12 +373,28 @@ const selectors4SyntaxDefinition = extendSyntaxDefinition(selectors3SyntaxDefini
                 'required',
                 'optional',
                 'blank',
-                'user-invalid'
+                'user-invalid',
+                'playing',
+                'paused',
+                'autofill',
+                'modal',
+                'fullscreen',
+                'picture-in-picture',
+                'defined',
+                'loading',
+                'popover-open'
             ],
             Formula: ['nth-col', 'nth-last-col'],
             String: ['dir'],
             FormulaOfSelector: ['nth-child', 'nth-last-child'],
-            Selector: ['current', 'is', 'where', 'has']
+            Selector: ['current', 'is', 'where', 'has', 'state']
+        }
+    },
+    pseudoElements: {
+        definitions: {
+            NoArgument: ['marker'],
+            String: ['highlight', 'cue'],
+            Selector: ['part']
         }
     }
 });

@@ -496,6 +496,14 @@ export const cssModules = {
                 String: ['highlight']
             }
         }
+    },
+    'css-shadow-parts-1': {
+        latest: true,
+        pseudoElements: {
+            definitions: {
+                Selector: ['part']
+            }
+        }
     }
 } satisfies Record<string, SyntaxDefinition & {latest?: true}>;
 

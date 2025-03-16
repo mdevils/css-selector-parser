@@ -431,6 +431,68 @@ describe('CSS Modules', () => {
         });
     });
 
+    describe('css-shadow-parts-1', () => {
+        it('should parse ::part pseudo-element', () => {
+            const parse = createParser({
+                modules: ['css-shadow-parts-1']
+            });
+
+            expect(parse('::part(button)')).toEqual(
+                ast.selector({
+                    rules: [
+                        ast.rule({
+                            items: [
+                                ast.pseudoElement({
+                                    name: 'part',
+                                    argument: ast.selector({
+                                        rules: [
+                                            ast.rule({
+                                                items: [ast.tagName({name: 'button'})]
+                                            })
+                                        ]
+                                    })
+                                })
+                            ]
+                        })
+                    ]
+                })
+            );
+
+            expect(parse('::part(button-primary)')).toEqual(
+                ast.selector({
+                    rules: [
+                        ast.rule({
+                            items: [
+                                ast.pseudoElement({
+                                    name: 'part',
+                                    argument: ast.selector({
+                                        rules: [
+                                            ast.rule({
+                                                items: [ast.tagName({name: 'button-primary'})]
+                                            })
+                                        ]
+                                    })
+                                })
+                            ]
+                        })
+                    ]
+                })
+            );
+        });
+
+        it('should reject ::part when module is not enabled', () => {
+            const parse = createParser({
+                syntax: {
+                    pseudoElements: {
+                        unknown: 'reject'
+                    }
+                }
+            });
+
+            expect(() => parse('::part(button)')).toThrow('Unknown pseudo-element "part".');
+        });
+    });
+
     describe('Multiple modules', () => {
         it('should support multiple modules at once', () => {
             const parse = createParser({

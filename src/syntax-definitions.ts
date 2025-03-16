@@ -414,6 +414,20 @@ export const cssSyntaxDefinitions: Record<CssLevel, SyntaxDefinition> = {
  * createParser({ modules: ['css-position-3'] })
  */
 export const cssModules = {
+    'css-position-1': {
+        pseudoClasses: {
+            definitions: {
+                NoArgument: ['static', 'relative', 'absolute']
+            }
+        }
+    },
+    'css-position-2': {
+        pseudoClasses: {
+            definitions: {
+                NoArgument: ['static', 'relative', 'absolute', 'fixed']
+            }
+        }
+    },
     'css-position-3': {
         pseudoClasses: {
             definitions: {

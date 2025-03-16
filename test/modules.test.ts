@@ -1,6 +1,87 @@
 import {createParser, ast} from './import.js';
 
 describe('CSS Modules', () => {
+    describe('css-position-1', () => {
+        it('should parse position-1 pseudo-classes when module is enabled', () => {
+            const parse = createParser({
+                modules: ['css-position-1']
+            });
+            
+            expect(parse(':static')).toEqual(
+                ast.selector({
+                    rules: [
+                        ast.rule({
+                            items: [ast.pseudoClass({name: 'static'})]
+                        })
+                    ]
+                })
+            );
+            
+            expect(parse(':relative')).toEqual(
+                ast.selector({
+                    rules: [
+                        ast.rule({
+                            items: [ast.pseudoClass({name: 'relative'})]
+                        })
+                    ]
+                })
+            );
+            
+            expect(parse(':absolute')).toEqual(
+                ast.selector({
+                    rules: [
+                        ast.rule({
+                            items: [ast.pseudoClass({name: 'absolute'})]
+                        })
+                    ]
+                })
+            );
+            
+            // Should reject fixed as it's not in position-1
+            const strictParse = createParser({
+                modules: ['css-position-1'],
+                syntax: {
+                    pseudoClasses: {
+                        unknown: 'reject'
+                    }
+                }
+            });
+            
+            expect(() => strictParse(':fixed')).toThrow('Unknown pseudo-class: "fixed".');
+        });
+    });
+    
+    describe('css-position-2', () => {
+        it('should parse position-2 pseudo-classes when module is enabled', () => {
+            const parse = createParser({
+                modules: ['css-position-2']
+            });
+            
+            // Position-2 adds fixed
+            expect(parse(':fixed')).toEqual(
+                ast.selector({
+                    rules: [
+                        ast.rule({
+                            items: [ast.pseudoClass({name: 'fixed'})]
+                        })
+                    ]
+                })
+            );
+            
+            // Should reject sticky as it's not in position-2
+            const strictParse = createParser({
+                modules: ['css-position-2'],
+                syntax: {
+                    pseudoClasses: {
+                        unknown: 'reject'
+                    }
+                }
+            });
+            
+            expect(() => strictParse(':sticky')).toThrow('Unknown pseudo-class: "sticky".');
+        });
+    });
+    
     describe('css-position-3', () => {
         it('should parse position pseudo-classes when module is enabled', () => {
             const parse = createParser({

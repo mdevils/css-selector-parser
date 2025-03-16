@@ -600,11 +600,12 @@ describe('CSS Modules', () => {
             );
         });
     });
-    
+
     describe('Syntax definition with modules', () => {
         it('should support modules defined in syntax definition', () => {
             const parse = createParser({
                 syntax: {
+                    baseSyntax: 'selectors-3',
                     pseudoClasses: {
                         unknown: 'reject'
                     },
@@ -614,7 +615,7 @@ describe('CSS Modules', () => {
                     modules: ['css-position-4', 'css-shadow-parts-1']
                 }
             });
-            
+
             // Should parse position-4 pseudo-classes
             expect(parse(':initial')).toEqual(
                 ast.selector({
@@ -625,7 +626,7 @@ describe('CSS Modules', () => {
                     ]
                 })
             );
-            
+
             // Should parse shadow-parts-1 pseudo-elements
             expect(parse('::part(button)')).toEqual(
                 ast.selector({
@@ -647,16 +648,16 @@ describe('CSS Modules', () => {
                     ]
                 })
             );
-            
+
             // Should reject pseudo-classes not in the modules
             expect(() => parse(':focus-visible')).toThrow('Unknown pseudo-class: "focus-visible".');
         });
-        
+
         it('should support latest syntax with all latest modules', () => {
             const parse = createParser({
                 syntax: 'latest'
             });
-            
+
             // Should parse position-4 pseudo-classes
             expect(parse(':initial')).toEqual(
                 ast.selector({
@@ -667,7 +668,7 @@ describe('CSS Modules', () => {
                     ]
                 })
             );
-            
+
             // Should parse shadow-parts-1 pseudo-elements
             expect(parse('::part(button)')).toEqual(
                 ast.selector({
@@ -689,7 +690,7 @@ describe('CSS Modules', () => {
                     ]
                 })
             );
-            
+
             // Should parse pseudo-4 pseudo-elements
             expect(parse('::marker')).toEqual(
                 ast.selector({
@@ -700,7 +701,7 @@ describe('CSS Modules', () => {
                     ]
                 })
             );
-            
+
             // Should parse scoping-1 pseudo-classes
             expect(parse(':host')).toEqual(
                 ast.selector({

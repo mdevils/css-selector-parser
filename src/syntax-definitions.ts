@@ -405,37 +405,8 @@ const selectors4SyntaxDefinition = extendSyntaxDefinition(selectors3SyntaxDefini
             NoArgument: ['marker'],
             Selector: ['part']
         }
-    },
-    // Include all the latest modules
-    modules: [
-        'css-position-4',
-        'css-scoping-1',
-        'css-pseudo-4',
-        'css-shadow-parts-1'
-    ]
-});
-
-const progressiveSyntaxDefinition = extendSyntaxDefinition(selectors4SyntaxDefinition, {
-    pseudoElements: {
-        unknown: 'accept'
-    },
-    pseudoClasses: {
-        unknown: 'accept'
-    },
-    attributes: {
-        unknownCaseSensitivityModifiers: 'accept'
     }
 });
-
-export const cssSyntaxDefinitions: Record<CssLevel, SyntaxDefinition> = {
-    css1: css1SyntaxDefinition,
-    css2: css2SyntaxDefinition,
-    css3: selectors3SyntaxDefinition,
-    'selectors-3': selectors3SyntaxDefinition,
-    'selectors-4': selectors4SyntaxDefinition,
-    latest: selectors4SyntaxDefinition,
-    progressive: progressiveSyntaxDefinition
-};
 
 /**
  * CSS Modules with their syntax definitions.
@@ -447,6 +418,7 @@ export const cssSyntaxDefinitions: Record<CssLevel, SyntaxDefinition> = {
  */
 export const cssModules = {
     'css-position-1': {
+        latest: false,
         pseudoClasses: {
             definitions: {
                 NoArgument: ['static', 'relative', 'absolute']
@@ -454,6 +426,7 @@ export const cssModules = {
         }
     },
     'css-position-2': {
+        latest: false,
         pseudoClasses: {
             definitions: {
                 NoArgument: ['static', 'relative', 'absolute', 'fixed']
@@ -461,6 +434,7 @@ export const cssModules = {
         }
     },
     'css-position-3': {
+        latest: false,
         pseudoClasses: {
             definitions: {
                 NoArgument: ['sticky', 'fixed', 'absolute', 'relative', 'static']
@@ -519,7 +493,7 @@ export const cssModules = {
             }
         }
     }
-} satisfies Record<string, SyntaxDefinition & {latest?: true}>;
+} satisfies Record<string, SyntaxDefinition & {latest?: boolean}>;
 
 /**
  * CSS Module name.
@@ -527,3 +501,32 @@ export const cssModules = {
  * @example 'css-scoping-1'
  */
 export type CssModule = keyof typeof cssModules;
+
+const latestSyntaxDefinition = {
+    ...selectors4SyntaxDefinition,
+    modules: (Object.entries(cssModules) as [CssModule, SyntaxDefinition & {latest?: boolean}][])
+        .filter(([, {latest}]) => latest)
+        .map(([name]) => name)
+};
+
+const progressiveSyntaxDefinition = extendSyntaxDefinition(latestSyntaxDefinition, {
+    pseudoElements: {
+        unknown: 'accept'
+    },
+    pseudoClasses: {
+        unknown: 'accept'
+    },
+    attributes: {
+        unknownCaseSensitivityModifiers: 'accept'
+    }
+});
+
+export const cssSyntaxDefinitions: Record<CssLevel, SyntaxDefinition> = {
+    css1: css1SyntaxDefinition,
+    css2: css2SyntaxDefinition,
+    css3: selectors3SyntaxDefinition,
+    'selectors-3': selectors3SyntaxDefinition,
+    'selectors-4': selectors4SyntaxDefinition,
+    latest: latestSyntaxDefinition,
+    progressive: progressiveSyntaxDefinition
+};

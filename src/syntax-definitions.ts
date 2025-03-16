@@ -436,7 +436,9 @@ export const cssModules = {
             }
         },
         pseudoElements: {
-            definitions: ['slotted']
+            definitions: {
+                Selector: ['slotted']
+            }
         }
     }
 } satisfies Record<string, SyntaxDefinition>;

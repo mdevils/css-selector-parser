@@ -402,8 +402,7 @@ const selectors4SyntaxDefinition = extendSyntaxDefinition(selectors3SyntaxDefini
     },
     pseudoElements: {
         definitions: {
-            NoArgument: ['marker'],
-            String: ['part']
+            NoArgument: ['marker']
         }
     }
 });

@@ -403,7 +403,7 @@ const selectors4SyntaxDefinition = extendSyntaxDefinition(selectors3SyntaxDefini
     pseudoElements: {
         definitions: {
             NoArgument: ['marker'],
-            Selector: ['part']
+            String: ['part']
         }
     }
 });
@@ -489,7 +489,7 @@ export const cssModules = {
         latest: true,
         pseudoElements: {
             definitions: {
-                Selector: ['part']
+                String: ['part']
             }
         }
     }

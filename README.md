@@ -1,40 +1,55 @@
-css-selector-parser
-===================
+# css-selector-parser
 
-* Fast and low memory CSS selector parser.
-* Parses CSS selector into object-model (AST).
-* Compliant with all historical and modern CSS specs.
-* Covered with tests.
-* Documented.
-* Supported CSS selector standards:
-    * `css1`: https://www.w3.org/TR/CSS1/
-    * `css2`: https://www.w3.org/TR/CSS2/
-    * `css3`/`selectors-3`: https://www.w3.org/TR/selectors-3/
-    * `selectors-4`: https://www.w3.org/TR/selectors-4/
-    * `latest`: refers to `selectors-4`
-    * `progressive`: `latest` + accepts unknown psudo-classes, psudo-elements and attribute case sensitivity modifiers
+![npm](https://img.shields.io/npm/v/css-selector-parser)
+![npm bundle size](https://img.shields.io/bundlephobia/minzip/css-selector-parser)
+![NPM License](https://img.shields.io/npm/l/css-selector-parser)
+![GitHub stars](https://img.shields.io/github/stars/mdevils/css-selector-parser)
 
-**Important:**
- * [Migrating from 1.x to 3.x](CHANGELOG.md#migrating-from-1x-to-3x).
- * [Migrating from 2.x to 3.x](CHANGELOG.md#migrating-from-2x-to-3x).
- * [Migrating from 1.x to 2.x](CHANGELOG.md#220).
+A high-performance CSS selector parser with advanced features for modern web development.
 
-Latest releases: [Changelog](CHANGELOG.md).
+## Features
 
-Installation
-------------
+- 🚀 **Fast and memory-efficient** parsing for all CSS selectors
+- 🌳 **AST-based** object model for programmatic manipulation
+- 📊 **Full compliance** with all CSS selector specifications
+- 🧪 **Comprehensive test coverage** 
+- 📚 **Well-documented API** with TypeScript support
+- 🔄 **Two-way conversion** between CSS selectors and AST
+- 🧩 **Modular support** for various CSS specifications
 
-```
+## Supported CSS Selector Standards
+
+- `css1`: [W3C CSS1 Specification](https://www.w3.org/TR/CSS1/)
+- `css2`: [W3C CSS2 Specification](https://www.w3.org/TR/CSS2/)
+- `css3`/`selectors-3`: [W3C Selectors Level 3](https://www.w3.org/TR/selectors-3/)
+- `selectors-4`: [W3C Selectors Level 4](https://www.w3.org/TR/selectors-4/)
+- `latest`: refers to `selectors-4`
+- `progressive`: `latest` + accepts unknown pseudo-classes, pseudo-elements and attribute case sensitivity modifiers
+
+## Migration Guides
+
+- [Migrating from 1.x to 3.x](CHANGELOG.md#migrating-from-1x-to-3x)
+- [Migrating from 2.x to 3.x](CHANGELOG.md#migrating-from-2x-to-3x)
+- [Migrating from 1.x to 2.x](CHANGELOG.md#220)
+
+See [Changelog](CHANGELOG.md) for release details.
+
+## Installation
+
+```bash
 npm install css-selector-parser
+# or
+yarn add css-selector-parser
+# or
+pnpm add css-selector-parser
 ```
 
-Usage
------
+## Usage
 
-### Parsing
+### Parsing Selectors
 
 ```javascript
-import {createParser} from 'css-selector-parser';
+import { createParser } from 'css-selector-parser';
 
 const parse = createParser();
 const selector = parse('a[href^="/"], .container:has(nav) > a[href]:nth-child(2)::before');
@@ -42,7 +57,7 @@ const selector = parse('a[href^="/"], .container:has(nav) > a[href]:nth-child(2)
 console.log(selector);
 ```
 
-Produces:
+This produces an AST (Abstract Syntax Tree) output:
 
 ```javascript
 ({
@@ -100,10 +115,10 @@ Produces:
 })
 ```
 
-### Constructing AST and rendering
+### Building and Rendering Selectors
 
 ```javascript
-import {ast, render} from 'css-selector-parser';
+import { ast, render } from 'css-selector-parser';
 
 const selector = ast.selector({
     rules: [
@@ -142,14 +157,12 @@ const selector = ast.selector({
 console.log(render(selector)); // a[href^="/"], .container:has(nav) > a[href]:nth-child(2)::before
 ```
 
-CSS Modules
------------
+## CSS Modules Support
 
-CSS Modules are specific CSS specifications that add new selectors or modify existing ones.
-The parser supports various CSS modules that can be included in your syntax definition:
+CSS Modules are specifications that add new selectors or modify existing ones. This parser supports various CSS modules that can be included in your syntax definition:
 
 ```javascript
-import {createParser} from 'css-selector-parser';
+import { createParser } from 'css-selector-parser';
 
 // Create a parser with specific CSS modules enabled
 const parse = createParser({
@@ -158,30 +171,36 @@ const parse = createParser({
 });
 ```
 
-Supported CSS modules:
+### Supported CSS Modules
 
-* `css-position-1`, `css-position-2`, `css-position-3`, `css-position-4`: Adds position-related pseudo-classes
-* `css-scoping-1`: Adds Shadow DOM selectors like `:host`, `:host-context()`, and `::slotted()`
-* `css-pseudo-4`: Adds modern pseudo-elements like `::selection`, `::backdrop`, etc.
-* `css-shadow-parts-1`: Adds `::part()` for styling shadow DOM components
+| Module | Description |
+|--------|-------------|
+| `css-position-1/2/3/4` | Position-related pseudo-classes |
+| `css-scoping-1` | Shadow DOM selectors (`:host`, `:host-context()`, `::slotted()`) |
+| `css-pseudo-4` | Modern pseudo-elements (`::selection`, `::backdrop`, etc.) |
+| `css-shadow-parts-1` | `::part()` for styling shadow DOM components |
 
 The `latest` syntax automatically includes all modules marked as current specifications.
 
-API
----
+## API Documentation
 
-* [Full API Documentation](docs/modules.md)
-* [Parsing CSS selectors](docs/modules.md#createParser)
-* [Constructing CSS AST](docs/modules.md#ast)
-* [Rendering CSS AST](docs/modules.md#render)
+- [Complete API Documentation](docs/modules.md)
+- [Parsing CSS Selectors](docs/modules.md#createParser)
+- [Constructing CSS AST](docs/modules.md#ast)
+- [Rendering CSS AST](docs/modules.md#render)
 
-LICENSE
--------
+## Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+## License
 
 MIT
 
-## Security contact information
+## Security Contact
 
-To report a security vulnerability, please use the
-[Tidelift security contact](https://tidelift.com/security).
-Tidelift will coordinate the fix and disclosure.
+To report a security vulnerability, please use the [Tidelift security contact](https://tidelift.com/security). Tidelift will coordinate the fix and disclosure.
+
+## Sponsorship
+
+If you find this project useful, please consider [sponsoring the developer](https://github.com/sponsors/mdevils) or [supporting on Patreon](https://patreon.com/mdevils).

@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [3.1.2](https://github.com/mdevils/css-selector-parser/compare/v3.1.1...v3.1.2) (2025-04-13)
+
+
+### Bug Fixes
+
+* improve documentation ([b127517](https://github.com/mdevils/css-selector-parser/commit/b127517d95111db22bbdbbb29fce9d6b2d0525b0))
+
 ### [3.1.1](https://github.com/mdevils/css-selector-parser/compare/v3.1.0...v3.1.1) (2025-03-16)
 
 ## [3.1.0](https://github.com/mdevils/css-selector-parser/compare/v3.0.5...v3.1.0) (2025-03-16)

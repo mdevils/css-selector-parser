@@ -397,13 +397,7 @@ describe('CSS Modules', () => {
                             items: [
                                 ast.pseudoElement({
                                     name: 'part',
-                                    argument: ast.selector({
-                                        rules: [
-                                            ast.rule({
-                                                items: [ast.tagName({name: 'button'})]
-                                            })
-                                        ]
-                                    })
+                                    argument: ast.string({value: 'button'})
                                 })
                             ]
                         })
@@ -444,13 +438,7 @@ describe('CSS Modules', () => {
                             items: [
                                 ast.pseudoElement({
                                     name: 'part',
-                                    argument: ast.selector({
-                                        rules: [
-                                            ast.rule({
-                                                items: [ast.tagName({name: 'button'})]
-                                            })
-                                        ]
-                                    })
+                                    argument: ast.string({value: 'button'})
                                 })
                             ]
                         })
@@ -465,13 +453,7 @@ describe('CSS Modules', () => {
                             items: [
                                 ast.pseudoElement({
                                     name: 'part',
-                                    argument: ast.selector({
-                                        rules: [
-                                            ast.rule({
-                                                items: [ast.tagName({name: 'button-primary'})]
-                                            })
-                                        ]
-                                    })
+                                    argument: ast.string({value: 'button-primary'})
                                 })
                             ]
                         })
@@ -635,13 +617,7 @@ describe('CSS Modules', () => {
                             items: [
                                 ast.pseudoElement({
                                     name: 'part',
-                                    argument: ast.selector({
-                                        rules: [
-                                            ast.rule({
-                                                items: [ast.tagName({name: 'button'})]
-                                            })
-                                        ]
-                                    })
+                                    argument: ast.string({value: 'button'})
                                 })
                             ]
                         })
@@ -677,13 +653,7 @@ describe('CSS Modules', () => {
                             items: [
                                 ast.pseudoElement({
                                     name: 'part',
-                                    argument: ast.selector({
-                                        rules: [
-                                            ast.rule({
-                                                items: [ast.tagName({name: 'button'})]
-                                            })
-                                        ]
-                                    })
+                                    argument: ast.string({value: 'button'})
                                 })
                             ]
                         })

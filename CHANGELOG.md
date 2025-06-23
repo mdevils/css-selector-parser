@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [3.1.3](https://github.com/mdevils/css-selector-parser/compare/v3.1.2...v3.1.3) (2025-06-23)
+
+
+### Bug Fixes
+
+* ::part() takes a string, not a selector ([db4dd40](https://github.com/mdevils/css-selector-parser/commit/db4dd402ba63715532e19c5ffebe7509e227ae4b))
+
 ### [3.1.2](https://github.com/mdevils/css-selector-parser/compare/v3.1.1...v3.1.2) (2025-04-13)
 
 

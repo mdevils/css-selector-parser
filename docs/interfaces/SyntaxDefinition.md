@@ -13,7 +13,9 @@ CSS Selector Syntax Definition can be used to define custom CSS selector parsing
 - [classNames](SyntaxDefinition.md#classnames)
 - [combinators](SyntaxDefinition.md#combinators)
 - [ids](SyntaxDefinition.md#ids)
+- [modules](SyntaxDefinition.md#modules)
 - [namespace](SyntaxDefinition.md#namespace)
+- [nestingSelector](SyntaxDefinition.md#nestingselector)
 - [pseudoClasses](SyntaxDefinition.md#pseudoclasses)
 - [pseudoElements](SyntaxDefinition.md#pseudoelements)
 - [tag](SyntaxDefinition.md#tag)
@@ -101,6 +103,21 @@ https://developer.mozilla.org/en-US/docs/Learn/CSS/Building_blocks/Selectors/Typ
 
 ___
 
+### modules
+
+• `Optional` **modules**: (``"css-position-1"`` \| ``"css-position-2"`` \| ``"css-position-3"`` \| ``"css-position-4"`` \| ``"css-scoping-1"`` \| ``"css-pseudo-4"`` \| ``"css-shadow-parts-1"`` \| ``"css-nesting-1"``)[]
+
+Additional CSS modules to include in the syntax definition.
+These are specific CSS modules that add new selectors or modify existing ones.
+
+**`Example`**
+
+```ts
+['css-position-4', 'css-scoping-1']
+```
+
+___
+
 ### namespace
 
 • `Optional` **namespace**: `boolean` \| { `wildcard?`: `boolean`  }
@@ -116,6 +133,25 @@ ns|div
 **`See`**
 
 https://www.w3.org/TR/css3-namespace/
+
+___
+
+### nestingSelector
+
+• `Optional` **nestingSelector**: `boolean`
+
+CSS Nesting Selector (&).
+Represents the parent selector in nested CSS.
+
+**`Example`**
+
+```ts
+&:hover
+```
+
+**`See`**
+
+https://www.w3.org/TR/css-nesting-1/#nest-selector
 
 ___
 

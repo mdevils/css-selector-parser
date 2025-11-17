@@ -58,6 +58,13 @@ export interface SyntaxDefinition {
      */
     classNames?: boolean;
     /**
+     * CSS Nesting Selector (&).
+     * Represents the parent selector in nested CSS.
+     * @example &:hover
+     * @see https://www.w3.org/TR/css-nesting-1/#nest-selector
+     */
+    nestingSelector?: boolean;
+    /**
      * CSS selector rule nesting combinators.
      * @example div.class > span
      * @see https://developer.mozilla.org/en-US/docs/Learn/CSS/Building_blocks/Selectors/Combinators
@@ -258,6 +265,7 @@ export const extendSyntaxDefinition: MergeMethod<SyntaxDefinition> = withNoNegat
         ),
         ids: replaceValueIfSpecified,
         classNames: replaceValueIfSpecified,
+        nestingSelector: replaceValueIfSpecified,
         namespace: withPositive(
             defaultXmlOptions,
             mergeSection({
@@ -491,6 +499,10 @@ export const cssModules = {
                 String: ['part']
             }
         }
+    },
+    'css-nesting-1': {
+        latest: true,
+        nestingSelector: true
     }
 } satisfies Record<string, SyntaxDefinition & {latest?: boolean}>;
 

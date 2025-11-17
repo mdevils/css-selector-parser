@@ -179,6 +179,7 @@ const parse = createParser({
 | `css-scoping-1` | Shadow DOM selectors (`:host`, `:host-context()`, `::slotted()`) |
 | `css-pseudo-4` | Modern pseudo-elements (`::selection`, `::backdrop`, etc.) |
 | `css-shadow-parts-1` | `::part()` for styling shadow DOM components |
+| `css-nesting-1` | CSS Nesting selector (`&`) |
 
 The `latest` syntax automatically includes all modules marked as current specifications.
 

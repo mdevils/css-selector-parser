@@ -13,6 +13,7 @@
 - [AstFormulaOfSelector](interfaces/AstFormulaOfSelector.md)
 - [AstId](interfaces/AstId.md)
 - [AstNamespaceName](interfaces/AstNamespaceName.md)
+- [AstNestingSelector](interfaces/AstNestingSelector.md)
 - [AstNoNamespace](interfaces/AstNoNamespace.md)
 - [AstPseudoClass](interfaces/AstPseudoClass.md)
 - [AstPseudoElement](interfaces/AstPseudoElement.md)
@@ -30,6 +31,7 @@
 
 - [AstEntity](modules.md#astentity)
 - [CssLevel](modules.md#csslevel)
+- [CssModule](modules.md#cssmodule)
 - [Parser](modules.md#parser)
 
 ### Variables
@@ -45,7 +47,7 @@
 
 ### AstEntity
 
-Ƭ **AstEntity**: [`AstSelector`](interfaces/AstSelector.md) \| [`AstRule`](interfaces/AstRule.md) \| [`AstTagName`](interfaces/AstTagName.md) \| [`AstWildcardTag`](interfaces/AstWildcardTag.md) \| [`AstId`](interfaces/AstId.md) \| [`AstClassName`](interfaces/AstClassName.md) \| [`AstNamespaceName`](interfaces/AstNamespaceName.md) \| [`AstWildcardNamespace`](interfaces/AstWildcardNamespace.md) \| [`AstNoNamespace`](interfaces/AstNoNamespace.md) \| [`AstSubstitution`](interfaces/AstSubstitution.md) \| [`AstString`](interfaces/AstString.md) \| [`AstFormula`](interfaces/AstFormula.md) \| [`AstFormulaOfSelector`](interfaces/AstFormulaOfSelector.md) \| [`AstPseudoClass`](interfaces/AstPseudoClass.md) \| [`AstAttribute`](interfaces/AstAttribute.md) \| [`AstPseudoElement`](interfaces/AstPseudoElement.md)
+Ƭ **AstEntity**: [`AstSelector`](interfaces/AstSelector.md) \| [`AstRule`](interfaces/AstRule.md) \| [`AstTagName`](interfaces/AstTagName.md) \| [`AstWildcardTag`](interfaces/AstWildcardTag.md) \| [`AstId`](interfaces/AstId.md) \| [`AstClassName`](interfaces/AstClassName.md) \| [`AstNamespaceName`](interfaces/AstNamespaceName.md) \| [`AstWildcardNamespace`](interfaces/AstWildcardNamespace.md) \| [`AstNoNamespace`](interfaces/AstNoNamespace.md) \| [`AstNestingSelector`](interfaces/AstNestingSelector.md) \| [`AstSubstitution`](interfaces/AstSubstitution.md) \| [`AstString`](interfaces/AstString.md) \| [`AstFormula`](interfaces/AstFormula.md) \| [`AstFormulaOfSelector`](interfaces/AstFormulaOfSelector.md) \| [`AstPseudoClass`](interfaces/AstPseudoClass.md) \| [`AstAttribute`](interfaces/AstAttribute.md) \| [`AstPseudoElement`](interfaces/AstPseudoElement.md)
 
 One of CSS AST entity types.
 
@@ -54,6 +56,26 @@ ___
 ### CssLevel
 
 Ƭ **CssLevel**: ``"css1"`` \| ``"css2"`` \| ``"css3"`` \| ``"selectors-3"`` \| ``"selectors-4"`` \| ``"latest"`` \| ``"progressive"``
+
+___
+
+### CssModule
+
+Ƭ **CssModule**: keyof typeof `cssModules`
+
+CSS Module name.
+
+**`Example`**
+
+```ts
+'css-position-3'
+```
+
+**`Example`**
+
+```ts
+'css-scoping-1'
+```
 
 ___
 
@@ -133,6 +155,7 @@ Creates a parse function to be used later to parse CSS selectors.
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `options` | `Object` | - |
+| `options.modules?` | (``"css-position-1"`` \| ``"css-position-2"`` \| ``"css-position-3"`` \| ``"css-position-4"`` \| ``"css-scoping-1"`` \| ``"css-pseudo-4"`` \| ``"css-shadow-parts-1"`` \| ``"css-nesting-1"``)[] | Additional CSS modules to include in the syntax definition. These are specific CSS modules that add new selectors or modify existing ones. **`Example`** ```ts ['css-position-3', 'css-scoping-1'] ``` |
 | `options.strict?` | `boolean` | CSS selector parser in modern browsers is very forgiving. For instance, it works fine with unclosed attribute selectors: `"[attr=value"`. Set to `false` in order to mimic browser behaviour. Default: `true` |
 | `options.substitutes?` | `boolean` | Flag to enable substitutes. This is not part of CSS syntax, but rather a useful feature to pass variables into CSS selectors. Default: `false` **`Example`** ```ts "[attr=$variable]" ``` |
 | `options.syntax?` | [`CssLevel`](modules.md#csslevel) \| [`SyntaxDefinition`](interfaces/SyntaxDefinition.md) | CSS Syntax options to be used for parsing. Can either be one of the predefined CSS levels ([CssLevel](modules.md#csslevel)) or a more detailed syntax definition ([SyntaxDefinition](interfaces/SyntaxDefinition.md)). Default: `"latest"` |

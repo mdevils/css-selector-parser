@@ -86,6 +86,8 @@ export function render(entity: AstEntity): string {
         return `#${escapeIdentifier(entity.name)}`;
     } else if (entity.type === 'ClassName') {
         return `.${escapeIdentifier(entity.name)}`;
+    } else if (entity.type === 'NestingSelector') {
+        return '&';
     } else if (entity.type === 'Attribute') {
         const {name, namespace, operator, value, caseSensitivityModifier} = entity;
         let result = '[';

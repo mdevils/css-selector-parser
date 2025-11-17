@@ -13,6 +13,7 @@ const entities: Record<AstEntity['type'], true> = {
     NamespaceName: true,
     WildcardNamespace: true,
     NoNamespace: true,
+    NestingSelector: true,
     Attribute: true,
     PseudoClass: true,
     PseudoElement: true,

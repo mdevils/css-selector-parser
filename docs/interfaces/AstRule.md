@@ -27,7 +27,7 @@ ___
 
 ### items
 
-• **items**: ([`AstTagName`](AstTagName.md) \| [`AstWildcardTag`](AstWildcardTag.md) \| [`AstId`](AstId.md) \| [`AstClassName`](AstClassName.md) \| [`AstPseudoClass`](AstPseudoClass.md) \| [`AstAttribute`](AstAttribute.md) \| [`AstPseudoElement`](AstPseudoElement.md))[]
+• **items**: ([`AstTagName`](AstTagName.md) \| [`AstWildcardTag`](AstWildcardTag.md) \| [`AstId`](AstId.md) \| [`AstClassName`](AstClassName.md) \| [`AstNestingSelector`](AstNestingSelector.md) \| [`AstPseudoClass`](AstPseudoClass.md) \| [`AstAttribute`](AstAttribute.md) \| [`AstPseudoElement`](AstPseudoElement.md))[]
 
 Items of a CSS rule. Can be tag, ids, class names, pseudo-classes and pseudo-elements.
 

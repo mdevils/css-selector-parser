@@ -363,6 +363,106 @@ describe('parse()', () => {
             expect(() => createParser({syntax: {}})('.class')).toThrow('Class names are not enabled.');
         });
     });
+    describe('Nesting Selector', () => {
+        it('should parse a nesting selector', () => {
+            expect(parse('&')).toEqual(
+                ast.selector({
+                    rules: [
+                        ast.rule({
+                            items: [ast.nestingSelector()]
+                        })
+                    ]
+                })
+            );
+        });
+        it('should parse nesting selector with pseudo-class', () => {
+            expect(parse('&:hover')).toEqual(
+                ast.selector({
+                    rules: [
+                        ast.rule({
+                            items: [ast.nestingSelector(), ast.pseudoClass({name: 'hover'})]
+                        })
+                    ]
+                })
+            );
+        });
+        it('should parse nesting selector with class', () => {
+            expect(parse('&.active')).toEqual(
+                ast.selector({
+                    rules: [
+                        ast.rule({
+                            items: [ast.nestingSelector(), ast.className({name: 'active'})]
+                        })
+                    ]
+                })
+            );
+        });
+        it('should parse nesting selector with id', () => {
+            expect(parse('&#main')).toEqual(
+                ast.selector({
+                    rules: [
+                        ast.rule({
+                            items: [ast.nestingSelector(), ast.id({name: 'main'})]
+                        })
+                    ]
+                })
+            );
+        });
+        it('should parse nesting selector with attribute', () => {
+            expect(parse('&[href]')).toEqual(
+                ast.selector({
+                    rules: [
+                        ast.rule({
+                            items: [ast.nestingSelector(), ast.attribute({name: 'href'})]
+                        })
+                    ]
+                })
+            );
+        });
+        it('should parse nesting selector with pseudo-element', () => {
+            expect(parse('&::before')).toEqual(
+                ast.selector({
+                    rules: [
+                        ast.rule({
+                            items: [ast.nestingSelector(), ast.pseudoElement({name: 'before'})]
+                        })
+                    ]
+                })
+            );
+        });
+        it('should parse nesting selector in nested rules', () => {
+            expect(parse('& > div')).toEqual(
+                ast.selector({
+                    rules: [
+                        ast.rule({
+                            items: [ast.nestingSelector()],
+                            nestedRule: ast.rule({
+                                combinator: '>',
+                                items: [ast.tagName({name: 'div'})]
+                            })
+                        })
+                    ]
+                })
+            );
+        });
+        it('should parse multiple selectors with nesting', () => {
+            expect(parse('&:hover, &:focus')).toEqual(
+                ast.selector({
+                    rules: [
+                        ast.rule({
+                            items: [ast.nestingSelector(), ast.pseudoClass({name: 'hover'})]
+                        }),
+                        ast.rule({
+                            items: [ast.nestingSelector(), ast.pseudoClass({name: 'focus'})]
+                        })
+                    ]
+                })
+            );
+        });
+        it('should fail if not enabled', () => {
+            expect(() => createParser({syntax: 'selectors-4'})('&')).toThrow('Nesting selector is not enabled.');
+        });
+    });
     describe('IDs', () => {
         it('should parse a single ID', () => {
             expect(parse('#id')).toEqual(

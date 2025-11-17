@@ -724,4 +724,56 @@ describe('CSS Modules', () => {
             }
         });
     });
+
+    describe('css-nesting-1', () => {
+        it('should parse nesting selector when module is enabled', () => {
+            const parse = createParser({
+                modules: ['css-nesting-1']
+            });
+
+            expect(parse('&')).toEqual(
+                ast.selector({
+                    rules: [
+                        ast.rule({
+                            items: [ast.nestingSelector()]
+                        })
+                    ]
+                })
+            );
+
+            expect(parse('&:hover')).toEqual(
+                ast.selector({
+                    rules: [
+                        ast.rule({
+                            items: [ast.nestingSelector(), ast.pseudoClass({name: 'hover'})]
+                        })
+                    ]
+                })
+            );
+        });
+
+        it('should be included in latest syntax', () => {
+            const parse = createParser({
+                syntax: 'latest'
+            });
+
+            expect(parse('&.active')).toEqual(
+                ast.selector({
+                    rules: [
+                        ast.rule({
+                            items: [ast.nestingSelector(), ast.className({name: 'active'})]
+                        })
+                    ]
+                })
+            );
+        });
+
+        it('should reject nesting selector when module is not enabled', () => {
+            const parse = createParser({
+                syntax: 'selectors-4'
+            });
+
+            expect(() => parse('&')).toThrow('Nesting selector is not enabled.');
+        });
+    });
 });

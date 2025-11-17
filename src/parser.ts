@@ -117,6 +117,7 @@ export function createParser(
         : [false, false];
     const idEnabled = Boolean(syntaxDefinition.ids);
     const classNamesEnabled = Boolean(syntaxDefinition.classNames);
+    const nestingSelectorEnabled = Boolean(syntaxDefinition.nestingSelector);
     const namespaceEnabled = Boolean(syntaxDefinition.namespace);
     const namespaceWildcardEnabled =
         syntaxDefinition.namespace &&
@@ -743,6 +744,10 @@ export function createParser(
                 const idName = parseIdentifier();
                 assert(idName, 'Expected ID name.');
                 rule.items.push({type: 'Id', name: idName});
+            } else if (is('&')) {
+                assert(nestingSelectorEnabled, 'Nesting selector is not enabled.');
+                next();
+                rule.items.push({type: 'NestingSelector'});
             } else if (is('[')) {
                 assert(attributesEnabled, 'Attributes are not enabled.');
                 rule.items.push(parseAttribute());

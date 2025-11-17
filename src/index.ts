@@ -10,6 +10,7 @@ export {
     AstFormulaOfSelector,
     AstId,
     AstNamespaceName,
+    AstNestingSelector,
     AstNoNamespace,
     AstPseudoClass,
     AstPseudoElement,

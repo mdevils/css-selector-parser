@@ -52,6 +52,7 @@ console.log(ast.isRule(selector)); // prints false
 - [isFormulaOfSelector](AstFactory.md#isformulaofselector)
 - [isId](AstFactory.md#isid)
 - [isNamespaceName](AstFactory.md#isnamespacename)
+- [isNestingSelector](AstFactory.md#isnestingselector)
 - [isNoNamespace](AstFactory.md#isnonamespace)
 - [isPseudoClass](AstFactory.md#ispseudoclass)
 - [isPseudoElement](AstFactory.md#ispseudoelement)
@@ -63,6 +64,7 @@ console.log(ast.isRule(selector)); // prints false
 - [isWildcardNamespace](AstFactory.md#iswildcardnamespace)
 - [isWildcardTag](AstFactory.md#iswildcardtag)
 - [namespaceName](AstFactory.md#namespacename)
+- [nestingSelector](AstFactory.md#nestingselector)
 - [noNamespace](AstFactory.md#nonamespace)
 - [pseudoClass](AstFactory.md#pseudoclass)
 - [pseudoElement](AstFactory.md#pseudoelement)
@@ -319,6 +321,27 @@ entity is AstNamespaceName
 
 ___
 
+### isNestingSelector
+
+• **isNestingSelector**: (`entity`: `unknown`) => entity is AstNestingSelector
+
+#### Type declaration
+
+▸ (`entity`): entity is AstNestingSelector
+
+##### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `entity` | `unknown` |
+
+##### Returns
+
+entity is AstNestingSelector
+
+
+___
+
 ### isNoNamespace
 
 • **isNoNamespace**: (`entity`: `unknown`) => entity is AstNoNamespace
@@ -551,6 +574,27 @@ ___
 
 ___
 
+### nestingSelector
+
+• **nestingSelector**: (`props?`: {}) => [`AstNestingSelector`](AstNestingSelector.md)
+
+#### Type declaration
+
+▸ (`props?`): [`AstNestingSelector`](AstNestingSelector.md)
+
+##### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `props?` | `Object` |
+
+##### Returns
+
+[`AstNestingSelector`](AstNestingSelector.md)
+
+
+___
+
 ### noNamespace
 
 • **noNamespace**: (`props?`: {}) => [`AstNoNamespace`](AstNoNamespace.md)
@@ -620,7 +664,7 @@ ___
 
 ### rule
 
-• **rule**: (`props`: { `combinator?`: `string` ; `items`: ([`AstTagName`](AstTagName.md) \| [`AstWildcardTag`](AstWildcardTag.md) \| [`AstId`](AstId.md) \| [`AstClassName`](AstClassName.md) \| [`AstPseudoClass`](AstPseudoClass.md) \| [`AstAttribute`](AstAttribute.md) \| [`AstPseudoElement`](AstPseudoElement.md))[] ; `nestedRule?`: [`AstRule`](AstRule.md)  }) => [`AstRule`](AstRule.md)
+• **rule**: (`props`: { `combinator?`: `string` ; `items`: ([`AstTagName`](AstTagName.md) \| [`AstWildcardTag`](AstWildcardTag.md) \| [`AstId`](AstId.md) \| [`AstClassName`](AstClassName.md) \| [`AstNestingSelector`](AstNestingSelector.md) \| [`AstPseudoClass`](AstPseudoClass.md) \| [`AstAttribute`](AstAttribute.md) \| [`AstPseudoElement`](AstPseudoElement.md))[] ; `nestedRule?`: [`AstRule`](AstRule.md)  }) => [`AstRule`](AstRule.md)
 
 #### Type declaration
 
@@ -632,7 +676,7 @@ ___
 | :------ | :------ | :------ |
 | `props` | `Object` | - |
 | `props.combinator?` | `string` | Rule combinator which was used to nest this rule (i.e. `">"` in case of `"div > span"` if the current rule is `"span"`). |
-| `props.items` | ([`AstTagName`](AstTagName.md) \| [`AstWildcardTag`](AstWildcardTag.md) \| [`AstId`](AstId.md) \| [`AstClassName`](AstClassName.md) \| [`AstPseudoClass`](AstPseudoClass.md) \| [`AstAttribute`](AstAttribute.md) \| [`AstPseudoElement`](AstPseudoElement.md))[] | Items of a CSS rule. Can be tag, ids, class names, pseudo-classes and pseudo-elements. |
+| `props.items` | ([`AstTagName`](AstTagName.md) \| [`AstWildcardTag`](AstWildcardTag.md) \| [`AstId`](AstId.md) \| [`AstClassName`](AstClassName.md) \| [`AstNestingSelector`](AstNestingSelector.md) \| [`AstPseudoClass`](AstPseudoClass.md) \| [`AstAttribute`](AstAttribute.md) \| [`AstPseudoElement`](AstPseudoElement.md))[] | Items of a CSS rule. Can be tag, ids, class names, pseudo-classes and pseudo-elements. |
 | `props.nestedRule?` | [`AstRule`](AstRule.md) | Nested rule if specified (i.e. `"div > span"`). |
 
 ##### Returns

@@ -1,9 +1,9 @@
 # css-selector-parser
 
-![npm](https://img.shields.io/npm/v/css-selector-parser)
-![npm bundle size](https://img.shields.io/bundlephobia/minzip/css-selector-parser)
-![NPM License](https://img.shields.io/npm/l/css-selector-parser)
-![GitHub stars](https://img.shields.io/github/stars/mdevils/css-selector-parser)
+[![npm](https://img.shields.io/npm/v/css-selector-parser)](https://www.npmjs.com/package/css-selector-parser)
+[![npm bundle size](https://img.shields.io/bundlephobia/minzip/css-selector-parser)](https://bundlephobia.com/package/css-selector-parser)
+[![NPM License](https://img.shields.io/npm/l/css-selector-parser)](https://github.com/mdevils/css-selector-parser/blob/master/LICENSE)
+[![GitHub stars](https://img.shields.io/github/stars/mdevils/css-selector-parser)](https://github.com/mdevils/css-selector-parser/stargazers)
 
 A high-performance CSS selector parser with advanced features for modern web development.
 

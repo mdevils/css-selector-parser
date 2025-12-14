@@ -1,0 +1,86 @@
+name: Deploy Playground to GitHub Pages
+
+on:
+  release:
+    types: [published, created]
+  # Allow manual trigger for testing
+  workflow_dispatch:
+
+# Sets permissions for GitHub Pages deployment
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Allow only one concurrent deployment
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18.x'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci --prefer-offline --no-audit --no-update-notifier
+
+      - name: Run linting
+        run: npm run lint
+
+      - name: Run tests
+        run: npm run test
+
+      - name: Build library
+        run: npm run build
+
+      - name: Build documentation
+        run: npm run build:docs
+
+      - name: Update playground version
+        run: |
+          VERSION=$(node -p "require('./package.json').version")
+          echo "Updating playground to version $VERSION"
+          find playground -type f \( -name '*.js' -o -name '*.html' \) -exec sed -i.bak "s/css-selector-parser@[0-9.]*[0-9]/css-selector-parser@$VERSION/g" {} \;
+          find playground -type f -name '*.bak' -delete
+
+      - name: Prepare deployment directory
+        run: |
+          mkdir -p deploy
+          # Copy playground files
+          cp -r playground/* deploy/
+          # Copy documentation
+          cp -r docs deploy/docs
+          # Ensure .nojekyll exists to prevent Jekyll processing
+          touch deploy/.nojekyll
+          echo "Deployment directory contents:"
+          ls -la deploy/
+
+      - name: Setup GitHub Pages
+        uses: actions/configure-pages@v4
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: 'deploy'
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+
+      - name: Output deployment URL
+        run: |
+          echo "✅ Playground deployed successfully!"
+          echo "🎮 Playground URL: https://mdevils.github.io/css-selector-parser/"
+          echo "📚 Documentation: https://mdevils.github.io/css-selector-parser/docs/"

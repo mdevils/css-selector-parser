@@ -12,10 +12,26 @@ A high-performance CSS selector parser with advanced features for modern web dev
 - 🚀 **Fast and memory-efficient** parsing for all CSS selectors
 - 🌳 **AST-based** object model for programmatic manipulation
 - 📊 **Full compliance** with all CSS selector specifications
-- 🧪 **Comprehensive test coverage** 
+- 🧪 **Comprehensive test coverage**
 - 📚 **Well-documented API** with TypeScript support
 - 🔄 **Two-way conversion** between CSS selectors and AST
 - 🧩 **Modular support** for various CSS specifications
+- 🎮 **[Interactive Playground](https://mdevils.github.io/css-selector-parser/)** - Try it in your browser!
+
+## Playground
+
+Try the interactive playground to explore the parser's capabilities:
+
+**[🎮 Launch Playground](https://mdevils.github.io/css-selector-parser/)**
+
+The playground allows you to:
+- ✍️ Write CSS selectors with syntax highlighting
+- ⚙️ Configure parser options in real-time
+- 🌳 View the parsed AST structure
+- 🧪 Test different CSS syntax levels and modules
+- ✅ See rendered output for validation
+
+Perfect for learning, debugging, and exploring CSS selector syntax!
 
 ## Supported CSS Selector Standards
 

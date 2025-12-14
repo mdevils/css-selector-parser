@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Interactive playground for css-selector-parser - Parse and visualize CSS selectors">
+  <meta name="keywords" content="CSS, selector, parser, AST, playground, interactive">
+
+  <!-- Open Graph / Social Media -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="CSS Selector Parser Playground">
+  <meta property="og:description" content="Interactive playground for parsing and visualizing CSS selectors">
+  <meta property="og:url" content="https://mdevils.github.io/css-selector-parser/">
+
+  <title>Playground | css-selector-parser</title>
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+
+  <!-- Preconnect to CDNs for performance -->
+  <link rel="preconnect" href="https://cdn.jsdelivr.net">
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/main.css">
+
+  <!-- Ace Editor -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.32.2/ace.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.32.2/mode-css.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.32.2/mode-json.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.32.2/theme-monokai.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.32.2/theme-github.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.32.2/ext-language_tools.min.js"></script>
+</head>
+<body>
+  <header>
+    <div class="header-content">
+      <h1>CSS Selector Parser Playground</h1>
+      <nav>
+        <a href="https://github.com/mdevils/css-selector-parser" target="_blank" rel="noopener">GitHub</a>
+        <a href="https://github.com/mdevils/css-selector-parser/blob/master/docs/modules.md" target="_blank" rel="noopener">Docs</a>
+        <a href="https://www.npmjs.com/package/css-selector-parser" target="_blank" rel="noopener">npm</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="playground">
+    <!-- Input Panel -->
+    <section class="input-panel">
+      <div class="editor-container">
+        <label for="selector-editor">CSS Selector</label>
+        <div id="selector-editor" class="code-editor"></div>
+      </div>
+
+      <!-- Configuration Panel -->
+      <div class="config-container">
+        <h3>Parser Configuration</h3>
+        <div class="config-presets">
+          <button data-preset="latest" class="preset-btn active">Latest</button>
+          <button data-preset="css3" class="preset-btn">CSS3</button>
+          <button data-preset="progressive" class="preset-btn">Progressive</button>
+          <button data-preset="modules" class="preset-btn">With Modules</button>
+        </div>
+        <div id="config-editor" class="code-editor config-editor"></div>
+      </div>
+    </section>
+
+    <!-- Output Panel -->
+    <section class="output-panel">
+      <div class="tabs">
+        <button class="tab active" data-tab="ast">AST</button>
+        <button class="tab" data-tab="rendered">Rendered</button>
+        <button class="tab" data-tab="info">Info</button>
+      </div>
+
+      <!-- AST View -->
+      <div class="tab-content active" id="ast-view">
+        <div id="ast-output" class="output-editor"></div>
+      </div>
+
+      <!-- Rendered View -->
+      <div class="tab-content" id="rendered-view">
+        <div class="output-header">
+          <h4>Rendered CSS Selector</h4>
+        </div>
+        <div id="rendered-output" class="output-editor"></div>
+      </div>
+
+      <!-- Info View -->
+      <div class="tab-content" id="info-view">
+        <div class="info-content">
+          <h3>About css-selector-parser</h3>
+          <p><strong>Version:</strong> <span id="parser-version">3.2.0</span></p>
+
+          <h4>Syntax Levels</h4>
+          <ul class="info-list">
+            <li><code>css1</code> - CSS Level 1 (basic selectors)</li>
+            <li><code>css2</code> - CSS Level 2 (+ pseudo-classes, combinators)</li>
+            <li><code>css3</code> / <code>selectors-3</code> - Selectors Level 3 (+ :nth-child, etc.)</li>
+            <li><code>selectors-4</code> - Selectors Level 4 (+ :is, :where, :has)</li>
+            <li><code>latest</code> - Latest specification</li>
+            <li><code>progressive</code> - Latest + accepts unknown pseudo-classes/elements</li>
+          </ul>
+
+          <h4>Available CSS Modules</h4>
+          <ul class="info-list" id="available-modules">
+            <li><code>css-position-4</code> - Position pseudo-classes</li>
+            <li><code>css-scoping-1</code> - :host, :host-context(), ::slotted()</li>
+            <li><code>css-pseudo-4</code> - ::selection, ::backdrop, ::marker</li>
+            <li><code>css-shadow-parts-1</code> - ::part()</li>
+            <li><code>css-nesting-1</code> - & nesting selector</li>
+          </ul>
+
+          <h4>Configuration Options</h4>
+          <ul class="info-list">
+            <li><code>syntax</code> - CSS syntax level to use</li>
+            <li><code>strict</code> - Enable strict parsing (throw on errors)</li>
+            <li><code>substitutes</code> - Allow variable syntax like $var</li>
+            <li><code>modules</code> - Array of CSS modules to enable</li>
+          </ul>
+
+          <div class="info-links">
+            <a href="https://github.com/mdevils/css-selector-parser" target="_blank" rel="noopener">GitHub Repository</a>
+            <a href="https://www.npmjs.com/package/css-selector-parser" target="_blank" rel="noopener">npm Package</a>
+            <a href="https://github.com/mdevils/css-selector-parser/blob/master/docs/modules.md" target="_blank" rel="noopener">API Documentation</a>
+          </div>
+
+          <div class="sponsor-section">
+            <h4>💖 Support This Project</h4>
+            <p>If you find this parser useful, please consider supporting its development!</p>
+            <div class="sponsor-links">
+              <a href="https://github.com/sponsors/mdevils" target="_blank" rel="noopener" class="sponsor-button">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                  <path d="M4.25 2.5c-1.336 0-2.75 1.164-2.75 3 0 2.15 1.58 4.144 3.365 5.682A20.565 20.565 0 008 13.393a20.561 20.561 0 003.135-2.211C12.92 9.644 14.5 7.65 14.5 5.5c0-1.836-1.414-3-2.75-3-1.373 0-2.609.986-3.029 2.456a.75.75 0 01-1.442 0C6.859 3.486 5.623 2.5 4.25 2.5zM8 14.25l-.345.666-.002-.001-.006-.003-.018-.01a7.643 7.643 0 01-.31-.17 22.075 22.075 0 01-3.434-2.414C2.045 10.731 0 8.35 0 5.5 0 2.836 2.086 1 4.25 1 5.797 1 7.153 1.802 8 3.02 8.847 1.802 10.203 1 11.75 1 13.914 1 16 2.836 16 5.5c0 2.85-2.045 5.231-3.885 6.818a22.08 22.08 0 01-3.744 2.584l-.018.01-.006.003h-.002L8 14.25zm0 0l.345.666a.752.752 0 01-.69 0L8 14.25z"/>
+                </svg>
+                Sponsor on GitHub
+              </a>
+            </div>
+            <p class="sponsor-note">Your support helps maintain and improve this project!</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Error Display -->
+      <div class="error-container hidden" id="error-display">
+        <div class="error-header">
+          <span class="error-icon">⚠</span>
+          <span class="error-title">Parse Error</span>
+          <button class="close-button" id="close-error" aria-label="Close error">×</button>
+        </div>
+        <pre class="error-message" id="error-message"></pre>
+        <div class="error-details" id="error-details"></div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>
+      Built with <a href="https://github.com/mdevils/css-selector-parser" target="_blank" rel="noopener">css-selector-parser</a> v3.2.0
+      | <a href="https://github.com/mdevils/css-selector-parser/blob/master/LICENSE" target="_blank" rel="noopener">MIT License</a>
+      | <a href="https://github.com/sponsors/mdevils" target="_blank" rel="noopener" class="sponsor-link">💖 Sponsor</a>
+    </p>
+  </footer>
+
+  <!-- Load application -->
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>

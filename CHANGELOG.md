@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.3.0](https://github.com/mdevils/css-selector-parser/compare/v3.2.0...v3.3.0) (2025-12-14)
+
+
+### Features
+
+* Add AST traversal functionality with visitor pattern ([8c0d76b](https://github.com/mdevils/css-selector-parser/commit/8c0d76b99b723c3980c61628534ccf4d152dead0))
+* Add interactive playground with GitHub Pages deployment ([fa5176b](https://github.com/mdevils/css-selector-parser/commit/fa5176b1c4d61da0da842b8515b4bb46fb5fb353))
+
 ## [3.2.0](https://github.com/mdevils/css-selector-parser/compare/v3.1.3...v3.2.0) (2025-11-17)
 
 

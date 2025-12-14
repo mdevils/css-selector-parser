@@ -23,3 +23,4 @@ export {
     AstWildcardTag
 } from './ast.js';
 export {CssLevel, CssModule, SyntaxDefinition} from './syntax-definitions.js';
+export {traverse, Visitor, VisitorFunction, TraversalContext, TraverseOptions} from './traverse.js';

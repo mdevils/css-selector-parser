@@ -11,6 +11,7 @@ A high-performance CSS selector parser with advanced features for modern web dev
 
 - 🚀 **Fast and memory-efficient** parsing for all CSS selectors
 - 🌳 **AST-based** object model for programmatic manipulation
+- 🚶 **AST traversal** with visitor pattern for analyzing and transforming selectors
 - 📊 **Full compliance** with all CSS selector specifications
 - 🧪 **Comprehensive test coverage**
 - 📚 **Well-documented API** with TypeScript support
@@ -20,18 +21,9 @@ A high-performance CSS selector parser with advanced features for modern web dev
 
 ## Playground
 
-Try the interactive playground to explore the parser's capabilities:
+**[🎮 Launch Interactive Playground](https://mdevils.github.io/css-selector-parser/)**
 
-**[🎮 Launch Playground](https://mdevils.github.io/css-selector-parser/)**
-
-The playground allows you to:
-- ✍️ Write CSS selectors with syntax highlighting
-- ⚙️ Configure parser options in real-time
-- 🌳 View the parsed AST structure
-- 🧪 Test different CSS syntax levels and modules
-- ✅ See rendered output for validation
-
-Perfect for learning, debugging, and exploring CSS selector syntax!
+Test CSS selectors in your browser with syntax highlighting, real-time AST visualization, and configurable parser options.
 
 ## Supported CSS Selector Standards
 
@@ -173,6 +165,70 @@ const selector = ast.selector({
 console.log(render(selector)); // a[href^="/"], .container:has(nav) > a[href]:nth-child(2)::before
 ```
 
+### Traversing the AST
+
+The `traverse` function allows you to walk through the AST and visit each node, making it easy to analyze or transform selectors.
+
+```javascript
+import { createParser, traverse } from 'css-selector-parser';
+
+const parse = createParser();
+const selector = parse('div.foo > span#bar:hover::before');
+
+// Simple visitor function - called for each node
+traverse(selector, (node, context) => {
+    console.log(node.type, context.parents.length);
+});
+
+// Visitor with enter/exit hooks
+traverse(selector, {
+    enter(node, context) {
+        console.log('Entering:', node.type);
+        if (node.type === 'ClassName') {
+            console.log('Found class:', node.name);
+        }
+    },
+    exit(node, context) {
+        console.log('Leaving:', node.type);
+    }
+});
+
+// Skip visiting children of specific nodes
+traverse(selector, (node) => {
+    if (node.type === 'PseudoClass') {
+        // Don't visit children of pseudo-classes
+        return false;
+    }
+});
+
+// Practical example: collect all class names
+const classNames = [];
+traverse(selector, (node) => {
+    if (node.type === 'ClassName') {
+        classNames.push(node.name);
+    }
+});
+console.log(classNames); // ['foo']
+
+// Access parent information
+traverse(selector, (node, context) => {
+    console.log({
+        type: node.type,
+        parent: context.parent?.type,
+        depth: context.parents.length,
+        key: context.key,
+        index: context.index
+    });
+});
+```
+
+The traversal context provides:
+- `node`: The current AST node being visited
+- `parent`: The parent node (undefined for root)
+- `parents`: Array of all ancestor nodes from root to current
+- `key`: Property name in parent that references this node
+- `index`: Array index if this node is in an array
+
 ## CSS Modules Support
 
 CSS Modules are specifications that add new selectors or modify existing ones. This parser supports various CSS modules that can be included in your syntax definition:
@@ -205,6 +261,7 @@ The `latest` syntax automatically includes all modules marked as current specifi
 - [Parsing CSS Selectors](docs/modules.md#createParser)
 - [Constructing CSS AST](docs/modules.md#ast)
 - [Rendering CSS AST](docs/modules.md#render)
+- [Traversing CSS AST](docs/modules.md#traverse)
 
 ## Contributing
 
